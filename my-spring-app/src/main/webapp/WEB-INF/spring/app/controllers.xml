@@ -10,8 +10,12 @@
 	<!-- Scans within the base package of the application for @Components to 
 		configure as beans -->
 	<context:component-scan base-package="com.mycompany.springapp"
-		scoped-proxy="targetClass" />
+		scoped-proxy="targetClass" >
+		<context:include-filter type="annotation" expression="javax.interceptor.Interceptor" />
+		</context:component-scan>
 	<tx:annotation-driven />
+
+	<bean class="com.schlimm.springcdi.interceptor.InterceptorAwareBeanFactoryPostProcessor"/>
 
 	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
 		<property name="scopes">
