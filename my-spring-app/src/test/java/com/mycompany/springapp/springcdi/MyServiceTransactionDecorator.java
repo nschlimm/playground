@@ -10,7 +10,7 @@ public class MyServiceTransactionDecorator implements MyService{
 	private MyService delegate;
 	
 	public String sayHello() {
-		return delegate.sayHello();
+		return delegate.sayHello() + "transaction";
 	}
 
 }

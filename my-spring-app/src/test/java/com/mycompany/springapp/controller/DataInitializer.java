@@ -6,12 +6,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.mycompany.springapp.model.Person;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import com.mycompany.springapp.model.Person;
  
 @Component
-@Scope("prototype")
+//@Scope("prototype")
 public class DataInitializer {
 
 	public static final int PERSON_COUNT = 3;
@@ -19,7 +19,7 @@ public class DataInitializer {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public List<Long> people = new ArrayList<Long>();
+	private List<Long> people = new ArrayList<Long>();
 
 	public void initData() {
 		people.clear();// clear out the previous list of people
@@ -40,5 +40,13 @@ public class DataInitializer {
 	
 	public EntityManager getEntityManager() {
 		return entityManager;
+	}
+
+	public List<Long> getPeople() {
+		return people;
+	}
+
+	public void setPeople(List<Long> people) {
+		this.people = people;
 	}
 }

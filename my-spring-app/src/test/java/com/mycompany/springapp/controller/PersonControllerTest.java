@@ -60,7 +60,7 @@ public class PersonControllerTest {
 	
 	@Test
 	public void shouldReturnSecondPersonWithEditMav() {
-		Long template = dataInitializer.people.get(1);
+		Long template = dataInitializer.getPeople().get(1);
 		ModelAndView mav = personController.editPerson(template);
 		assertNotNull(mav);
 		assertEquals("edit", mav.getViewName());

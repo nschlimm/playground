@@ -17,7 +17,7 @@ public class DecoratorTestCase {
 	@Test
 	public void testHelloWorld() {
 		
-		Assert.assertTrue(service.sayHello().equals("Hello"));
+		Assert.assertTrue(service.sayHello().equals("Hellotransactionsecurity"));
 		
 	}
 }

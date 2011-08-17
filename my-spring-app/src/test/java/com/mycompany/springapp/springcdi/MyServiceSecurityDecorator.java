@@ -10,7 +10,7 @@ public class MyServiceSecurityDecorator implements MyService {
 	private MyService delegate;
 	
 	public String sayHello() {
-		return delegate.sayHello();
+		return delegate.sayHello() + "security";
 	}
 
 }
