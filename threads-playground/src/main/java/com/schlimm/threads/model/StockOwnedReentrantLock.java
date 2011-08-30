@@ -42,9 +42,4 @@ public class StockOwnedReentrantLock implements Stock {
 		}
 	}
 
-	@Override
-	public String getCase() {
-		return "Stock with owned ReentrantLock";
-	}
-
 }

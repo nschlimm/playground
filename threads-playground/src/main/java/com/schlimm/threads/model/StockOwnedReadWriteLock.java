@@ -42,9 +42,4 @@ public class StockOwnedReadWriteLock implements Stock {
 		}
 	}
 
-	@Override
-	public String getCase() {
-		return "Stock with owned ReadWriteLock";
-	}
-
 }

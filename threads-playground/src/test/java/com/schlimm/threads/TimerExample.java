@@ -1,4 +1,4 @@
-package com.schlimm.threads.timer;
+package com.schlimm.threads;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,7 +58,7 @@ public class TimerExample {
 			
 			Thread.sleep(1000);
 			
-			System.out.println(String.format("%1$-30s %2$-7s %3$-7s %4$-7s %5$-7s", stock[i].getCase(), stock[i].getUnits(), task1.added, task2.reduced, (task1.added - task2.reduced)));
+			System.out.println(String.format("%1$-30s %2$-7s %3$-7s %4$-7s %5$-7s", stock[i].getClass().getSimpleName(), stock[i].getUnits(), task1.added, task2.reduced, (task1.added - task2.reduced)));
 		}
 	}
 

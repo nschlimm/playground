@@ -24,9 +24,4 @@ public class StockAtomicLong implements Stock {
 		return units.get();
 	}
 
-	@Override
-	public String getCase() {
-		return "Atomic Long";
-	}
-
 }

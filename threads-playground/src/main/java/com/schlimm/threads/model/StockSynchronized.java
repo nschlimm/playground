@@ -28,9 +28,4 @@ public class StockSynchronized implements Stock {
 		}
 	}
 
-	@Override
-	public String getCase() {
-		return "Stock with synchronized block";
-	}
-
 }

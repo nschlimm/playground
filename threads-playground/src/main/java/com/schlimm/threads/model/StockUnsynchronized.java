@@ -22,9 +22,4 @@ public class StockUnsynchronized implements Stock {
 		return units;
 	}
 
-	@Override
-	public String getCase() {
-		return "Unsynchronized Stock";
-	}
-
 }

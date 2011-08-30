@@ -1,4 +1,4 @@
-package com.schlimm.threads.thread;
+package com.schlimm.threads;
 
 import com.schlimm.threads.model.Stock;
 import com.schlimm.threads.model.StockAtomicLong;
@@ -13,7 +13,8 @@ public class NativeThreadExample {
 
 	public class StockIncreaser extends Thread {
 		private int stockObjectIndex = 0;
-		private volatile double added = 0;
+		private volatile long added = 0;
+		private boolean running = true;
 
 		public StockIncreaser(String name, int stockObjectIndex) {
 			super(name);
@@ -23,9 +24,9 @@ public class NativeThreadExample {
 		@Override
 		public void run() {
 
-			while (true) {
+			while (running) {
 				if (Thread.currentThread().isInterrupted())
-					break;
+					running = false;
 				stock[stockObjectIndex].add(1);
 				added += 1;
 			}
@@ -34,7 +35,8 @@ public class NativeThreadExample {
 
 	public class StockReducer extends Thread {
 		private int stockObjectIndex = 0;
-		private volatile double reduced = 0;
+		private volatile long reduced = 0;
+		private boolean running = true;
 
 		public StockReducer(String name, int stockObjectIndex) {
 			super(name);
@@ -43,9 +45,9 @@ public class NativeThreadExample {
 
 		@Override
 		public void run() {
-			while (true) {
+			while (running) {
 				if (Thread.currentThread().isInterrupted())
-					break;
+					running = false;
 				stock[stockObjectIndex].reduce(1);
 				reduced += 1;
 			}
@@ -53,7 +55,7 @@ public class NativeThreadExample {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		System.out.println(String.format("%1$-30s %2$-10s %3$-20s %4$-20s %5$-20s", "Case", "Units", "Added", "Reduced", "A-R"));
+		System.out.println(String.format("%1$-30s %2$-10s %3$-12s %4$-12s %5$-14s %6$-12s", "Case", "Units", "Added", "Reduced", "Expected Units", "Difference"));
 		for (int i = 0; i < stock.length; i++) {
 			StockIncreaser thread1 = new NativeThreadExample().new StockIncreaser("Stock-Increaser", i);
 			thread1.start();
@@ -67,7 +69,7 @@ public class NativeThreadExample {
 
 			Thread.sleep(1000);
 
-			System.out.println(String.format("%1$-30s %2$-10s %3$-20s %4$-20s %5$-20s", stock[i].getCase(), stock[i].getUnits(), thread1.added, thread2.reduced, (thread1.added - thread2.reduced)));
+			System.out.println(String.format("%1$-30s %2$-10s %3$-12s %4$-12s %5$-14s %6$-12s", stock[i].getClass().getSimpleName(), stock[i].getUnits(), thread1.added, thread2.reduced, (thread1.added - thread2.reduced), stock[i].getUnits() -(thread1.added - thread2.reduced)));
 		}
 	}
 
