@@ -24,4 +24,9 @@ public class StockAtomicLong implements Stock {
 		return units.get();
 	}
 
+	@Override
+	public Stock prototype(int initial) {
+		return new StockAtomicLong(initial);
+	}
+
 }

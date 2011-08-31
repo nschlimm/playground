@@ -42,4 +42,9 @@ public class StockOwnedReentrantLock implements Stock {
 		}
 	}
 
+	@Override
+	public Stock prototype(int initial) {
+		return new StockOwnedReentrantLock(initial);
+	}
+
 }

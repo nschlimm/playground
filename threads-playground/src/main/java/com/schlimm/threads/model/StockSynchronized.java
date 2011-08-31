@@ -28,4 +28,9 @@ public class StockSynchronized implements Stock {
 		}
 	}
 
+	@Override
+	public Stock prototype(int initial) {
+		return new StockSynchronized(initial);
+	}
+
 }

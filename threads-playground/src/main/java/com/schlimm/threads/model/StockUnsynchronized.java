@@ -22,4 +22,9 @@ public class StockUnsynchronized implements Stock {
 		return units;
 	}
 
+	@Override
+	public Stock prototype(int initial) {
+		return new StockUnsynchronized(initial);
+	}
+
 }

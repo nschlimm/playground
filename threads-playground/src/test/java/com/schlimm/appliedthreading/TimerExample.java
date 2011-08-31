@@ -1,4 +1,4 @@
-package com.schlimm.threads;
+package com.schlimm.appliedthreading;
 
 import java.util.Timer;
 import java.util.TimerTask;

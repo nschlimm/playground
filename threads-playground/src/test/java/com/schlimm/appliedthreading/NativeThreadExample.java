@@ -1,4 +1,4 @@
-package com.schlimm.threads;
+package com.schlimm.appliedthreading;
 
 import com.schlimm.threads.model.Stock;
 import com.schlimm.threads.model.StockAtomicLong;
@@ -62,12 +62,12 @@ public class NativeThreadExample {
 			StockReducer thread2 = new NativeThreadExample().new StockReducer("Stock-Reducer", i);
 			thread2.start();
 
-			Thread.sleep(10000);
+			Thread.sleep(2000);
 
 			thread1.interrupt();
 			thread2.interrupt();
 
-			Thread.sleep(1000);
+			Thread.sleep(100);
 
 			System.out.println(String.format("%1$-30s %2$-10s %3$-12s %4$-12s %5$-14s %6$-12s", stock[i].getClass().getSimpleName(), stock[i].getUnits(), thread1.added, thread2.reduced, (thread1.added - thread2.reduced), stock[i].getUnits() -(thread1.added - thread2.reduced)));
 		}

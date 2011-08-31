@@ -42,4 +42,9 @@ public class StockOwnedReadWriteLock implements Stock {
 		}
 	}
 
+	@Override
+	public Stock prototype(int initial) {
+		return new StockOwnedReadWriteLock(initial);
+	}
+
 }
