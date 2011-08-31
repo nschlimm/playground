@@ -19,22 +19,21 @@ public class StockOwnedReadWriteLock implements Stock {
 		this.units = initial;
 	}
 
-	public long add(long quantity) {
-		lock.writeLock().lock();
+	public void add(long quantity) throws InterruptedException  {
+		lock.writeLock().lockInterruptibly();
 		try {
 			units += quantity;
-			return units;
 		} finally {
 			lock.writeLock().unlock();
 		}
 	}
 	
-	public long reduce(long quantity) {
-		return add(-quantity);
+	public void reduce(long quantity) throws InterruptedException {
+		add(-quantity);
 	}
 
-	public long getUnits() {
-		lock.readLock().lock();
+	public long getUnits() throws InterruptedException {
+		lock.readLock().lockInterruptibly();
 		try {
 			return units;
 		} finally {

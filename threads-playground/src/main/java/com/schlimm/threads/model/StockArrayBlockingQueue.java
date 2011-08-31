@@ -1,26 +1,23 @@
 package com.schlimm.threads.model;
 
-import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class StockArrayBlockingQueue implements Stock {
 	
-	private BlockingQueue<Long> stock = new ArrayBlockingQueue<Long>(0);
+	private BlockingQueue<Long> stock = null;
 	
-	public StockArrayBlockingQueue(long initial) {
+	public StockArrayBlockingQueue(int initial) {
 		super();
-		this.stock.addAll(Arrays.asList(Arrays.copyOf(new Long[]{initial}, 9)));
+		this.stock=new ArrayBlockingQueue<Long>(initial);
 	}
 
-	public long add(long quantity) {
-		stock.offer(quantity);
-		return stock.size();
+	public void add(long quantity) throws InterruptedException {
+		stock.put(quantity);
 	}
 	
-	public long reduce(long quantity) throws InterruptedException {
-		return stock.poll(1000, TimeUnit.MILLISECONDS);
+	public void reduce(long quantity) throws InterruptedException {
+		add(-quantity);
 	}
 
 	public long getUnits() {
@@ -29,7 +26,7 @@ public class StockArrayBlockingQueue implements Stock {
 
 	@Override
 	public Stock prototype(int initial) {
-		return new StockArrayBlockingQueue(initial);
+		return new StockArrayBlockingQueue((int) (Runtime.getRuntime().freeMemory()/100));
 	}
 
 }

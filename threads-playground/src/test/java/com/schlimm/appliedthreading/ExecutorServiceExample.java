@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.schlimm.threads.model.Stock;
+import com.schlimm.threads.model.StockArrayBlockingQueue;
 import com.schlimm.threads.model.StockAtomicLong;
 import com.schlimm.threads.model.StockOwnedReadWriteLock;
 import com.schlimm.threads.model.StockOwnedReentrantLock;
@@ -23,7 +24,7 @@ public class ExecutorServiceExample {
 	private final static int poolsize = Runtime.getRuntime().availableProcessors();
 	private interface ExecutorServiceFactory {ExecutorService createExecutor();};
 	private final static Stock[] stockObjects = new Stock[] { new StockUnsynchronized(0), new StockOwnedReadWriteLock(0), new StockOwnedReentrantLock(0), new StockSynchronized(0),
-			new StockAtomicLong(0) };
+			new StockAtomicLong(0), new StockArrayBlockingQueue((int) (Runtime.getRuntime().freeMemory()/100)) };
 	private final static ExecutorServiceFactory[] pools = new ExecutorServiceFactory[] { 
 		new ExecutorServiceFactory() {@Override public ExecutorService createExecutor() {return Executors.newFixedThreadPool(poolsize);}}, 
 		new ExecutorServiceFactory() {@Override public ExecutorService createExecutor() {return Executors.newCachedThreadPool();}}, 
@@ -44,10 +45,15 @@ public class ExecutorServiceExample {
 		@Override
 		public Long call() throws Exception {
 			while (running) {
-				if (Thread.currentThread().isInterrupted())
-					running = false;
-				stockObject.add(1);
-				added += 1;
+				try {
+					stockObject.add(1);
+					added += 1;
+					if (Thread.currentThread().isInterrupted()) // exit safe if interrupted
+						running = false;
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					break;
+				}
 			}
 			return added;
 		}
@@ -67,10 +73,15 @@ public class ExecutorServiceExample {
 		@Override
 		public Long call() throws Exception {
 			while (running) {
-				if (Thread.currentThread().isInterrupted())
-					running = false;
-				stockObject.reduce(1);
-				reduced -= 1;
+				try {
+					stockObject.reduce(1);
+					reduced -= 1;
+					if (Thread.currentThread().isInterrupted()) // exit safe if interrupted
+						running = false;
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					break;
+				}
 			}
 			return reduced;
 		}
@@ -88,7 +99,7 @@ public class ExecutorServiceExample {
 				// add tasks to the worker pool
 				Collection<Future<Long>> futures = new ArrayList<Future<Long>>();
 				for (int i = 0; i < poolsize; i++) {
-					Callable<Long> taskToAdd = (i % 2 == 0 ? new ExecutorServiceExample().new StockIncreaser(stockObject) : new ExecutorServiceExample().new StockReducer(stockObject));
+					Callable<Long> taskToAdd = ((i+2) % 2 == 0 ? new ExecutorServiceExample().new StockIncreaser(stockObject) : new ExecutorServiceExample().new StockReducer(stockObject));
 					futures.add(pool.submit(taskToAdd));
 				}
 

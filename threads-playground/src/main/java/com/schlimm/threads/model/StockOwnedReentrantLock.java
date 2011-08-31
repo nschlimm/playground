@@ -19,22 +19,21 @@ public class StockOwnedReentrantLock implements Stock {
 		this.units = initial;
 	}
 
-	public long add(long quantity) {
-		lock.lock();
+	public void add(long quantity) throws InterruptedException {
+		lock.lockInterruptibly();
 		try {
 			units += quantity;
-			return units;
 		} finally {
 			lock.unlock();
 		}
 	}
 	
-	public long reduce(long quantity) {
-		return add(-quantity);
+	public void reduce(long quantity) throws InterruptedException {
+		add(-quantity);
 	}
 
-	public long getUnits() {
-		lock.lock();
+	public long getUnits() throws InterruptedException {
+		lock.lockInterruptibly();
 		try {
 			return units;
 		} finally {

@@ -9,13 +9,12 @@ public class StockUnsynchronized implements Stock {
 		this.units = initial;
 	}
 
-	public long add(long quantity) {
+	public void add(long quantity) {
 		units += quantity;
-		return units;
 	}
 	
-	public long reduce(long quantity) {
-		return add(-quantity);
+	public void reduce(long quantity) {
+		add(-quantity);
 	}
 
 	public long getUnits() {

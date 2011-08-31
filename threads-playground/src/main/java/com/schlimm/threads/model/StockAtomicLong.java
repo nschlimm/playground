@@ -11,13 +11,12 @@ public class StockAtomicLong implements Stock {
 		this.units.addAndGet(initial);
 	}
 
-	public long add(long quantity) {
+	public void add(long quantity) {
 		units.getAndAdd(quantity);
-		return units.get();
 	}
 	
-	public long reduce(long quantity) {
-		return add(-quantity);
+	public void reduce(long quantity) {
+		add(-quantity);
 	}
 
 	public long getUnits() {

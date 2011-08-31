@@ -22,7 +22,12 @@ public class TimerExample {
 		}
 		@Override
 		public void run() {
-			stock[stockObjectIndex].add(1);
+			try {
+				stock[stockObjectIndex].add(1);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
+			}
 			added += 1;
 		}
 	}
@@ -36,7 +41,12 @@ public class TimerExample {
 		}
 		@Override
 		public void run() {
-			stock[stockObjectIndex].reduce(1);
+			try {
+				stock[stockObjectIndex].reduce(1);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
+			}
 			reduced += 1;
 		}
 	}

@@ -27,7 +27,12 @@ public class NativeThreadExample {
 			while (running) {
 				if (Thread.currentThread().isInterrupted())
 					running = false;
-				stock[stockObjectIndex].add(1);
+				try {
+					stock[stockObjectIndex].add(1);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					break;
+				}
 				added += 1;
 			}
 		}
@@ -48,7 +53,12 @@ public class NativeThreadExample {
 			while (running) {
 				if (Thread.currentThread().isInterrupted())
 					running = false;
-				stock[stockObjectIndex].reduce(1);
+				try {
+					stock[stockObjectIndex].reduce(1);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					break;
+				}
 				reduced += 1;
 			}
 		}
