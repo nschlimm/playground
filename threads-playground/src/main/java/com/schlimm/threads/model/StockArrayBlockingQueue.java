@@ -17,7 +17,7 @@ public class StockArrayBlockingQueue implements Stock {
 	}
 	
 	public void reduce(long quantity) throws InterruptedException {
-		add(-quantity);
+		stock.take();
 	}
 
 	public long getUnits() {
