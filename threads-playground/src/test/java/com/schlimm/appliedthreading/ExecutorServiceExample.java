@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.schlimm.threads.model.Stock;
-import com.schlimm.threads.model.StockArrayBlockingQueue;
 import com.schlimm.threads.model.StockAtomicLong;
 import com.schlimm.threads.model.StockOwnedReadWriteLock;
 import com.schlimm.threads.model.StockOwnedReentrantLock;
@@ -24,7 +23,7 @@ public class ExecutorServiceExample {
 	private final static int poolsize = Runtime.getRuntime().availableProcessors();
 	private interface ExecutorServiceFactory {ExecutorService createExecutor();};
 	private final static Stock[] stockObjects = new Stock[] { new StockUnsynchronized(0), new StockOwnedReadWriteLock(0), new StockOwnedReentrantLock(0), new StockSynchronized(0),
-			new StockAtomicLong(0), new StockArrayBlockingQueue((int) (Runtime.getRuntime().freeMemory()/100)) };
+			new StockAtomicLong(0)};
 	private final static ExecutorServiceFactory[] pools = new ExecutorServiceFactory[] { 
 		new ExecutorServiceFactory() {@Override public ExecutorService createExecutor() {return Executors.newFixedThreadPool(poolsize);}}, 
 		new ExecutorServiceFactory() {@Override public ExecutorService createExecutor() {return Executors.newCachedThreadPool();}}, 
@@ -88,7 +87,7 @@ public class ExecutorServiceExample {
 	}
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
-		System.out.println(String.format("%1$-110s %2$-10s %3$-12s %4$-12s %5$-14s %6$-12s", "Case", "Units", "Added", "Reduced", "Expected Units", "Difference"));
+		System.out.println(String.format("%1$-110s %2$-10s %3$-12s %4$-12s %5$-14s %6$-12s %7$-12s", "Case", "Units", "Added", "Reduced", "Operations", "Expected Units", "Difference"));
 		for (int x = 0; x < pools.length; x++) {
 			for (int j = 0; j < stockObjects.length; j++) {
 
@@ -117,6 +116,24 @@ public class ExecutorServiceExample {
 				// give the active threads some time to interrupt
 				Thread.sleep(100);
 
+				// extract the results of the tasks using the futures
+				int added = 0;
+				int reduced = 0;
+				for (Future<Long> future : futures) {
+					Long stockoperations = null;
+					try {
+						stockoperations = future.get(1, TimeUnit.MILLISECONDS); // need time out 'cause after shutdown non started tasks
+																	            // will not return a result
+					} catch (TimeoutException e) {
+						// don't do this in production code :)
+					}
+					if (stockoperations != null) {
+						added += (stockoperations > 0 ? stockoperations : 0);
+						reduced += (stockoperations < 0 ? -stockoperations : 0);
+					}
+				}
+				int expectedUnits = added - reduced;
+
 				// give this case a identifying name
 				StringBuilder thisCase = new StringBuilder(String.valueOf(x)).append("-").append(stockObject.getClass().getSimpleName()).append("-").append(pool.getClass().getSimpleName());
 				if (pool instanceof ThreadPoolExecutor) {
@@ -125,26 +142,8 @@ public class ExecutorServiceExample {
 							.append("-").append(executor.getKeepAliveTime(TimeUnit.MILLISECONDS)).append("-").append(executor.getThreadFactory().getClass().getSimpleName());
 				}
 
-				// extract te results of the tasks using the futures
-				int added = 0;
-				int reduced = 0;
-				for (Future<Long> future : futures) {
-					Long stockTask = null;
-					try {
-						stockTask = future.get(1, TimeUnit.MILLISECONDS); // need time out 'cause after shutdown non started tasks
-																			// will not return a result
-					} catch (TimeoutException e) {
-						// don't do this in production code :)
-					}
-					if (stockTask != null) {
-						added += (stockTask > 0 ? stockTask : 0);
-						reduced += (stockTask < 0 ? -stockTask : 0);
-					}
-				}
-				int expectedUnits = added - reduced;
-
 				// print the result to the sysout
-				System.out.println(String.format("%1$-110s %2$-10s %3$-12s %4$-12s %5$-14s %6$-12s", thisCase, stockObject.getUnits(), added, reduced, expectedUnits, stockObject.getUnits()
+				System.out.println(String.format("%1$-110s %2$-10s %3$-12s %4$-12s %5$-14s %6$-12s %7$-12s", thisCase, stockObject.getUnits(), added, reduced, added+reduced, expectedUnits, stockObject.getUnits()
 						- expectedUnits));
 
 			}
