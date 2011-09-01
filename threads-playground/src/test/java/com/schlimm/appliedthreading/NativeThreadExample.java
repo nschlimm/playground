@@ -67,9 +67,9 @@ public class NativeThreadExample {
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println(String.format("%1$-30s %2$-10s %3$-12s %4$-12s %5$-14s %6$-12s", "Case", "Units", "Added", "Reduced", "Expected Units", "Difference"));
 		for (int i = 0; i < stock.length; i++) {
-			StockIncreaser thread1 = new NativeThreadExample().new StockIncreaser("Stock-Increaser", i);
+			StockIncreaser thread1 = new NativeThreadExample().new StockIncreaser("QueuingStock-Increaser", i);
 			thread1.start();
-			StockReducer thread2 = new NativeThreadExample().new StockReducer("Stock-Reducer", i);
+			StockReducer thread2 = new NativeThreadExample().new StockReducer("QueuingStock-Reducer", i);
 			thread2.start();
 
 			Thread.sleep(2000);

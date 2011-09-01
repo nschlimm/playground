@@ -15,7 +15,7 @@ public class CountDownLatchExample {
 				public void run() {
 					System.out.println("Waiting ...");
 					try {
-						latch.await();	// puts thread in wait state - interruptibly
+						latch.await();	// puts thread in wait state until latch is counted down to zero - interruptibly
 					} catch (InterruptedException e) { // actual interrupted state is now false ('cause its still running! enforces state model)
 						Thread.currentThread().interrupt();
 						return;
