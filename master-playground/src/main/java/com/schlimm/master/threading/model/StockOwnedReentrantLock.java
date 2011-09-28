@@ -20,7 +20,7 @@ public class StockOwnedReentrantLock implements Stock {
 	}
 
 	public void add(long quantity) throws InterruptedException {
-		lock.lockInterruptibly();
+		lock.lock();
 		try {
 			units += quantity;
 		} finally {

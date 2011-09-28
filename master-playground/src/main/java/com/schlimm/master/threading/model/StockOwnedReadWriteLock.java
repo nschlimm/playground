@@ -20,7 +20,7 @@ public class StockOwnedReadWriteLock implements Stock {
 	}
 
 	public void add(long quantity) throws InterruptedException  {
-		lock.writeLock().lockInterruptibly();
+		lock.writeLock().lock();
 		try {
 			units += quantity;
 		} finally {
