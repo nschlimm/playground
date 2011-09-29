@@ -38,8 +38,8 @@ public class NioClient implements Runnable {
 	// Maps a SocketChannel to a list of ByteBuffer instances
 	private Map<SocketChannel, List<ByteBuffer>> pendingData = new HashMap<SocketChannel, List<ByteBuffer>>();
 	
-	// Maps a SocketChannel to a RspHandler
-	private Map<SocketChannel, RspHandler> rspHandlers = Collections.synchronizedMap(new HashMap<SocketChannel, RspHandler>());
+	// Maps a SocketChannel to a BenchmarkRspHandler
+	private Map<SocketChannel, BenchmarkRspHandler> benchmarkRspHandlers = Collections.synchronizedMap(new HashMap<SocketChannel, BenchmarkRspHandler>());
 	
 	public NioClient(InetAddress hostAddress, int port) throws IOException {
 		this.hostAddress = hostAddress;
@@ -47,12 +47,12 @@ public class NioClient implements Runnable {
 		this.selector = this.initSelector();
 	}
 
-	public void send(byte[] data, RspHandler handler) throws IOException {
+	public void send(byte[] data, BenchmarkRspHandler handler) throws IOException {
 		// Start a new connection
 		SocketChannel socket = this.initiateConnection();
 		
 		// Register the response handler
-		this.rspHandlers.put(socket, handler);
+		this.benchmarkRspHandlers.put(socket, handler);
 		
 		// And queue the data we want written
 		synchronized (this.pendingData) {
@@ -154,7 +154,7 @@ public class NioClient implements Runnable {
 		System.arraycopy(data, 0, rspData, 0, numRead);
 		
 		// Look up the handler for this channel
-		RspHandler handler = (RspHandler) this.rspHandlers.get(socketChannel);
+		BenchmarkRspHandler handler = (BenchmarkRspHandler) this.benchmarkRspHandlers.get(socketChannel);
 		
 		// And pass the response to it
 		if (handler.handleResponse(rspData)) {
@@ -239,8 +239,8 @@ public class NioClient implements Runnable {
 			Thread t = new Thread(client, "Tiny-Client");
 			t.setDaemon(true);
 			t.start();
-			RspHandler handler = new RspHandler();
-			client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.SleepCommand")), handler);
+			BenchmarkRspHandler handler = new BenchmarkRspHandler();
+			client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.benchmark.ArrayCloneTest", 500L, 10, 1000)), handler);
 			handler.waitForResponse();
 		} catch (Exception e) {
 			e.printStackTrace();

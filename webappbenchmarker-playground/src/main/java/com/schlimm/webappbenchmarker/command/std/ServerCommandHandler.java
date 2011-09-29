@@ -25,7 +25,7 @@ public class ServerCommandHandler implements ServerCommand {
 					serverCommand = commandCache.get(clientCommand.getServerCommandClassName());
 				else {
 				    try {
-						serverCommand = (ServerCommand) Class.forName(clientCommand.getServerCommandClassName()).getConstructor(new Class[]{}).newInstance(clientCommand.getArguments());
+						serverCommand = (ServerCommand) Class.forName(clientCommand.getServerCommandClassName()).getConstructor(new Class[]{}).newInstance();
 					} catch (ClassNotFoundException e) {
 						System.out.println("Could not find class: " + clientCommand.getServerCommandClassName());
 					} catch (Exception e) {

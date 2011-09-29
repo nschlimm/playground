@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-public class RspHandler {
+import com.schlimm.webappbenchmarker.statistic.Average;
+
+public class BenchmarkRspHandler {
 	private byte[] rsp = null;
 	
 	public synchronized boolean handleResponse(byte[] rsp) {
@@ -20,8 +22,9 @@ public class RspHandler {
 			} catch (InterruptedException e) {
 			}
 		}
-		
-		System.out.println(new ObjectInputStream(new ByteArrayInputStream(rsp)).readObject());
+		Object[] object = (Object[]) new ObjectInputStream(new ByteArrayInputStream(rsp)).readObject();
+		Average average = (Average) object[0];
+		System.out.println(average.mean() + ";" + average.stddev());
 
 	}
 }

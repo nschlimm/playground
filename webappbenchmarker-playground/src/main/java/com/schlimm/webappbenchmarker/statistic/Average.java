@@ -1,5 +1,6 @@
 package com.schlimm.webappbenchmarker.statistic;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -8,8 +9,14 @@ import java.util.*;
  *
  * @author Heinz Kabutz
  */
-public class Average {
-  /** The set of values stored as doubles.  Autoboxed. */
+public class Average implements Serializable {
+	
+  /**
+	 * Version
+	 */
+	private static final long serialVersionUID = 1L;
+	
+/** The set of values stored as doubles.  Autoboxed. */
   private Collection<Double> values = new ArrayList<Double>();
 
   /**
