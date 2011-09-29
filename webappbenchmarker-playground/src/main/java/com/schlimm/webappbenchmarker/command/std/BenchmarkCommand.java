@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.schlimm.webappbenchmarker.command.ServerCommand;
-import com.schlimm.webappbenchmarker.statistic.Average;
 import com.schlimm.webappbenchmarker.statistic.PerformanceChecker;
 import com.schlimm.webappbenchmarker.statistic.PerformanceHarness;
+import com.schlimm.webappbenchmarker.statistic.Statistics;
 
 public class BenchmarkCommand implements ServerCommand {
 
@@ -31,7 +31,7 @@ public class BenchmarkCommand implements ServerCommand {
 			e.printStackTrace();
 		}
 		PerformanceHarness harness = new PerformanceHarness();
-	    Average arrayClone = harness.calculatePerf(
+	    Statistics arrayClone = harness.calculatePerf(
 	            new PerformanceChecker(testtime,
 	                benachmarkObject), testruns);
 		return new Object[]{arrayClone};

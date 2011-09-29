@@ -39,7 +39,7 @@ public class PerformanceChecker {
         }
       }, testTime);
       while (!expired) {
-        task.run();
+        getTask().run();
         numberOfLoops++;
       }
       start = System.currentTimeMillis() - start;
@@ -60,4 +60,8 @@ public class PerformanceChecker {
       }
     }
   }
+
+public Runnable getTask() {
+	return task;
+}
 }

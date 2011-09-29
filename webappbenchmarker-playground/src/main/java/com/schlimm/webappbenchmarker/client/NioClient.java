@@ -239,9 +239,20 @@ public class NioClient implements Runnable {
 			Thread t = new Thread(client, "Tiny-Client");
 			t.setDaemon(true);
 			t.start();
-			BenchmarkRspHandler handler = new BenchmarkRspHandler();
-			client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.benchmark.ArrayCloneTest", 500L, 10, 1000)), handler);
-			handler.waitForResponse();
+			System.out.println("ServerHandler1");
+			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
+			for (int i = 0; i < 4; i++) {
+				BenchmarkRspHandler handler = new BenchmarkRspHandler();
+				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.ServerCommandHandler", 500L, 5)), handler);
+				handler.waitForResponse();
+			}
+			System.out.println("ServerHandler2");
+			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
+			for (int i = 0; i < 4; i++) {
+				BenchmarkRspHandler handler = new BenchmarkRspHandler();
+				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.ServerCommandHandler2", 500L, 5)), handler);
+				handler.waitForResponse();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
