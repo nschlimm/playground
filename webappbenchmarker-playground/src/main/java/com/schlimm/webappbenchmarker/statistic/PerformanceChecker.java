@@ -64,4 +64,9 @@ public class PerformanceChecker {
 public Runnable getTask() {
 	return task;
 }
+
+@Override
+	public String toString() {
+		return "Performance checker - test time : " + testTime + " - epsilon : " + EPSILON + " - max attempts : " + MAXIMUM_ATTEMPTS + " - task details : " + task.toString();
+	}
 }

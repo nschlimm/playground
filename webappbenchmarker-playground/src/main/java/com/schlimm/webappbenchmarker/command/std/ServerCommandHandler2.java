@@ -29,12 +29,12 @@ public class ServerCommandHandler2 implements ServerCommand, Runnable {
 				else {
 					try {
 						serverCommand = (ServerCommand) Class.forName(clientCommand.getServerCommandClassName()).getConstructor(new Class[] {}).newInstance();
+						commandCache.put(clientCommand.getServerCommandClassName(), serverCommand);
 					} catch (ClassNotFoundException e) {
 						System.out.println("Could not find class: " + clientCommand.getServerCommandClassName());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					commandCache.put(clientCommand.getServerCommandClassName(), serverCommand);
 				}
 			} finally {
 				lock.unlock();

@@ -22,7 +22,7 @@ public class PerformanceHarness {
 		// first we warm up the hotspot compiler
 		check.start();
 		check.start();
-		System.out.println("Starting test harness for: " + check.getTask().getClass());
+		System.out.println("Starting test harness: " + check.toString());
 		long jitBefore = ManagementFactory.getCompilationMXBean().getTotalCompilationTime();
 		long classesLoadedPrior = ManagementFactory.getClassLoadingMXBean().getTotalLoadedClassCount();
 		for (int i = 0; i < runs; i++) {
@@ -31,7 +31,7 @@ public class PerformanceHarness {
 		}
 		long jitAfter = ManagementFactory.getCompilationMXBean().getTotalCompilationTime();
 		long classesLoadedAfter = ManagementFactory.getClassLoadingMXBean().getTotalLoadedClassCount();
-		System.out.println("Stopped test harness for: " + check.getTask().getClass());
+		System.out.println("Stopped test harness for: " + check.toString());
 		avg.setJitTimeBeforeHarness(jitBefore);
 		avg.setJitTimeAfterHarness(jitAfter);
 		avg.setClassesLoadedBeforeHarness(classesLoadedPrior);
