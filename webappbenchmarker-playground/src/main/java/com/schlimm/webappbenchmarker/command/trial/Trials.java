@@ -1,4 +1,4 @@
-package com.schlimm.webappbenchmarker.command.std;
+package com.schlimm.webappbenchmarker.command.trial;
 
 import java.util.Random;
 

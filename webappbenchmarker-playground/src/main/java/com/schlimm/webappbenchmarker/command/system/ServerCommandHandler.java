@@ -1,7 +1,6 @@
-package com.schlimm.webappbenchmarker.command.std;
+package com.schlimm.webappbenchmarker.command.system;
 
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -9,12 +8,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.schlimm.webappbenchmarker.command.ClientCommand;
 import com.schlimm.webappbenchmarker.command.ServerCommand;
 
-public class ServerCommandHandler implements ServerCommand, Runnable {
+public class ServerCommandHandler implements ServerCommand {
 
 	private Map<String, ServerCommand> commandCache = new ConcurrentHashMap<String, ServerCommand>();
-	{for (int i = 0; i < 100000; i++) {
-		commandCache.put(String.valueOf(new Random().nextInt()), new CommandDummy());
-	}}
 	private Lock lock = new ReentrantLock();
 
 	@Override
@@ -42,11 +38,6 @@ public class ServerCommandHandler implements ServerCommand, Runnable {
 		}
 		Object[] result = serverCommand.execute(clientCommand.getArguments());
 		return result;
-	}
-
-	@Override
-	public void run() {
-		execute(new ClientCommand("com.schlimm.webappbenchmarker.command.std.CommandDummy"));
 	}
 
 }

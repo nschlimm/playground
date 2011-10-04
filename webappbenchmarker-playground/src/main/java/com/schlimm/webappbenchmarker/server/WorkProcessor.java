@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import com.schlimm.webappbenchmarker.command.ServerCommand;
-import com.schlimm.webappbenchmarker.command.std.ServerCommandHandler;
+import com.schlimm.webappbenchmarker.command.system.ServerCommandHandler;
 import com.schlimm.webappbenchmarker.protocol.ApplicationLayerProtocol;
 import com.schlimm.webappbenchmarker.protocol.StandardJavaSerialization;
 

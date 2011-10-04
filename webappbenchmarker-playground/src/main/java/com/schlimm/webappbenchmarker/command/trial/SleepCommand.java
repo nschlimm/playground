@@ -1,4 +1,4 @@
-package com.schlimm.webappbenchmarker.command.std;
+package com.schlimm.webappbenchmarker.command.trial;
 
 import com.schlimm.webappbenchmarker.command.ServerCommand;
 

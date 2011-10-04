@@ -1,4 +1,4 @@
-package com.schlimm.webappbenchmarker.command.std;
+package com.schlimm.webappbenchmarker.command.system;
 
 import java.util.ArrayList;
 import java.util.Arrays;

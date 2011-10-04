@@ -1,4 +1,4 @@
-package com.schlimm.webappbenchmarker.command.std;
+package com.schlimm.webappbenchmarker.command.cachebenchmark;
 
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;

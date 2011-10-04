@@ -17,11 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.schlimm.webappbenchmarker.ChangeRequest;
-import com.schlimm.webappbenchmarker.command.ClientCommand;
-import com.schlimm.webappbenchmarker.protocol.ApplicationLayerProtocol;
-import com.schlimm.webappbenchmarker.protocol.StandardJavaSerialization;
+import com.schlimm.webappbenchmarker.command.Testscenario;
 
-public class NioClient implements Runnable {
+public class NioClient implements Runnable, WBClient {
 	// The host:port combination to connect to
 	private InetAddress hostAddress;
 	private int port;
@@ -234,74 +232,20 @@ public class NioClient implements Runnable {
 
 	public static void main(String[] args) {
 		try {
-			ApplicationLayerProtocol protocol = new StandardJavaSerialization();
 			NioClient client = new NioClient(InetAddress.getByName("localhost"), 9090);
 			Thread t = new Thread(client, "Tiny-Client");
 			t.setDaemon(true);
 			t.start();
-			System.out.println("Check null - small cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_CheckNull", 500L, 5, 10)), handler);
-				handler.waitForResponse();
+			String scenarioStr = null;
+			String scenarioArguments = "";
+			for (String arg : args) {
+				if (arg.startsWith("-WBscenario="))
+					scenarioStr=arg.split("=")[1];
+				if (arg.startsWith("-WBscenarioArguments="))
+					scenarioArguments=arg.split("=")[1];
 			}
-			System.out.println("Check map - small cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_CheckMap", 500L, 5, 10)), handler);
-				handler.waitForResponse();
-			}
-			System.out.println("putIfAbsent - small cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_PutIfAbsent", 500L, 5, 10)), handler);
-				handler.waitForResponse();
-			}
-			System.out.println("Check null - large cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_CheckNull", 500L, 5, 100000)), handler);
-				handler.waitForResponse();
-			}
-			System.out.println("Check map - large cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_CheckMap", 500L, 5, 100000)), handler);
-				handler.waitForResponse();
-			}
-			System.out.println("putIfAbsent - large cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_PutIfAbsent", 500L, 5, 100000)), handler);
-				handler.waitForResponse();
-			}
-			System.out.println("Check null - very large cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_CheckNull", 500L, 5, 1000000)), handler);
-				handler.waitForResponse();
-			}
-			System.out.println("Check map - very large cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_CheckMap", 500L, 5, 1000000)), handler);
-				handler.waitForResponse();
-			}
-			System.out.println("putIfAbsent - very large cache - mixed mode");
-			System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", "Mean exec count", "Deviation", "JIT before", "JIT after", "CL before", "CL after"));
-			for (int i = 0; i < 4; i++) {
-				BenchmarkRspHandler handler = new BenchmarkRspHandler();
-				client.send(protocol.toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.std.BenchmarkCommand","com.schlimm.webappbenchmarker.command.std.CacheSolution_PutIfAbsent", 500L, 5, 1000000)), handler);
-				handler.waitForResponse();
-			}
+			Testscenario scenario = (Testscenario) Class.forName(scenarioStr).getConstructor(new Class[]{WBClient.class}).newInstance(client);
+			scenario.execute((Object[])scenarioArguments.split(";"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

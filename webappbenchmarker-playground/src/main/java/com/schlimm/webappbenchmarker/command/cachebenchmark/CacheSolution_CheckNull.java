@@ -1,4 +1,4 @@
-package com.schlimm.webappbenchmarker.command.std;
+package com.schlimm.webappbenchmarker.command.cachebenchmark;
 
 import java.util.Map;
 import java.util.Random;
@@ -8,14 +8,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.schlimm.webappbenchmarker.command.ServerCommand;
 
-public class CacheSolution_CheckMap implements Runnable, ServerCommand {
+public class CacheSolution_CheckNull implements Runnable, ServerCommand {
 
 	private Map<String, String> commandCache = new ConcurrentHashMap<String, String>();
 	private Lock lock = new ReentrantLock();
 	private int cacheSize = 10;
 	String[] keys;
 
-	public CacheSolution_CheckMap(Integer cacheSize) {
+	public CacheSolution_CheckNull(Integer cacheSize) {
 		super();
 		this.cacheSize = cacheSize;
 		keys = new String[cacheSize];
@@ -27,16 +27,14 @@ public class CacheSolution_CheckMap implements Runnable, ServerCommand {
 	@Override
 	public Object[] execute(Object... arguments) {
 		String clientCommand = (String) arguments[0];
-		String serverCommand = null;
-		if (commandCache.containsKey(clientCommand)) {
-			serverCommand = commandCache.get(clientCommand);
-		} else {
+		String serverCommand = commandCache.get(clientCommand);
+		if (serverCommand == null) {
 			lock.lock();
 			try {
-				if (commandCache.containsKey(clientCommand)) {
+				if (commandCache.containsKey(clientCommand))
 					serverCommand = commandCache.get(clientCommand);
-				} else {
-					// do something CPU intensive (is not relevant for test result)
+				else {
+					// do something CPU intensive (is not relevant for test result here)
 					serverCommand = "dummy string";
 					commandCache.put(clientCommand, serverCommand);
 				}
@@ -52,7 +50,7 @@ public class CacheSolution_CheckMap implements Runnable, ServerCommand {
 	public void run() {
 		execute(keys[new Random().nextInt(cacheSize)]);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "class - " + this.getClass() + " - cache size : " + cacheSize;
