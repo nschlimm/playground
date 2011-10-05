@@ -37,7 +37,7 @@ public class NioClient implements Runnable, WBClient {
 	private Map<SocketChannel, List<ByteBuffer>> pendingData = new HashMap<SocketChannel, List<ByteBuffer>>();
 	
 	// Maps a SocketChannel to a BenchmarkRspHandler
-	private Map<SocketChannel, BenchmarkRspHandler> benchmarkRspHandlers = Collections.synchronizedMap(new HashMap<SocketChannel, BenchmarkRspHandler>());
+	private Map<SocketChannel, AbstractResponseHandler> rspHandlers = Collections.synchronizedMap(new HashMap<SocketChannel, AbstractResponseHandler>());
 	
 	public NioClient(InetAddress hostAddress, int port) throws IOException {
 		this.hostAddress = hostAddress;
@@ -45,12 +45,17 @@ public class NioClient implements Runnable, WBClient {
 		this.selector = this.initSelector();
 	}
 
-	public void send(byte[] data, BenchmarkRspHandler handler) throws IOException {
+	public void send(byte[] data, AbstractResponseHandler handler) {
 		// Start a new connection
-		SocketChannel socket = this.initiateConnection();
+		SocketChannel socket = null;
+		try {
+			socket = this.initiateConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		// Register the response handler
-		this.benchmarkRspHandlers.put(socket, handler);
+		this.rspHandlers.put(socket, handler);
 		
 		// And queue the data we want written
 		synchronized (this.pendingData) {
@@ -152,7 +157,7 @@ public class NioClient implements Runnable, WBClient {
 		System.arraycopy(data, 0, rspData, 0, numRead);
 		
 		// Look up the handler for this channel
-		BenchmarkRspHandler handler = (BenchmarkRspHandler) this.benchmarkRspHandlers.get(socketChannel);
+		AbstractResponseHandler handler = (AbstractResponseHandler) this.rspHandlers.get(socketChannel);
 		
 		// And pass the response to it
 		if (handler.handleResponse(rspData)) {

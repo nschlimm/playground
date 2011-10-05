@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 
 import com.schlimm.webappbenchmarker.statistic.Statistics;
 
-public class BenchmarkRspHandler {
+public class BenchmarkRspHandler extends AbstractResponseHandler {
 	private byte[] rsp = null;
 	
 	public synchronized boolean handleResponse(byte[] rsp) {
@@ -16,14 +16,21 @@ public class BenchmarkRspHandler {
 		return true;
 	}
 	
-	public synchronized void waitForResponse() throws IOException, ClassNotFoundException {
+	public synchronized void waitForResponse() {
 		while(this.rsp == null) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 			}
 		}
-		Object[] object = (Object[]) new ObjectInputStream(new ByteArrayInputStream(rsp)).readObject();
+		Object[] object = null;
+		try {
+			object = (Object[]) new ObjectInputStream(new ByteArrayInputStream(rsp)).readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		Statistics statistics = (Statistics) object[0];
 		 DecimalFormat df = new DecimalFormat("#.####");
 		System.out.println(String.format("%1$-20s %2$-15s %3$-11s %4$-10s %5$-10s %6$-10s", df.format(statistics.mean()), df.format(statistics.stddev()), statistics.getJitTimeBeforeHarness(), statistics.getJitTimeAfterHarness(), statistics.getClassesLoadedBeforeHarness(), statistics.getClassesLoadedAfterHarness()));

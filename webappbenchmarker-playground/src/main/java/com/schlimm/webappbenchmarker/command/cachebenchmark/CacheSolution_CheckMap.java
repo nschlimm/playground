@@ -13,14 +13,17 @@ public class CacheSolution_CheckMap implements Runnable, ServerCommand {
 	private Map<String, String> commandCache = new ConcurrentHashMap<String, String>();
 	private Lock lock = new ReentrantLock();
 	private int cacheSize = 10;
-	String[] keys;
-
-	public CacheSolution_CheckMap(Integer cacheSize) {
+	private String[] keys;
+	
+	public CacheSolution_CheckMap(Integer cacheSize, Boolean initialize) {
 		super();
 		this.cacheSize = cacheSize;
 		keys = new String[cacheSize];
 		for (int i = 0; i < cacheSize; i++) {
 			keys[i] = Long.toHexString(Double.doubleToLongBits(Math.random()));
+			if (initialize) {
+				commandCache.put(keys[i], Long.toHexString(Double.doubleToLongBits(Math.random())));
+			}
 		}
 	}
 

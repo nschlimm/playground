@@ -14,12 +14,15 @@ public class CacheSolution_PutIfAbsent implements Runnable, ServerCommand {
 	private int cacheSize = 10;
 	String[] keys;
 
-	public CacheSolution_PutIfAbsent(Integer cacheSize) {
+	public CacheSolution_PutIfAbsent(Integer cacheSize, Boolean initialize) {
 		super();
 		this.cacheSize = cacheSize;
 		keys = new String[cacheSize];
 		for (int i = 0; i < cacheSize; i++) {
 			keys[i] = Long.toHexString(Double.doubleToLongBits(Math.random()));
+			if (initialize) {
+				commandCache.put(keys[i], new SomeCPUIntenseTask());
+			}
 		}
 	}
 
