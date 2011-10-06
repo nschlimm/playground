@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.schlimm.webappbenchmarker.command.ServerCommand;
 
-public class Contention implements ServerCommand {
+public class ContentionJava5Locks implements ServerCommand {
 
 	private Lock lock = new ReentrantLock();
 	private volatile boolean expired;
@@ -23,7 +23,7 @@ public class Contention implements ServerCommand {
 				public void run() {
 					expired = true;
 				}
-			}, 256);
+			}, 1000);
 			while (!expired) {
 				counter++; // do some work
 			}
@@ -45,9 +45,9 @@ public class Contention implements ServerCommand {
 
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws InterruptedException {
-		Contention contention = new Contention();
-		Thread thread1 = new Thread(contention.new Worker(), "Worker-1");
-		Thread thread2 = new Thread(contention.new Worker(), "Worker-2");
+		ContentionJava5Locks contentionJava5Locks = new ContentionJava5Locks();
+		Thread thread1 = new Thread(contentionJava5Locks.new Worker(), "Worker-1");
+		Thread thread2 = new Thread(contentionJava5Locks.new Worker(), "Worker-2");
 		thread1.start();
 		thread2.start();
 		Thread.currentThread().sleep(60000);

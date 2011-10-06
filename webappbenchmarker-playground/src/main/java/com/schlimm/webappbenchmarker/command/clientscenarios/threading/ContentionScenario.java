@@ -1,5 +1,7 @@
 package com.schlimm.webappbenchmarker.command.clientscenarios.threading;
 
+import java.util.concurrent.Callable;
+
 import com.schlimm.webappbenchmarker.client.SimpleRspHandler;
 import com.schlimm.webappbenchmarker.client.WBClient;
 import com.schlimm.webappbenchmarker.command.ClientCommand;
@@ -12,16 +14,31 @@ public class ContentionScenario extends Testscenario {
 		super(client);
 	}
 
+	@SuppressWarnings({ "unused", "rawtypes" })
+	private class Contentions implements Callable {
+
+		private ClientCommand command;
+		
+		public Contentions(ClientCommand command) {
+			super();
+			this.command = command;
+		}
+
+		@Override
+		public Object call() throws Exception {
+			while(!Thread.currentThread().isInterrupted()) {
+				SimpleRspHandler rspHandler = new SimpleRspHandler();
+				client.send(new StandardJavaSerialization().toByteArray(command), rspHandler);
+				rspHandler.waitForResponse();
+			}
+			return null;
+		}
+		
+	}
+	
 	@Override
 	public void execute(Object... args) {
-		while (true) { // infinite loop
-			SimpleRspHandler rspHandler1 = new SimpleRspHandler();
-			SimpleRspHandler rspHandler2 = new SimpleRspHandler();
-			client.send(new StandardJavaSerialization().toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.threadingissues.Contention")), rspHandler1);
-			client.send(new StandardJavaSerialization().toByteArray(new ClientCommand("com.schlimm.webappbenchmarker.command.threadingissues.Contention")), rspHandler2);
-			rspHandler1.waitForResponse();
-			rspHandler2.waitForResponse();
-		}
+		
 	}
 
 }
