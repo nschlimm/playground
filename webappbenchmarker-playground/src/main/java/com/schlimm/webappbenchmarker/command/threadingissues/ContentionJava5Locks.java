@@ -50,7 +50,7 @@ public class ContentionJava5Locks implements ServerCommand {
 		Thread thread2 = new Thread(contentionJava5Locks.new Worker(), "Worker-2");
 		thread1.start();
 		thread2.start();
-		Thread.currentThread().sleep(60000);
+		Thread.currentThread().sleep(30000);
 		thread1.interrupt();
 		thread2.interrupt();
 	}
