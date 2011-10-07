@@ -86,6 +86,7 @@ public class NioServer implements Runnable {
 						switch (change.type) {
 						case ChangeRequest.CHANGEOPS:
 							SelectionKey key = change.socket.keyFor(this.selector);
+							if (key==null) continue;
 							key.interestOps(change.ops); // if this is OP_WRITE then the selection key is immediately available on selected keys
 														// this is because the socket channel is almost always ready for writing
 						}

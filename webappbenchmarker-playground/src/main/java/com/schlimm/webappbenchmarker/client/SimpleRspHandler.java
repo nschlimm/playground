@@ -18,6 +18,8 @@ public class SimpleRspHandler extends AbstractResponseHandler {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
 			}
 		}
 		try {
