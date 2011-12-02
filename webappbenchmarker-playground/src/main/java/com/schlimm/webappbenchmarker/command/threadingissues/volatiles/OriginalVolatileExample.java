@@ -3,43 +3,28 @@ package com.schlimm.webappbenchmarker.command.threadingissues.volatiles;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.schlimm.webappbenchmarker.command.ServerCommand;
+public class OriginalVolatileExample {
 
-/**
- * Synchronized read of expired status
- * 
- * Results: option -server
- * status		expired			result
- * non-volatile non-volatile	positive
- * 
- * @author Niklas Schlimm
- *
- */
-public class AnotherVolatileExample3 implements ServerCommand {
-
- private WorkStatus status = new WorkStatus(); // non volatile status does not work
+ private boolean expired;
  private long counter = 0;
  private Object mutext = new Object();
 
  public Object[] execute(Object... arguments) {
-   status.expired = false;
+   expired = false;
    final Timer timer = new Timer();
    timer.schedule(new TimerTask() {
-    public void run() {
-     status.expired = true;
-     System.out.println("Timer interrupted main thread ...");
-     timer.cancel();
-    }
-   }, 1000);
-   boolean expired = false;
+	   public void run() {
+		    synchronized (mutext) {
+		        expired = true;
+		    }
+		    System.out.println("Timer interrupted main thread ...");
+		    timer.cancel();
+		}   }, 1000);
    while (!expired) {
     counter++; // do some work
-    synchronized (mutext) {
-		expired = status.expired;
-	}
    }
    System.out.println("Main thread was interrupted by timer ...");
-  return new Object[] { counter, status };
+  return new Object[] { counter, expired };
  }
 
  private class Worker implements Runnable {
@@ -53,14 +38,13 @@ public class AnotherVolatileExample3 implements ServerCommand {
 
  @SuppressWarnings("static-access")
  public static void main(String[] args) throws InterruptedException {
-  AnotherVolatileExample3 volatileExample = new AnotherVolatileExample3();
+  OriginalVolatileExample volatileExample = new OriginalVolatileExample();
   Thread thread1 = new Thread(volatileExample.new Worker(), "Worker-1");
+  Thread thread2 = new Thread(volatileExample.new Worker(), "Worker-2");
   thread1.start();
+  thread2.start();
   Thread.currentThread().sleep(60000);
   thread1.interrupt();
- }
- 
- private class WorkStatus {
-	 public boolean expired = false;
+  thread2.interrupt();
  }
 }
