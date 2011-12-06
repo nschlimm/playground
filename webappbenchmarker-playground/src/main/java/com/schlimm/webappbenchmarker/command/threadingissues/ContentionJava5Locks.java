@@ -18,16 +18,16 @@ public class ContentionJava5Locks implements ServerCommand {
 		lock.lock();
 		try {
 			expired = false;
-			Timer timer = new Timer();
+			final Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
 				public void run() {
 					expired = true;
+					timer.cancel();
 				}
 			}, 1000);
 			while (!expired) {
 				counter++; // do some work
 			}
-			timer.cancel();
 		} finally {
 			lock.unlock();
 		}
