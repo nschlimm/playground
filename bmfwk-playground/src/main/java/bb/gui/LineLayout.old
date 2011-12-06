@@ -1,0 +1,764 @@
+AM ARCHIVING THIS CLASS, SINCE HAS BEEN OBSOLETED BY the new LinePanel
+	but am keeping the source code around just to remember how to implement a non-trivial LayoutManager
+
+/*
+Copyright © 2008 Brent Boyer
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Lesser GNU General Public License for more details.
+
+You should have received a copy of the Lesser GNU General Public License along with this program (see the license directory in this project).  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+
+Programmer Notes:
+
++++ don't bother with the table layouts below--sun is adding a general GroupLayout to swing in 1.6 which does it all:
+http://java.sun.com/javase/6/docs/api/javax/swing/GroupLayout.html
+
+	--or, maybe use GroupLayout internally in a more convenient api called TableLayout
+
+	--HERE IS SOMEONE ELSE'S WORK ON A TABLE LAYOUT, which is what really need since this will exploit full 2D:
+		https://explicit-tablelayout.dev.java.net/
+	another one:
+		http://www.javalobby.org/articles/miglayout/
+		critique:
+			http://alblue.blogspot.com/2006/09/java-miglayout-good-layout-or-grid.html
+			
+	--great article exploring all the problems wioth java layouts:
+		http://www.mindsilver.com/guide/docs/articles/layout/index.php
+
++++ NEED to support the relative LINE_AXIS and PAGE_AXIS axis options of BoxLayout
+
++++ there is a bunch of functionality in this class that needs to be put in an abstract base LayoutManager2 class:
+	--the way that I have cached fields for the sizes (e.g. totalMinimumSize) and their accessors (e.g. maximumLayoutSize)
+		--altho the revalidateLayout method necessarily needs to made abstract
+	--utility methods like checkContainerArgAndThread
+	--when do this, should have CenterLayout use this new class...
+
++++ currently, this class calcs min and max sizes based off of the corresponding
+sizes of the target's contents, but they are actually never used!
+When it comes time to draw them, the preferred size is always used.
+	--does this imply that i should eliminate the min and max size fields and have the accessor method return the preferred size?
+	--or should i go with an algorithm which draws the Components scaled according to the
+	ratios found in their preferred sizes so that when drawn the Components precisely fill up the target container's size?
+*/
+
+package bb.gui;
+
+import bb.util.Check;
+import bb.util.Execute;
+import java.awt.AWTError;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
+import java.io.Serializable;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+/**
+* This layout manager is intended to offer similar functionality as {@link javax.swing.BoxLayout}.
+* It was written solely to fix {@link UnitTest#main bugs/bad behavior} in BoxLayout.
+* <p>
+* Because of this class's deep similarity with BoxLayout, the following description,
+* which was lifted from the javadocs of BoxLayout and customized, applies here:
+* <blockquote>
+* LineLayout is a layout manager that allows multiple Components to be layed out either
+* vertically or horizontally. The Components will not wrap so, for
+* example, a vertical arrangement of Components will stay vertically
+* arranged when the frame is resized.
+* <p>
+* When you create a LineLayout, you specify whether its major axis is
+* the {@link #xAxis x-axis} (i.e. left to right placement) or
+* {@link #yAxis y-axis} (i.e. top to bottom placement).
+* Components are arranged from left to right (or top to bottom), in the same order as they were added to the Container.
+* Invisible Components are ignored (they never affect the layout).
+* <p>
+* For left to right layout, Components start to the right of the left edge, and are laid
+* out edge-edge, heading right, in the order in which they were added,
+* at their preferred sizes.
+* Each Component's {@link Component#getAlignmentY y-alignment} is used to determine where it sits above or
+* below the horizontal line going thru the middle of the target Container.
+* (Its {@link Component#getAlignmentX x-alignment} is ignored.)
+* <p>
+* For top to bottom layout, Components start below the top edge, and are laid
+* out edge-edge, heading to the bottom, in the order in which they were added,
+* at their preferred sizes.
+* Each Component's {@link Component#getAlignmentX x-alignment} is used to determine where it sits left or
+* right of the vertical line going down the middle of the target Container.
+* (Its {@link Component#getAlignmentY y-alignment} is ignored.)
+* <p>
+* Nesting multiple panels with different combinations of horizontal and
+* vertical layout gives an effect similar to {@link GridBagLayout}, without the complexity.
+* <p>
+* Instead of using LineLayout directly, programs may find it convenient to use the {@link LinePanel} class.
+* LinePanel is a lightweight Swing container that initially uses a LineLayout.
+* LinePanel also provides handy strut methods to help you use LineLayout well.
+* </blockquote>
+* <p>
+* In terms of the API exposed by this class, it is identical to BoxLayout with one exception:
+* its sole {@link #LineLayout constructor} only requires specification of the alignment axis.
+* <p>
+* Moving beyond method signatures to method semantics, this class is mostly identical to BoxLayout
+* with the following exceptions:
+* <ol>
+*  <li>
+*		<i>LineLayout always draws Components at their preferred dimensions</i>.<br/>
+*		<b>Warning</b>: one consequence is that Glue Components (e.g. from Box.createHorizontalGlue)
+*		are always displayed at zero size (since that is their preferred size),
+*		so they probably will not have the same effect as they do in other LayoutManagers.
+*  </li>
+*  <li>
+*		LineLayout uses the x or y alignment of a Component to set its justification in a consistent and natural way.
+*		Specificly, for a vertical (y-axis) layout, an x-alignment value of 0 will make the Component left justified,
+*		0.5f will make it center justified, 1.0f will make it right justified, and other values cause intermediate justification.
+*		Similarly, for a horizontal (x-axis) layout, a y-alignment value of 0 will make the Component top justified,
+*		0.5f will make it center justified, 1.0f will make it bottom justified, and other values cause intermediate justification.
+*		(BoxLayout {@link UnitTest#buildExampleBoxLayoutFails works inconsistently} with alignment values.
+*		Consequently, the only way to achieve justification with it is to use barbaric techniques
+*		such as embedding Components inside Panels, and placing Glue/Strut Components to the sides.)
+*  </li>
+*  <li>
+*		Both getLayoutAlignmentX and getLayoutAlignmentY always return 0.5f to indicate centered.
+*		(This behavior is identical to BorderLayout, CardLayout, and GridBagLayout,
+*		while BoxLayout and OverlayLayout do more complicated stuff.)
+*  </li>
+*  <li>
+*		<i>This class currently does not support the relative LINE_AXIS and PAGE_AXIS axis options of BoxLayout;
+*		support for these options is intended to be added in the future</i>.
+*  </li>
+* </ol>
+* <p>
+* Other than the {@link UnitTest} inner class of this class, there is no Swing-specific functionality in this class.
+* Thus, this LayoutManager may be used even in all-AWT programs.
+* <p>
+* Like typical Java GUI code, this class is not multithread safe:
+* it expects to only be called by {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}.
+* This threading limitation is checked in every public method.
+* <p>
+* @author Brent Boyer
+*/
+public class LineLayout implements LayoutManager2, Serializable {
+	
+	// -------------------- constants --------------------
+	
+	private static final long serialVersionUID = 1;
+	
+	/**
+	* Specifies that Components should be laid out left to right.
+	* In other words, this value selects the x-axis as the tiled dimension, and the y-axis as the aligned dimension.
+	*/
+	public static final int xAxis = 0;	// is same as BoxLayout.X_AXIS (from looking at its source code); we do not use it, however, since we want to use this class if swing is absent
+	
+	/**
+	* Specifies that Components should be laid out top to bottom.
+	* In other words, this value selects the y-axis as the tiled dimension, and the x-axis as the aligned dimension.
+	*/
+	public static final int yAxis = 1;	// is same as BoxLayout.Y_AXIS (from looking at its source code); we do not use it, however, since we want to use this class if swing is absent
+	
+	// -------------------- instance Fields --------------------
+	
+	/**
+	* Stores which axis to align along (i.e. the tiled dimension).
+	* @serial
+	*/
+	private final int axis;
+	
+	/**
+	* Stores the first Container to use this instance (only one may ever use it).
+	* @serial
+	*/
+	private Container firstTarget;
+	
+	/**
+	* Caches the value returned by {@link #minimumLayoutSize minimumLayoutSize}.
+	* Calculated inside {@link #revalidateLayout revalidateLayout} as follows:
+	* <ol>
+	*  <li>in the tiled dimension, is the sum of the minimum sizes of each Component held in the Container
+	*  <li>in the aligned dimension, is the individual maximum of all the minimum sizes among all such Components.
+	* </ol>
+	* Finally, both dimensions are increased to account for the target Container's insets.
+	* @see #xAxis
+	* @see #yAxis
+	* @serial
+	*/
+	private final Dimension totalMinimumSize = new Dimension();
+	
+	/**
+	* Caches the value returned by {@link #preferredLayoutSize preferredLayoutSize}.
+	* Calculated inside {@link #revalidateLayout revalidateLayout} as follows:
+	* <ol>
+	*  <li>in the tiled dimension, is the sum of the preferred sizes of each Component held in the Container
+	*  <li>in the aligned dimension, is the preferred maximum of all the minimum sizes among all such Components.
+	* </ol>
+	* Finally, both dimensions are increased to account for the target Container's insets.
+	* @see #xAxis
+	* @see #yAxis
+	* @serial
+	*/
+	private final Dimension totalPreferredSize = new Dimension();
+	
+	/**
+	* Caches the value returned by {@link #maximumLayoutSize maximumLayoutSize}.
+	* Calculated inside {@link #revalidateLayout revalidateLayout} as follows:
+	* <ol>
+	*  <li>in the tiled dimension, is the sum of the maximum sizes of each Component held in the Container
+	*  <li>in the aligned dimension, is the individual maximum of all the maximum sizes among all such Components.
+	* </ol>
+	* Finally, both dimensions are increased to account for the target Container's insets.
+	* @see #xAxis
+	* @see #yAxis
+	* @serial
+	*/
+	private final Dimension totalMaximumSize = new Dimension();
+	
+	/**
+	* Records whether or not this LayoutManager has been validated against the current version of the target Container.
+	* @see #invalidateLayout invalidateLayout
+	* @see #revalidateLayout revalidateLayout
+	* @serial
+	*/
+	private boolean validatedStatus = false;
+	
+	// -------------------- factory methods --------------------
+	
+	/**
+	* Returns <code>new LineLayout(xAxis)</code>.
+	* <p>
+	* Example use: <code>JPanel jpanel = new JPanel( LineLayout.makeHorizontal() );</code>
+	* <p>
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public static LineLayout makeHorizontal() throws IllegalStateException {
+		return new LineLayout(xAxis);
+	}
+	
+	/**
+	* Returns <code>new LineLayout(yAxis)</code>.
+	* <p>
+	* Example use: <code>JPanel jpanel = new JPanel( LineLayout.makeVertical() );</code>
+	* <p>
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public static LineLayout makeVertical() throws IllegalStateException {
+		return new LineLayout(yAxis);
+	}
+	
+	// -------------------- constructor --------------------
+	
+	/**
+	* Creates a layout manager that will lay out Components in a line either left to right or
+	* top to bottom, as specified in the axis argument.
+	* <p>
+	* <i>Note</i>: unlike the corresponding BoxLayout constructor, <i>the LineLayout constructor
+	* does not take a Container arg</i>.
+	* Instead, the target Container is more conveniently established by "lazy initialization".
+	* Specificly, the first Container arg that is presented to one of the LayoutManager or LayoutManager2 methods
+	* of this class will establish what target Container this instance is for.
+	* <p>
+	* This elimination of the Container arg allows for a convenient compaction of code.
+	* Compare:
+	* <pre><code>
+	*	JPanel jpanel = new JPanel( new LineLayout(LineLayout.xAxis) );
+	* </code></pre>
+	* versus
+	* <pre><code>
+	*	JPanel jpanel = new JPanel();
+	*	jpanel.setLayout( new BoxLayout(jpanel, BoxLayout.xAxis) );
+	* </code></pre>
+	* (Even more convenient are the methods {@link #makeHorizontal makeHorizontal} and {@link #makeVertical makeVertical}.)
+	* <p>
+	* @param axis the axis to lay out Components along.
+	* For left-to-right layout, specify <code>LineLayout.xAxis</code>;
+	* for top-to-bottom layout, specify <code>LineLayout.yAxis</code>
+	* @throws IllegalArgumentException if the axis arg has an invalid value
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public LineLayout(int axis) throws IllegalArgumentException, IllegalStateException {
+		if ( (axis != xAxis) && (axis != yAxis) ) throw new IllegalArgumentException("axis = " + axis + " is an invalid value");
+		Check.state().edt();
+		
+		this.axis = axis;
+	}
+	
+	// -------------------- LayoutManager, LayoutManager2 methods --------------------
+	
+	/**
+	* Returns the alignment along the x axis.
+	* This specifies how target would like to be aligned relative to other Components.
+	* The value should be a number between 0 and 1 where 0 represents alignment along the origin,
+	* 1 is aligned the furthest away from the origin, 0.5 is centered, etc.
+	* <p>
+	* @param target a Container
+	* @return the value 0.5f to indicate centered
+	* @throws AWTError if {@link #checkContainerArgAndThread checkContainerArgAndThread} objects to container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public float getLayoutAlignmentX(Container target) throws AWTError, IllegalStateException {
+		checkContainerArgAndThread(target);
+		
+		revalidateLayout(target);
+		return 0.5f;
+	}
+	
+	/**
+	* Returns the alignment along the y axis.
+	* This specifies how target would like to be aligned relative to other Components.
+	* The value should be a number between 0 and 1 where 0 represents alignment along the origin,
+	* 1 is aligned the furthest away from the origin, 0.5 is centered, etc.
+	* <p>
+	* @param target a Container
+	* @return the value 0.5f to indicate centered
+	* @throws AWTError if {@link #checkContainerArgAndThread checkContainerArgAndThread} objects to container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public float getLayoutAlignmentY(Container target) throws AWTError, IllegalStateException {
+		checkContainerArgAndThread(target);
+		
+		revalidateLayout(target);
+		return 0.5f;
+	}
+	
+	/**
+	* Returns the minimum dimensions needed to lay out the Components contained
+	* in the specified target container.
+	* Invisible child Components are ignored in the calculation.
+	* The result includes the effects of the target container's insets.
+	* <p>
+	* @param target the Container that needs to be laid out
+	* @return a new Dimension instance (both the height and width are >= 0 && <= Integer.MAX_VALUE)
+	* @throws AWTError if {@link #checkContainerArgAndThread checkContainerArgAndThread} objects to container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @see #preferredLayoutSize preferredLayoutSize
+	* @see #maximumLayoutSize maximumLayoutSize
+	*/
+	public Dimension minimumLayoutSize(Container target) throws AWTError, IllegalStateException {
+		checkContainerArgAndThread(target);
+		
+		revalidateLayout(target);
+		return new Dimension(totalMinimumSize);
+	}
+	
+	/**
+	* Returns the preferred dimensions needed to lay out the Components contained
+	* in the specified target container.
+	* Invisible child Components are ignored in the calculation.
+	* The result includes the effects of the target container's insets.
+	* <p>
+	* @param target the Container that needs to be laid out
+	* @return a new Dimension instance (both the height and width are >= 0 && <= Integer.MAX_VALUE)
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @throws AWTError if {@link #checkContainerArgAndThread checkContainerArgAndThread} objects to container
+	* @see #minimumLayoutSize minimumLayoutSize
+	* @see #maximumLayoutSize maximumLayoutSize
+	*/
+	public Dimension preferredLayoutSize(Container target) throws AWTError, IllegalStateException {
+		checkContainerArgAndThread(target);
+		
+		revalidateLayout(target);
+		return new Dimension(totalPreferredSize);
+	}
+	
+	/**
+	* Returns the maximum dimensions needed to lay out the Components contained
+	* in the specified target container.
+	* Invisible child Components are ignored in the calculation.
+	* The result includes the effects of the target container's insets.
+	* <p>
+	* @param target the Container that needs to be laid out
+	* @return a new Dimension instance (both the height and width are >= 0 && <= Integer.MAX_VALUE)
+	* @throws AWTError if {@link #checkContainerArgAndThread checkContainerArgAndThread} objects to container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @see #minimumLayoutSize minimumLayoutSize
+	* @see #preferredLayoutSize preferredLayoutSize
+	*/
+	public Dimension maximumLayoutSize(Container target) throws AWTError, IllegalStateException {
+		checkContainerArgAndThread(target);
+		
+		revalidateLayout(target);
+		return new Dimension(totalMaximumSize);
+	}
+	
+	/**
+	* Not used by this class (is implemented as an empty method).
+	* <p>
+	* @param name the name of the Component
+	* @param comp the Component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void addLayoutComponent(String name, Component comp) throws IllegalStateException {
+		Check.state().edt();
+	}
+	
+	/**
+	* Not used by this class (is implemented as an empty method).
+	* <p>
+	* @param comp the Component
+	* @param constraints constraints
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void addLayoutComponent(Component comp, Object constraints) throws IllegalStateException {
+		Check.state().edt();
+	}
+	
+	/**
+	* Indicates that a child has changed its layout related information,
+	* and thus any cached calculations should be flushed.
+	* <p>
+	* @param target the affected container
+	* @throws AWTError if {@link #checkContainerArgAndThread checkContainerArgAndThread} objects to container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void invalidateLayout(Container target) throws AWTError, IllegalStateException {
+		checkContainerArgAndThread(target);
+		
+		validatedStatus = false;
+	}
+	
+	/**
+	* Called by the AWT when the specified Container needs to be laid out.
+	* <p>
+	* @param target the container to lay out
+	* @throws AWTError if {@link #checkContainerArgAndThread checkContainerArgAndThread} objects to container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void layoutContainer(Container target) throws AWTError, IllegalStateException {
+		checkContainerArgAndThread(target);
+		
+		revalidateLayout(target);
+		
+		Insets insets = target.getInsets();
+		
+		Dimension availableSize = decreaseSizeForInsets( target.getSize(), insets );
+		int nChildren = target.getComponentCount();
+		
+		if (axis == xAxis) {
+			int xOffset = insets.left;
+			
+			for (int i = 0; i < nChildren; i++) {
+				Component c = target.getComponent(i);
+				if ( !c.isVisible() ) continue;
+				
+				c.setSize( c.getPreferredSize() );
+				c.setLocation( xOffset, calcYOffset(c, availableSize, insets) );
+				
+				xOffset += c.getSize().width;
+			}
+		}
+		else if (axis == yAxis) {
+			int yOffset = insets.top;
+			
+			for (int i = 0; i < nChildren; i++) {
+				Component c = target.getComponent(i);
+				if ( !c.isVisible() ) continue;
+				
+				c.setSize( c.getPreferredSize() );
+				c.setLocation( calcXOffset(c, availableSize, insets), yOffset );
+				
+				yOffset += c.getSize().height;
+			}
+		}
+		else {
+			throw new IllegalStateException("axis = " + axis + " is an illegal value; should never have been assigned this");
+		}
+	}
+	
+	/**
+	* Not used by this class (is implemented as an empty method).
+	* <p>
+	* @param comp the Component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void removeLayoutComponent(Component comp) throws IllegalStateException {
+		Check.state().edt();
+	}
+	
+	// -------------------- misc utility methods --------------------
+	
+	/**
+	* Confirms that target is the same Container that this LineLayout instance was first used with.
+	* (The first time this method is called with a non-null value for target,
+	* that Container is stored and used to compare against subsequent calls.)
+	* <p>
+	* @throws AWTError if target is null or isn't the first Container used by this instance
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	protected void checkContainerArgAndThread(Container target) throws AWTError, IllegalStateException {
+		if (target == null) throw new AWTError("target is null");
+		Check.state().edt();
+		
+		if (firstTarget == null) {
+			firstTarget = target;
+			return;
+		}
+		
+		if (target != firstTarget)
+			throw new AWTError("target is NOT the Container this LineLayout instance was first used with");
+	}
+	
+	protected void revalidateLayout(Container target) {
+			// if already validated then return immediately, doing nothing:
+		if (validatedStatus) return;
+		
+			// otherwise need to revalidate the layout:
+		totalMinimumSize.width = 0;
+		totalMinimumSize.height = 0;
+		
+		totalPreferredSize.width = 0;
+		totalPreferredSize.height = 0;
+		
+		totalMaximumSize.width = 0;
+		totalMaximumSize.height = 0;
+		
+		int nChildren = target.getComponentCount();
+		
+		if (axis == xAxis) {
+			for (int i = 0; i < nChildren; i++) {
+				Component c = target.getComponent(i);
+				if ( !c.isVisible() ) continue;
+				
+				totalMinimumSize.width += c.getMinimumSize().width;
+				totalMinimumSize.height = Math.max( c.getMinimumSize().height, totalMinimumSize.height );
+				
+				totalPreferredSize.width += c.getPreferredSize().width;
+				totalPreferredSize.height = Math.max( c.getPreferredSize().height, totalPreferredSize.height );
+				
+				totalMaximumSize.width += c.getMaximumSize().width;
+				totalMaximumSize.height = Math.max( c.getMaximumSize().height, totalMaximumSize.height );
+			}
+		}
+		else if (axis == yAxis) {
+			for (int i = 0; i < nChildren; i++) {
+				Component c = target.getComponent(i);
+				if ( !c.isVisible() ) continue;
+				
+				totalMinimumSize.width = Math.max( c.getMinimumSize().width, totalMinimumSize.width );
+				totalMinimumSize.height += c.getMinimumSize().height;
+				
+				totalPreferredSize.width = Math.max( c.getPreferredSize().width, totalPreferredSize.width );
+				totalPreferredSize.height += c.getPreferredSize().height;
+				
+				totalMaximumSize.width = Math.max( c.getMaximumSize().width, totalMaximumSize.width );
+				totalMaximumSize.height += c.getMaximumSize().height;
+			}
+		}
+		else {
+			throw new IllegalStateException("axis = " + axis + " is an illegal value; should never have been assigned this");
+		}
+		
+		increaseSizeForInsets(totalMinimumSize, target);
+		increaseSizeForInsets(totalPreferredSize, target);
+		increaseSizeForInsets(totalMaximumSize, target);
+		
+		validatedStatus = true;
+	}
+	
+	/**
+	* Increases the supplied Dimension arg to account for the target Container's Insets.
+	*/
+	protected void increaseSizeForInsets(Dimension size, Container target) {
+		Insets insets = target.getInsets();
+		
+		long totalWidth = ((long) size.width) + ((long) insets.left) + ((long) insets.right);	// you MUST convert all ints to longs (so that addition does not silently wrap around)
+		size.width = (int) Math.min(totalWidth, Integer.MAX_VALUE);	// you MUST cap with Integer.MAX_VALUE as the upper bound
+		
+		long totalHeight = ((long) size.height) + ((long) insets.top) + ((long) insets.bottom);	// you MUST convert all ints to longs (so that addition does not silently wrap around)
+		size.height = (int) Math.min(totalHeight, Integer.MAX_VALUE);	// you MUST cap with Integer.MAX_VALUE as the upper bound
+	}
+	
+	/**
+	* Returns a new Dimension instance that comes from decreasing the supplied Dimension arg to account for the target Container's Insets.
+	*/
+	protected Dimension decreaseSizeForInsets(Dimension size, Insets insets) {
+		long availWidth = ((long) size.width) - ((long) insets.left) - ((long) insets.right);	// you MUST convert all ints to longs (so that addition does not silently wrap around)
+		int newWidth = (int) Math.max(availWidth, 0);	// you MUST stem with 0 as the lower bound
+		
+		long availHeight = ((long) size.height) - ((long) insets.top) - ((long) insets.bottom);	// you MUST convert all ints to longs (so that addition does not silently wrap around)
+		int newHeight = (int) Math.max(availHeight, 0);	// you MUST stem with 0 as the lower bound
+		
+		return new Dimension(newWidth, newHeight);
+	}
+	
+	/**
+	* Calculates the x-offset of a Component, taking into effect both the x-axis alignment of the Component and the Insets of the parent Container.
+	*/
+	protected int calcXOffset(Component c, Dimension allocSize, Insets insets) {
+		int xAlignmentOffset = (int) Math.max( (allocSize.width - c.getSize().width) * c.getAlignmentX(), 0.0 );
+		
+		long intSum = ((long) insets.left) + ((long) xAlignmentOffset);	// you MUST convert all ints to longs (so that addition does not silently wrap around)
+		return (int) Math.min(intSum, Integer.MAX_VALUE);	// you MUST cap with Integer.MAX_VALUE as the upper bound
+	}
+	
+	/**
+	* Calculates the y-offset of a Component, taking into effect both the y-axis alignment of the Component and the Insets of the parent Container.
+	*/
+	protected int calcYOffset(Component c, Dimension allocSize, Insets insets) {
+		int yAlignmentOffset = (int) Math.max( (allocSize.height - c.getSize().height) * c.getAlignmentY(), 0.0 );
+		
+		long intSum = ((long) insets.top) + ((long) yAlignmentOffset);	// you MUST convert all ints to longs (so that addition does not silently wrap around)
+		return (int) Math.min(intSum, Integer.MAX_VALUE);	// you MUST cap with Integer.MAX_VALUE as the upper bound
+	}
+	
+	// -------------------- UnitTest (static inner class) --------------------
+	
+	/** See the Overview page of the project's javadocs for a general description of this unit test class. */
+	public static class UnitTest {
+		
+		private static final Border border = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+		
+		/**
+		* This method may be called to demonstrate how Sun's BoxLayout fails while LineLayout works.
+		* It brings up a series of JFrames that demonstrate various points.
+		* Execute "java bb.gui.LineLayout$UnitTest" (on Windoze) to see this.
+		*/
+		public static void main(final String[] args) {
+			Execute.usingEdt( new Runnable() { public void run() {
+				Check.arg().empty(args);
+				
+				buildFrame("OK, BoxLayout seems to works for 2 JLabels", buildExampleBoxLayoutWorks());
+				buildFrame("Now BoxLayout fails (justification of JLabels is changed) when add 2 JButtons", buildExampleBoxLayoutFails());
+				buildFrame("But LineLayout works on the same items!", buildExampleLineLayoutWorks());
+				
+				JFrame jframe4 = buildFrame("LineLayout does fancy alignment too", buildExampleLineLayoutDoesFancyAlignment());
+				jframe4.setSize( 5*jframe4.getWidth(), jframe4.getHeight() );	// make it wider to undo the pack that was done in buildFrame
+				jframe4.validate();	// MUST do this after setSize to re-invoke the LayoutManager
+				
+// +++ could add more tests, such as one frame that shows how can use glue in BoxLayout for alignment, but that that fails in LineLayout
+			} } );
+		}
+		
+			// state fields only used by buildFrame:
+		private static int nextX = 20;
+		private static int nextY = 0;
+		
+		private static JFrame buildFrame(String title, JComponent contents) {
+			JFrame jframe = new JFrame(title);
+			jframe.setLocation(nextX, nextY);
+			jframe.getContentPane().add( contents );
+			jframe.pack();
+			jframe.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+			jframe.setVisible(true);
+			
+			nextY += jframe.getSize().height + 5;	// update this field so that the next one built will appear below it
+			
+			return jframe;
+		}
+		
+		/**
+		* This adds 2 JLabels into a JPanel with a vertical BoxLayout LayoutManager.
+		* They should be displayed as expected (one on top of the other, both left justified).
+		*/
+		private static JPanel buildExampleBoxLayoutWorks() {
+			JPanel jpanel = new JPanel();
+			jpanel.setLayout( new BoxLayout(jpanel, BoxLayout.Y_AXIS) );
+			jpanel.setBorder(border);
+			
+			JLabel jlabel1 = new JLabel("Who loves Brent more: Claudia Schiffer or Cindy Crawford?");
+			JLabel jlabel2 = new JLabel("Choices, choices...");
+				// make sure and explicitly left-justify them:
+			jlabel1.setAlignmentX(0.0f);
+			jlabel2.setAlignmentX(0.0f);
+			
+			jpanel.add( jlabel1 );
+			jpanel.add( jlabel2 );
+			
+			return jpanel;
+		}
+		
+		/**
+		* Is the result of buildExampleBoxLayoutWorks, but have added below it
+		* 2 JButtons (whose total length is significantly less either JLabel)
+		* in a sub-JPanel that is center-justified.
+		* Should see that the JLabels are now incorrectly right justified
+		* while the 2 JButtons are incorrectly left justified!
+		* Why should adding a new (and shorter, at that) Component screw up existing alignment?
+		* Looking at Sun's source code, it seems as if the incomprehensible SizeRequirements
+		* class is probably to blame...
+		*/
+		private static JPanel buildExampleBoxLayoutFails() {
+			JPanel jpanel = buildExampleBoxLayoutWorks();
+			jpanel.add( buildTwoHorizontalButtons() );
+			return jpanel;
+		}
+		
+		private static JPanel buildTwoHorizontalButtons() {
+			JPanel jpanel = new JPanel();
+			jpanel.setLayout( new BoxLayout(jpanel, BoxLayout.X_AXIS) );
+			jpanel.setAlignmentX(0.5f);
+//			jpanel.setAlignmentX(0.0f);
+// +++ IF USE THIS LINE INSTEAD, then BoxLayout DOES seem to work as well...
+			
+			jpanel.add( new JButton("OK") );
+			jpanel.add( Box.createHorizontalStrut(20) );
+			jpanel.add( new JButton("Cancel") );
+			
+			return jpanel;
+		}
+		
+		/**
+		* Is the result of buildExampleBoxLayoutFails, but with a new LineLayout swapped in as a replacement LayoutManager.
+		* Should see that now the alignment of the JLabels is preserved as expected.
+		*/
+		private static JPanel buildExampleLineLayoutWorks() {
+			JPanel jpanel = buildExampleBoxLayoutFails();
+			
+			jpanel.setLayout( new LineLayout(BoxLayout.Y_AXIS) );
+			
+			return jpanel;
+		}
+		
+		/**
+		* Adds 5 JLabels in a vertical Linelayout.
+		* Each JLabel has a different x-alignement, that regularly increases as go down the line.
+		* Should see that the JLabels displayed in a diagonal, which illustrates the fancy alignment
+		* that LineLayout is capable of.
+		*/
+		private static JPanel buildExampleLineLayoutDoesFancyAlignment() {
+			JPanel jpanel = new JPanel();
+			jpanel.setLayout( new LineLayout(BoxLayout.Y_AXIS) );
+			jpanel.setBorder(border);
+			
+			JLabel jlabel1 = new JLabel("LeftJustified");
+			jlabel1.setAlignmentX(0.0f);
+			
+			JLabel jlabel2 = new JLabel("Left-CenterJustified");
+			jlabel2.setAlignmentX(0.25f);
+			
+			JLabel jlabel3 = new JLabel("CenterJustified");
+			jlabel3.setAlignmentX(0.5f);
+			
+			JLabel jlabel4 = new JLabel("Center-RightJustified");
+			jlabel4.setAlignmentX(0.75f);
+			
+			JLabel jlabel5 = new JLabel("RightJustified");
+			jlabel5.setAlignmentX(1.0f);
+			
+			jpanel.add( jlabel1 );
+			jpanel.add( jlabel2 );
+			jpanel.add( jlabel3 );
+			jpanel.add( jlabel4 );
+			jpanel.add( jlabel5 );
+			
+			return jpanel;
+		}
+		
+		/** This sole private constructor suppresses the default (public) constructor, ensuring non-instantiability outside of this class. */
+		private UnitTest() {}
+		
+	}
+	
+}
+

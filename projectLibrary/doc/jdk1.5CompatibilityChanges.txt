@@ -1,0 +1,62 @@
+--------------------------------------------------
+All the code changes done around 2006/1/20 as part of the move to make my code fully JDK 1.5 compliant
+--------------------------------------------------
+
+
+--the code had to compile with
+	-Xlint:all
+turned on and no additional checking options present (such as -Xlint:-unchecked which suppresses unchecked warnings).
+
+This mainly meant that had to use generics everywhere.
+
+WARNING: javac does not seem to catch all the places where generics ought to be used.  What javac seemed to be really good at catching was opportunities for generics in data structures (Lists, Sets, Maps, etc).  But in reality, anywhere that your code has a cast is probably a place where generics ought to be used:
+
+	Example #1: usually needed to change all instances of Comparable/Comparator/ThreadLocal to Comparable<T>/Comparator<T>/ThreadLocal<T> for some specific value of T
+
+	Example #2: had to search thru all my files trying to find all casts and see what is going on.  I could not think of a decent regular expression to detect casts, and so instead I had to do the brute search for
+		" = ("
+	and hope that that picked up most of my casts.  It turns out that while it picks up many of my casts (since I am consistent about using spaces), it also picked up lots of other irrelevant lines like
+		int index = (number > 0) ? 0 : 1;
+	It also misses many casts that appear nested inside expressions, like
+		((String) iter.next()).charAt(...)
+		
+There are many times that you simply have to use casts however:
+	--with number types (e.g. int i = (int) Math.max( intValue1, intValue2 );)
+	--with the equals and clone methods
+	--with the result of ObjectOutputStream.readObject()
+		Note: in order to suppress the unchecked cast exception that will get if the result of readObject must be cast to a generic, will need to use the @SuppressWarnings("unchecked") annotation
+
+
+--examine all
+	for
+loops for use of new syntax
+
+
+--set the default exception behavior for all threads by calling the static 
+	Thread.setDefaultUncaughtExceptionHandler()
+method
+	--see D:\software\java\docsGroupedBySource\jdc\jdcNewsletter_2006_02_11.txt
+	--have it log to a logger instead
+
+
+--StringBuffer --> StringBuilder
+
+
+--catch (Exception e) --> catch (Throwable t)
+
+
+--updated many method contracts which throw RuntimeException (especially if use ThrowableUtil.toRuntimeException) to hava a javadoc like
+	* @throws RuntimeException (or some subclass) if any other error occurs; this may merely wrap some other underlying Throwable
+
+
+--did a review of every single class regarding its multithread safety, and made sure that it had accurate javadocs covering this
+	--a big change was how I documented immutable classes: I now note that not only the immediate state, but even the deep state (of any object fields) must be immutable to make the claim that is multithread safe
+	--see the file
+		D:\interestsTechnical\computerNotes\java\errorsJavaFrequent.txt
+	wherein I describe many of the standard multithread javadocs
+
+
+
+
+
+

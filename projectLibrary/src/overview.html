@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<!-- Copyright © 2008 Brent Boyer.  All rights reserved. -->
+
+<!--
+This file is described here:
+	http://java.sun.com/javase/6/docs/technotes/tools/windows/javadoc.html#overviewcomment
+-->
+
+<html>
+	<head>
+		<meta name="copyright" content="2008 Brent Boyer">
+		<meta http-equiv="content-language" content="en-us">
+		<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+		
+		<title>bbLibrary Javadoc Comments</title>
+	</head>
+
+	<body style="background: white;">
+		<p>
+			Provides classes and interfaces for a wide range of programs.
+		</p>
+
+		<h1>Purpose</h1>
+		<p>
+			This Java code was written to provide a general purpose library of components
+			that can be reused across other Java projects.
+		</p>
+
+		<h1>Performance</h1>
+		<p>
+			Some of the classes emphasize performance.
+			They assume that RAM is plentiful and fast, and do things like allocate large buffers or something.
+			Therefore, this library may be less suitable for applications like embedded programming unless modified.
+		</p>
+
+		<h1>Unit tests</h1>
+		<p>
+			This library uses the following convention:
+			every class to be unit tested has an inner class named <code>UnitTest</code>
+			that consists solely of test code for the enclosing class.
+		</p>
+		<p>
+			These classes are to be executed by JUnit 4.
+			Therefore, test methods of <code>UnitTest</code> are always annotated with <code>@Test</code>,
+			setUp/tearDown methods are annotated with <code>@Before/@After</code> etc.
+			<blockquote>
+				<i>Major exception: all the gui classes must be executed manually
+				because they do not lend themselves to the standard JUnit assertion tests.</i>
+			</blockquote>
+		</p>
+		<p>
+			Eliminating all the test code from the shipping product
+			is trivially achieved by filtering all <code>*$UnitTest.class</code> files from the jar file.
+		</p>
+		<p>
+			See the <code>bb.util.JUnitExecutor</code> class for ways to automatically test large bodies of code.
+		</p>
+		<p>
+			Unless noted otherwise, every <code>UnitTest</code> class should be assumed to not be multithread safe.
+		</p>
+		<h2>Justification</h2>
+		<p>
+			A common, but crude, practice is to put test code into a <code>main</code> method of the class.
+			Unfortunately, this approach has serious drawbacks:
+			<ol>
+			 <li>test code is not cleanly separated from working code</li>
+			 <li>one consequence is that test code cannot be excluded from the shipping product</li>
+			 <li>
+			 	if the <code>main</code> method is also needed for a true program entry point,
+			 	then extra logic is required to determine whether to execute in test or real mode
+			 </li>
+			</ol>
+		</p>
+		<p>
+			An improved, but suboptimal, practice
+			(that is unfortunately recommended by the <a href="http://en.wikipedia.org/wiki/JUnit">JUnit</a>
+			<a href="http://junit.sourceforge.net/doc/faq/faq.htm">FAQ</a>),
+			is to put the test code into a <a href="http://junit.sourceforge.net/doc/faq/faq.htm#organize_1">shadow external class</a>
+			(e.g. <code>HelloWorld</code> would have a <code>HelloWorldTest</code> counterpart).
+			These test shadow classes are typically placed in a separate root directory from the working code
+			(e.g. <code>test</code> versus <code>src</code> as the directory root).
+			Unfortunately, this approach too has serious drawbacks:
+			<ol>
+			 <li>non-public members of the target class are difficult or impossible to access</li>
+			 <li>if the test directory root is used, the src directory tree must be recreated</li>
+			 <li>
+			 	even worse than the initial setup, the test directory structure must be kept in sync with the src directory,
+			 	which is a major problem if package refactoring is done
+			 </li>
+			</ol>
+		</p>
+		<p>
+			In contrast, the <code>UnitTest</code> inner class approach eliminates all the above problems
+			and introduces no known serious issues.  Therefore, it is the optimal approach.
+<blockquote><pre style="font-size:x-small">
+Hmm, Paul Summermatter pointed out to me the following things that he thought were issues with using the inner class approach:
+	1) the parent class gets the JUnit import statements which are not really related to it
+		my eval: extremely minor issue
+	2) he said that he saw problems with obfuscators when use this approach
+		my eval: sounds like a bug in the obfuscator, not the approach...
+	3) there is the possibility that some stupid programmer will put references in the parent class to stuff in the inner class,
+	which will then break your production releases if you strip out the test inner class files
+		my eval: this could be a legitimate concern with certain large teams
+	4) he likes having separate files as it unclutters stuff in his opinion
+		my eval: this is very subjective; I prefer it all in one...
+</pre></blockquote>
+		</p>
+		<h2>Acknowledgement</h2>
+		<p>
+			The idea of using a UnitTest inner class approach like this
+			was first suggested by Allen Holub in his book
+			<a href="http://www.amazon.com/exec/obidos/ASIN/1893115100/alleiholuasso">Taming Java Threads</a>
+		</p>
+
+<!--
+		<h1>Overall Specification</h1>
+		<p>
+			Include a description of, or links to, any global specifications
+			that are not included in the rest of the javadoc-generated documentation.<br>
+			<br>
+			For example, you might describe how the general behavior is allowed to vary from one operating system to another (Windows, Solaris, Mac).
+		</p>
+
+		<h1>Related Documentation</h1>
+		<p>For overviews, tutorials, examples, guides, and tool documentation, please see:</p>
+		<ol>
+			<li><a href=""></a></li>
+		</ol>
+
+		Put @see and @since tags down here.
+-->
+
+	</body>
+</html>

@@ -1,0 +1,324 @@
+AM ARCHIVING THIS CLASS, SINCE NO LONGER APPEARS TO BE USED AND IT HAS PROBLEMATIC BEHAVIOR AS NOTED BELOW
+
+/*
+Copyright © 2008 Brent Boyer
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Lesser GNU General Public License for more details.
+
+You should have received a copy of the Lesser GNU General Public License along with this program (see the license directory in this project).  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+
+Programmer notes:
+
+--is this class needed?  or can you just use flow layout and set a components x & y alignments?
+
++++ see LineLayout Programmer notes which describe a proposed new base class
+*/
+
+package bb.gui;
+
+import bb.util.Check;
+import bb.util.Execute;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.LayoutManager2;
+import java.io.Serializable;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+/**
+* LayoutManager which always draws each Component centered inside the target Container,
+* and at its preferred size.
+<!--
++++ that behavior--always drawing a component at its preferred size--is hugely problematic
+when components get too big, as stuff gets crowded off the screen.
+
+If ever use this class in the future, need to make it more sophisticated like other layout managers.
+-->
+
+* Here, "centered" means that the Component's bounding rectangle's
+* center is the same as the center of the Container.
+* <p>
+* Typically, this LayoutManager will be used for Containers which have only a single
+* Component inside, because multiple Components will get drawn over each other.
+* But if overdrawing is satisfactory or desired, then this LayoutManager is also suitable for Containers with multiple Components inside.
+* <p>
+* Like typical Java GUI code, this class is not multithread safe:
+* it expects to only be called by {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}.
+* This threading limitation is checked in every public method.
+* <p>
+* @author Brent Boyer
+*/
+public class CenterLayout implements LayoutManager, LayoutManager2, Serializable {
+	
+	// -------------------- constants --------------------
+	
+	private static final long serialVersionUID = 1;
+	
+	// -------------------- constructor --------------------
+	
+	/**
+	* Creates a new CenterLayout instance.
+	* <p>
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public CenterLayout()  throws IllegalStateException {
+		Check.state().edt();
+	}
+	
+	// -------------------- methods required by LayoutManager and LayoutManager2 --------------------
+	
+// +++ are the 2 methods below correct?
+// Note that BorderLayout and CardLayout, GridBagLayout always return 0.5f for both x and y
+// while BoxLayout, OverlayLayout do more complicated stuff
+	
+	/**
+	* Returns the alignment along the X axis for the Container.
+	* <p>
+	* @param target a Container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @return the alignment (a value >= 0.0f && <= 1.0f)
+	*/
+	public float getLayoutAlignmentX(Container target) throws IllegalStateException {
+		Check.state().edt();
+		
+return 0.5f;
+	}
+	
+	/**
+	* Returns the alignment along the Y axis for the Container.
+	* <p>
+	* @param target a Container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @return the alignment (a value >= 0.0f && <= 1.0f)
+	*/
+	public float getLayoutAlignmentY(Container target) throws IllegalStateException {
+		Check.state().edt();
+		
+return 0.5f;
+	}
+	
+	/**
+	* Returns the minimum dimensions needed to lay out the components contained in target.
+	* Invisible child Components are ignored in the calculation.
+	* The result includes the effects of the target container's insets.
+	* <p>
+	* @param target the Container that needs to be laid out
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @return a new Dimension instance (both the height and width are >= 0 && <= Integer.MAX_VALUE)
+	* @see #preferredLayoutSize
+	* @see #maximumLayoutSize
+	*/
+	public Dimension minimumLayoutSize(Container target) throws IllegalStateException {
+		Check.state().edt();
+		
+		Dimension d = new Dimension(0, 0);
+		
+		int nChildren = target.getComponentCount();
+		for (int i = 0; i < nChildren; i++) {
+			Component c = target.getComponent(i);
+			if ( !c.isVisible() ) continue;
+			
+			Dimension childMinSize = c.getMinimumSize();
+			
+			if (d.width < childMinSize.width) d.width = childMinSize.width;	// so, the LARGEST minimum size of a component will determine the result
+			if (d.height < childMinSize.height) d.height = childMinSize.height;
+		}
+		
+		Insets insets = target.getInsets();
+		d.width += insets.left + insets.right;
+		d.height += insets.top + insets.bottom;
+		
+		return d;
+	}
+	
+	/**
+	* Returns the preferred dimensions needed to lay out the components contained in target.
+	* Invisible child Components are ignored in the calculation.
+	* The result includes the effects of the target container's insets.
+	* <p>
+	* @param target the Container that needs to be laid out
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @return a new Dimension instance (both the height and width are >= 0 && <= Integer.MAX_VALUE)
+	* @see #minimumLayoutSize
+	* @see #maximumLayoutSize
+	*/
+	public Dimension preferredLayoutSize(Container target) throws IllegalStateException {
+		Check.state().edt();
+		
+		Dimension d = new Dimension(0, 0);
+		
+		int nChildren = target.getComponentCount();
+		for (int i = 0; i < nChildren; i++) {
+			Component c = target.getComponent(i);
+			if ( !c.isVisible() ) continue;
+			
+			Dimension childPrefSize = c.getPreferredSize();
+			
+			if (d.width < childPrefSize.width) d.width = childPrefSize.width;	// so, the LARGEST preferred size of a component will determine the result
+			if (d.height < childPrefSize.height) d.height = childPrefSize.height;
+		}
+		
+		Insets insets = target.getInsets();
+		d.width += insets.left + insets.right;
+		d.height += insets.top + insets.bottom;
+		
+		return d;
+	}
+	
+	/**
+	* Returns <code>target.getMaximumSize()</code>.
+	* <p>
+	* @param target the Container that needs to be laid out
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @return a new Dimension instance (both the height and width are >= 0 && <= Integer.MAX_VALUE)
+	* @see #minimumLayoutSize
+	* @see #preferredLayoutSize
+	*/
+	public Dimension maximumLayoutSize(Container target) throws IllegalStateException {
+		Check.state().edt();
+		
+		Dimension d = new Dimension(0, 0);
+		
+		int nChildren = target.getComponentCount();
+		for (int i = 0; i < nChildren; i++) {
+			Component c = target.getComponent(i);
+			if ( !c.isVisible() ) continue;
+			
+			Dimension childMaxSize = c.getMaximumSize();
+			
+			if (d.width < childMaxSize.width) d.width = childMaxSize.width;	// so, the LARGEST maximum size of a component will determine the result
+			if (d.height < childMaxSize.height) d.height = childMaxSize.height;
+		}
+		
+		Insets insets = target.getInsets();
+		d.width += insets.left + insets.right;
+		d.height += insets.top + insets.bottom;
+		
+		return d;
+	}
+	
+// +++ double check that these empty methods below are correct...
+	
+	/**
+	* Not used by this class (is implemented as an empty method).
+	* <p>
+	* @param name the name of the component
+	* @param comp the component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void addLayoutComponent(String name, Component comp) throws IllegalStateException {
+		Check.state().edt();
+	}
+	
+	/**
+	* Not used by this class (is implemented as an empty method).
+	* <p>
+	* @param comp the component
+	* @param constraints constraints
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void addLayoutComponent(Component comp, Object constraints) throws IllegalStateException {
+		Check.state().edt();
+	}
+	
+	/**
+	* Not used by this class (is implemented as an empty method).
+	* <p>
+	* @param target the affected container
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void invalidateLayout(Container target) throws IllegalStateException {
+		Check.state().edt();
+	}
+	
+	/**
+	* Called by the AWT when the specified Container needs to be laid out.
+	* <p>
+	* @param target the container to lay out
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void layoutContainer(Container target) throws IllegalStateException {
+		Check.state().edt();
+		
+		Dimension containerSize = target.getSize();
+		
+		int nChildren = target.getComponentCount();
+		for (int i = 0; i < nChildren; i++) {
+			Component c = target.getComponent(i);
+			//if ( !c.isVisible() ) continue;		// go ahead and set the size and locations even of invisible ones, so that if they are turned back on, they will be correctly positioned
+			
+			Dimension cSize = c.getPreferredSize();
+			c.setSize( cSize );
+// +++ see class javadocs--this behavior is problematic, is too simplistic...
+			
+			int xOffset = (containerSize.width - cSize.width)/2;
+			int yOffset = (containerSize.height - cSize.height)/2;
+			c.setLocation( xOffset, yOffset );
+		}
+	}
+	
+	/**
+	* Not used by this class (is implemented as an empty method).
+	* <p>
+	* @param comp the component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public void removeLayoutComponent(Component comp) throws IllegalStateException {
+		Check.state().edt();
+	}
+	
+	// -------------------- UnitTest (static inner class) --------------------
+	
+	/** See the Overview page of the project's javadocs for a general description of this unit test class. */
+	public static class UnitTest {
+		
+		public static void main(final String[] args) {
+			Execute.usingEdt( new Runnable() { public void run() {
+				Check.arg().empty(args);
+				
+				JFrame jframe1 = new JFrame("CenterLayout For A Single Child Component");
+				jframe1.setLocation(20, 0);
+				jframe1.setSize(500, 300);
+				jframe1.getContentPane().add( buildSingleChildComponent() );
+				jframe1.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+				jframe1.setVisible(true);
+				
+				JFrame jframe2 = new JFrame("CenterLayout For Two Child Components");
+				jframe2.setLocation(20, 320);
+				jframe2.setSize(500, 300);
+				jframe2.getContentPane().add( buildTwoChildComponents() );
+				jframe2.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+				jframe2.setVisible(true);
+			} } );
+		}
+		
+		protected static JPanel buildSingleChildComponent() {
+			JPanel jpanel = new JPanel( new CenterLayout() );
+			jpanel.add( new JLabel("Any text could be here") );
+			return jpanel;
+		}
+		
+		protected static JPanel buildTwoChildComponents() {
+			JPanel jpanel = new JPanel( new CenterLayout() );
+			jpanel.add( new JLabel("This label should be foremost, on top of the button") );
+			jpanel.add( new JButton("OK") );
+			return jpanel;
+		}
+		
+		/** This sole private constructor suppresses the default (public) constructor, ensuring non-instantiability outside of this class. */
+		private UnitTest() {}
+		
+	}
+	
+}

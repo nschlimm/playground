@@ -1,0 +1,230 @@
+AM ARCHIVING THIS CLASS, SINCE HAS BEEN OBSOLETED BY the new LinePanel
+
+/*
+Copyright © 2008 Brent Boyer
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Lesser GNU General Public License for more details.
+
+You should have received a copy of the Lesser GNU General Public License along with this program (see the license directory in this project).  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+Programmer notes:
+
++++ problem: the strut and glue methods return Components (because they just call Box), rather than JComponents...
+*/
+
+package bb.gui;
+
+import bb.util.Check;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+
+/**
+* A lightweight container (a direct subclass of JPanel) that initially uses a
+* {@link LineLayout} instance as its layout manager.
+* <p>
+* LinePanel is designed to provide the exact same functionality as the {@link Box} class <i>except</i>:
+* <ol>
+*  <li>
+*    it uses LineLayout as its initial LayoutManager
+*      <ul>
+*        <li>Box uses {@link BoxLayout}</li>
+*        <li>LineLayout is better than BoxLayout</li>
+*      </ul>
+*  </li>
+*  <li>
+*    its LayoutManager may be changed via the setLayout method
+*      <ul>
+*        <li>Box forbids change</li>
+*        <li>having a changeable LayoutManager enables you to cool things like
+*           dynamically toggle between vertical and horizontal LineLayouts</li>
+*      </ul>
+*  </li>
+*  <li>
+*    it extends JPanel, so it is a Swing widget
+*      <ul>
+*        <li>Box extends Container, and so is really an AWT widget</li>
+*        <li>the advantage of making this a Swing widget is that you can use all the nice new
+*           Swing functionality (e.g. setBorder, etc) on an instance</li>
+*      </ul>
+*  </li>
+* </ol>
+* <p>
+* Like typical Java GUI code, this class is not multithread safe:
+* it expects to only be called by {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}.
+* This threading limitation is checked in every public method.
+* <p>
+* @author Brent Boyer
+*/
+public class LinePanel extends JPanel {
+	
+	// -------------------- constants --------------------
+	
+	private static final long serialVersionUID = 1;
+	
+	// -------------------- constructor --------------------
+	
+	/**
+	* Creates a LinePanel that displays its components along the the specified axis.
+	* <p>
+	* @param axis the axis to lay out components along.
+	*			  For left-to-right layout, specify <code>LineLayout.xAxis</code>;
+	*			  for top-to-bottom layout, specify <code>LineLayout.yAxis</code>
+	* @throws IllegalArgumentException if the axis arg has an invalid value
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @see #createHorizontalBox createHorizontalBox
+	* @see #createVerticalBox createVerticalBox
+	*/
+	public LinePanel(int axis) throws IllegalArgumentException, IllegalStateException {
+		super( new LineLayout(axis) );
+		Check.state().edt();
+	}
+	
+	// -------------------- static convenience methods which duplicate Box's ones --------------------
+	
+	/**
+	* Creates a LinePanel that displays its components from left to right.
+	* <p>
+	* @return the LinePanel
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public static LinePanel createHorizontalBox() throws IllegalStateException {
+		Check.state().edt();
+		
+		return new LinePanel(LineLayout.xAxis);
+	}
+	
+	/**
+	* Creates a LinePanel that displays its components from top to bottom.
+	* <p>
+	* @return the LinePanel
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public static LinePanel createVerticalBox() throws IllegalStateException {
+		Check.state().edt();
+		
+		return new LinePanel(LineLayout.yAxis);
+	}
+	
+// +++ all the remaining methods below defer to Box -- should I leave them in this class,
+// so that it offers the same exact API, or take them out?
+	
+	/**
+	* Creates an invisible component that's always the specified size.
+	* <p>
+	* @param d the dimensions of the invisible component
+	* @return the component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @see #createGlue createGlue
+	* @see #createHorizontalStrut createHorizontalStrut
+	* @see #createVerticalStrut createVerticalStrut
+	*/
+	public static Component createRigidArea(Dimension d) throws IllegalStateException {
+		Check.state().edt();
+		
+		return Box.createRigidArea(d);
+	}
+	
+	/**
+	* Creates an invisible, fixed-width component.
+	* In a horizontal box, you typically use this method to force a certain amount of space between two components.
+	* In a vertical box, you might use this method to force the box to be at least the specified width.
+	* The invisible component has no height unless excess space is available,
+	* in which case it takes its share of available space, just like any other component that has no maximum height.
+	* <p>
+	* @param width the width of the invisible component, in pixels >= 0
+	* @return the component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @see #createVerticalStrut createVerticalStrut
+	* @see #createGlue createGlue
+	* @see #createRigidArea createRigidArea
+	*/
+	public static Component createHorizontalStrut(int width) throws IllegalStateException {
+		Check.state().edt();
+		
+		return Box.createHorizontalStrut(width);
+	}
+	
+	/**
+	* Creates an invisible, fixed-height component.
+	* In a vertical box, you typically use this method to force a certain amount of space between two components.
+	* In a horizontal box, you might use this method to force the box to be at least the specified height.
+	* The invisible component has no width unless excess space is available,
+	* in which case it takes its share of available space, just like any other component that has no maximum width.
+	* <p>
+	* @param height the height of the invisible component, in pixels >= 0
+	* @return the component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	* @see #createHorizontalStrut createHorizontalStrut
+	* @see #createGlue createGlue
+	* @see #createRigidArea createRigidArea
+	*/
+	public static Component createVerticalStrut(int height) throws IllegalStateException {
+		Check.state().edt();
+		
+		return Box.createVerticalStrut(height);
+	}
+	
+	/**
+	* Creates an invisible "glue" component that can be useful in a Box
+	* whose visible components have a maximum width (for a horizontal box)
+	* or height (for a vertical box).
+	* You can think of the glue component as being a gooey substance
+	* that expands as much as necessary to fill the space between its neighboring components.
+	* <p>
+	* For example, suppose you have a horizontal box that contains two fixed-size components.
+	* If the box gets extra space, the fixed-size components won't become larger,
+	* so where does the extra space go?
+	* Without glue, the extra space goes to the right of the second component.
+	* If you put glue between the fixed-size components, then the extra space goes there.
+	* If you put glue before the first fixed-size component, the extra space goes there,
+	* and the fixed-size components are shoved against the right  edge of the box.
+	* If you put glue before the first fixed-size component and after the second fixed-size component,
+	* the fixed-size components are centered in the box.
+	* <p>
+	* To use glue, call <code>Box.createGlue</code> and add the returned component to a container.
+	* The glue component has no minimum or preferred size, so it takes no space unless excess space is available.
+	* If excess space is available, then the glue component takes its share of available
+	* horizontal or vertical space, just like any other component that has no maximum width or height.
+	* <p>
+	* @return the component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public static Component createGlue() throws IllegalStateException {
+		Check.state().edt();
+		
+		return Box.createGlue();
+	}
+	
+	/**
+	* Creates a horizontal glue component.
+	* <p>
+	* @return the component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public static Component createHorizontalGlue() throws IllegalStateException {
+		Check.state().edt();
+		
+		return Box.createHorizontalGlue();
+	}
+	
+	/**
+	* Creates a vertical glue component.
+	* <p>
+	* @return the component
+	* @throws IllegalStateException if calling thread is not {@link EventQueue}'s {@link EventQueue#isDispatchThread dispatch thread}
+	*/
+	public static Component createVerticalGlue() throws IllegalStateException {
+		Check.state().edt();
+		
+		return Box.createVerticalGlue();
+	}
+	
+}

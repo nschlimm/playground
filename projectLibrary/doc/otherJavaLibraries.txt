@@ -1,0 +1,57 @@
+--------------------------------------------------
+General purpose
+--------------------------------------------------
+
+
+http://www.myjavatools.com/
+http://users.erols.com/ziring/java-samp.html
+
+
+--------------------------------------------------
+Collections
+--------------------------------------------------
+
+
+Commons-Collections
+http://commons.apache.org/collections/
+
+
+fastutil:
+http://fastutil.dsi.unimi.it/
+
+
+Google Collections
+http://www.ociweb.com/jnb/jnbApr2008.html
+
+
+JAL:
+http://vigna.dsi.unimi.it/jal/
+
+
+--------------------------------------------------
+Numerical
+--------------------------------------------------
+
+
+Colt
+http://acs.lbl.gov/~hoschek/colt/
+
+
+Parallel Colt
+http://piotr.wendykier.googlepages.com/parallelcolt
+
+
+--------------------------------------------------
+Statistical
+--------------------------------------------------
+
+
+http://jsci.sourceforge.net/api/JSci/maths/statistics
+http://www.iro.umontreal.ca/~simardr/ssj/doc/html/umontreal/iro/lecuyer/probdist
+http://www.ee.ucl.ac.uk/~mflanaga/java/Stat.html
+http://www.jasen.org/doc/org/jasen/core/calculators/ChiSquaredCalculator.html
+
+Also, to check ChiSquared results against a table of known results, see:
+	http://www.math.ku.edu/~mandal/math365/data/chiTable.html
+
+

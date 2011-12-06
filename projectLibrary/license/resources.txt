@@ -1,0 +1,26 @@
+How to use GNU licenses for your own software
+	http://www.gnu.org/licenses/gpl-howto.html
+
+
+The LGPL and Java
+	http://www.gnu.org/licenses/lgpl-java.html
+
+
+GNU Free Documentation License (GFDL) for manuals
+	http://en.wikipedia.org/wiki/GNU_Free_Documentation_License
+	http://news.slashdot.org/news/08/11/04/0150230.shtml
++++ the above url describes some problems with the GFDL.  I AM CONFUSED BY THIS, AND AM NOT SURE HOW TO RELEASE ALL OF MY DOCUMENTATION; FOR NOW WILL SIMPLY RETAIN ALL RIGHTS...
+	--FindBugs uses this license for its docs:
+		http://creativecommons.org/licenses/by-nc-sa/3.0/
+	THAT LICENSE IS APPARENTLY MUCH BETTER SUITED FOR MOST DOCUMENTATION THAN THE GFDL WHICH IS APPARENTLY IMPOSSIBLE TO UNDERSTAND AND VERY BURDENSOME
+	--see also:
+		http://news.slashdot.org/story/09/05/21/2317253/Wikipedia-Moving-From-GFDL-To-Creative-Commons-License?art_pos=23
+
+
+SFLC's Legal Guide On Free Software
+	http://it.slashdot.org/it/08/02/20/0154210.shtml
+
+
+A Practical Guide to GPL Compliance
+	http://www.softwarefreedom.org/resources/2008/compliance-guide.html
+
