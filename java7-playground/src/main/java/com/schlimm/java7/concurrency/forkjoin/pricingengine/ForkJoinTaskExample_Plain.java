@@ -1,4 +1,4 @@
-package com.schlimm.java7.concurrency;
+package com.schlimm.java7.concurrency.forkjoin.pricingengine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,10 +7,8 @@ import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
-import com.schlimm.java7.concurrency.model.PricingEngine;
-import com.schlimm.java7.concurrency.model.Proposal;
 
-public class ForkJoinTaskExample extends RecursiveTask<List<Map<String, Double>>> {
+public class ForkJoinTaskExample_Plain extends RecursiveTask<List<Map<String, Double>>> {
 
 	private List<Proposal> proposals;
 
@@ -19,7 +17,7 @@ public class ForkJoinTaskExample extends RecursiveTask<List<Map<String, Double>>
 	 */
 	private static final long serialVersionUID = -2703342063482619328L;
 
-	public ForkJoinTaskExample(List<Proposal> proposals) {
+	public ForkJoinTaskExample_Plain(List<Proposal> proposals) {
 		super();
 		this.proposals = proposals;
 	}
@@ -28,13 +26,7 @@ public class ForkJoinTaskExample extends RecursiveTask<List<Map<String, Double>>
 	protected List<Map<String, Double>> compute() {
 
 		if (proposals.size() == 1) { // task is small enough to compute linear in this thread
-			if (proposals.get(0).multipleCovers()) {
-				if (proposals.get(0).isAutomotiveLiability()) {
-
-				}
-			} else {
-				return Arrays.asList(computeDirectly(proposals.get(0)));
-			}
+			return Arrays.asList(computeDirectly(proposals.get(0)));
 		}
 
 		// task is to large for one thread to execute efficiently, split the task
@@ -42,9 +34,9 @@ public class ForkJoinTaskExample extends RecursiveTask<List<Map<String, Double>>
 
 		int split = proposals.size() / 2;
 
-		ForkJoinTaskExample f1 = new ForkJoinTaskExample(proposals.subList(0, split));
+		ForkJoinTaskExample_Plain f1 = new ForkJoinTaskExample_Plain(proposals.subList(0, split));
 		f1.fork(); // generate task for some other thread that can execute on some other CPU
-		ForkJoinTaskExample f2 = new ForkJoinTaskExample(proposals.subList(split, proposals.size()));
+		ForkJoinTaskExample_Plain f2 = new ForkJoinTaskExample_Plain(proposals.subList(split, proposals.size()));
 		List<Map<String, Double>> newList = new ArrayList<>();
 		newList.addAll(f2.compute()); // compute this sub task in the current thread
 		newList.addAll(f1.join()); // join the results of the other sub task
@@ -58,7 +50,7 @@ public class ForkJoinTaskExample extends RecursiveTask<List<Map<String, Double>>
 
 	public static void main(String[] args) {
 		// Calculate four proposals
-		ForkJoinTaskExample task = new ForkJoinTaskExample(Arrays.asList(new Proposal("Niklas", "Schlimm", "7909",
+		ForkJoinTaskExample_Plain task = new ForkJoinTaskExample_Plain(Arrays.asList(new Proposal("Niklas", "Schlimm", "7909",
 				"AAL", true, true, true), new Proposal("Andreas", "Fritz", "0005", "432", true, true, true),
 				new Proposal("Christian", "Toennessen", "0583", "442", true, true, true), new Proposal("Frank",
 						"Hinkel", "4026", "AAA", true, true, true)));

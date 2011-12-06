@@ -1,7 +1,12 @@
-package com.schlimm.java7.concurrency.model;
+package com.schlimm.java7.concurrency.forkjoin.pricingengine;
 
-public class Proposal {
-	
+import java.util.ArrayList;
+import java.util.List;
+
+import com.schlimm.java7.concurrency.forkjoin.dip.DecomposableInput;
+
+public class Proposal implements DecomposableInput {
+
 	private String vorname;
 	private String nachname;
 	private String hsn;
@@ -9,7 +14,7 @@ public class Proposal {
 	private boolean comprehensive;
 	private boolean partInsuranceCover;
 	private boolean automotiveLiability;
-	
+
 	public Proposal(String vorname, String nachname, String hsn, String tsn, boolean comprehensive,
 			boolean partInsuranceCover, boolean automotiveLiability) {
 		super();
@@ -21,10 +26,9 @@ public class Proposal {
 		this.partInsuranceCover = partInsuranceCover;
 		this.automotiveLiability = automotiveLiability;
 	}
-	
+
 	public boolean multipleCovers() {
-		return ((isAutomotiveLiability() ? 1 : 0) + (isComprehensive() ? 1 : 0)
-				+ (isPartInsuranceCover() ? 1 : 0)) > 1;
+		return ((isAutomotiveLiability() ? 1 : 0) + (isComprehensive() ? 1 : 0) + (isPartInsuranceCover() ? 1 : 0)) > 1;
 	}
 
 	public String getVorname() {
@@ -82,5 +86,30 @@ public class Proposal {
 	public void setAutomotiveLiability(boolean automotiveLiability) {
 		this.automotiveLiability = automotiveLiability;
 	}
-	
+
+	@Override
+	public boolean computeDirectly() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<DecomposableInput> disassemble() {
+		List<DecomposableInput> decomposedProposal = new ArrayList<>();
+		if (multipleCovers()) {
+			if (isComprehensive())
+				decomposedProposal.add(new Proposal(new String(vorname), new String(nachname), new String(hsn),
+						new String(tsn), comprehensive, false, false));
+			if (isPartInsuranceCover())
+				decomposedProposal.add(new Proposal(new String(vorname), new String(nachname), new String(hsn),
+						new String(tsn), false, partInsuranceCover, false));
+			if (isAutomotiveLiability())
+				decomposedProposal.add(new Proposal(new String(vorname), new String(nachname), new String(hsn),
+						new String(tsn), false, false, automotiveLiability));
+		} else {
+			throw new IllegalStateException("Cannot disassemble proposal!");
+		}
+		return decomposedProposal;
+	}
+
 }

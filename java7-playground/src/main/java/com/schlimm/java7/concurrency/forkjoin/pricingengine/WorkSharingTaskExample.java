@@ -1,4 +1,4 @@
-package com.schlimm.java7.concurrency;
+package com.schlimm.java7.concurrency.forkjoin.pricingengine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,8 +12,6 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import com.schlimm.java7.concurrency.model.PricingEngine;
-import com.schlimm.java7.concurrency.model.Proposal;
 
 public class WorkSharingTaskExample implements Callable<Map<String, Double>> {
 
