@@ -45,15 +45,15 @@ public class PricingEngine implements ComputationActivity {
 
 	private void complexRateCalculation() {
 		int a = 0, b = 1;
-		for (int i = 0; i < 100000000; i++) {
+		for (int i = 0; i < 1000000000; i++) {
 			a = a + b;
 			b = a - b;
 		}
 	}
 
 	@Override
-	public ComposableResult compute(DecomposableInput task) {
-		Map<String, Double> result = calculatePrices((Proposal)((ListOfProposals)task).getProposals().get(0));
+	public ComposableResult<?> compute(DecomposableInput<?> input) {
+		Map<String, Double> result = calculatePrices((Proposal)((ListOfProposals)input).getComposition().get(0));
 		List<Map<String, Double>> priceList = new ArrayList<>();
 		priceList.add(result);
 		return new ListOfPrices(priceList);

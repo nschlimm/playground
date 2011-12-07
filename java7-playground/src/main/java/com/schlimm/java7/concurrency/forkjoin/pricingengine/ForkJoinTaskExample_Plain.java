@@ -2,6 +2,7 @@ package com.schlimm.java7.concurrency.forkjoin.pricingengine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
@@ -55,7 +56,9 @@ public class ForkJoinTaskExample_Plain extends RecursiveTask<List<Map<String, Do
 				new Proposal("Christian", "Toennessen", "0583", "442", true, true, true), new Proposal("Frank",
 						"Hinkel", "4026", "AAA", true, true, true)));
 		ForkJoinPool pool = new ForkJoinPool();
+		System.out.println(new Date());
 		System.out.println(pool.invoke(task));
+		System.out.println(new Date());
 	}
 
 }

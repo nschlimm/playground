@@ -1,7 +1,18 @@
 package com.schlimm.java7.concurrency.forkjoin.dip;
 
-public interface ComposableResult {
+public abstract class ComposableResult<A> {
 
-	ComposableResult assemble(ComposableResult result);
+	protected A composedResult;
+
+	public ComposableResult(A firstPeace) {
+		super();
+		composedResult = firstPeace;
+	}
+
+	public abstract ComposableResult<A> compose(ComposableResult<A> anotherPeace);
+	
+	public A getComposedResult() {
+		return composedResult;
+	}
 	
 }

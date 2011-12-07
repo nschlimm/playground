@@ -1,11 +1,7 @@
 package com.schlimm.java7.concurrency.forkjoin.pricingengine;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import com.schlimm.java7.concurrency.forkjoin.dip.DecomposableInput;
-
-public class Proposal implements DecomposableInput {
+public class Proposal {
 
 	private String vorname;
 	private String nachname;
@@ -85,31 +81,6 @@ public class Proposal implements DecomposableInput {
 
 	public void setAutomotiveLiability(boolean automotiveLiability) {
 		this.automotiveLiability = automotiveLiability;
-	}
-
-	@Override
-	public boolean computeDirectly() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<DecomposableInput> disassemble() {
-		List<DecomposableInput> decomposedProposal = new ArrayList<>();
-		if (multipleCovers()) {
-			if (isComprehensive())
-				decomposedProposal.add(new Proposal(new String(vorname), new String(nachname), new String(hsn),
-						new String(tsn), comprehensive, false, false));
-			if (isPartInsuranceCover())
-				decomposedProposal.add(new Proposal(new String(vorname), new String(nachname), new String(hsn),
-						new String(tsn), false, partInsuranceCover, false));
-			if (isAutomotiveLiability())
-				decomposedProposal.add(new Proposal(new String(vorname), new String(nachname), new String(hsn),
-						new String(tsn), false, false, automotiveLiability));
-		} else {
-			throw new IllegalStateException("Cannot disassemble proposal!");
-		}
-		return decomposedProposal;
 	}
 
 }

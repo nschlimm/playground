@@ -5,31 +5,24 @@ import java.util.List;
 
 import com.schlimm.java7.concurrency.forkjoin.dip.DecomposableInput;
 
-public class ListOfProposals implements DecomposableInput {
+public class ListOfProposals extends DecomposableInput<List<Proposal>> {
 
-	private List<DecomposableInput> proposals;
-	
-	public ListOfProposals(List<DecomposableInput> proposals) {
-		super();
-		this.proposals = proposals;
+	public ListOfProposals(List<Proposal> proposals) {
+		super(proposals);
 	}
 
 	@Override
 	public boolean computeDirectly() {
-		return proposals.size()==1;
+		return composition.size()==1;
 	}
 
 	@Override
-	public List<DecomposableInput> disassemble() {
-		int split = proposals.size() / 2;
-		List<DecomposableInput> decomposedListOfProposals = new ArrayList<>();
-		decomposedListOfProposals.add(new ListOfProposals(proposals.subList(0, split)));
-		decomposedListOfProposals.add(new ListOfProposals(proposals.subList(split, proposals.size())));
+	public List<DecomposableInput<List<Proposal>>> decompose() {
+		int split = composition.size() / 2;
+		List<DecomposableInput<List<Proposal>>> decomposedListOfProposals = new ArrayList<>();
+		decomposedListOfProposals.add(new ListOfProposals(composition.subList(0, split)));
+		decomposedListOfProposals.add(new ListOfProposals(composition.subList(split, composition.size())));
 		return decomposedListOfProposals;
-	}
-
-	public List<DecomposableInput> getProposals() {
-		return proposals;
 	}
 
 }
