@@ -13,15 +13,15 @@ public class ListOfProposals extends DecomposableInput<List<Proposal>> {
 
 	@Override
 	public boolean computeDirectly() {
-		return composition.size()==1;
+		return rawInput.size()==1;
 	}
 
 	@Override
 	public List<DecomposableInput<List<Proposal>>> decompose() {
-		int split = composition.size() / 2;
+		int split = rawInput.size() / 2;
 		List<DecomposableInput<List<Proposal>>> decomposedListOfProposals = new ArrayList<>();
-		decomposedListOfProposals.add(new ListOfProposals(composition.subList(0, split)));
-		decomposedListOfProposals.add(new ListOfProposals(composition.subList(split, composition.size())));
+		decomposedListOfProposals.add(new ListOfProposals(rawInput.subList(0, split)));
+		decomposedListOfProposals.add(new ListOfProposals(rawInput.subList(split, rawInput.size())));
 		return decomposedListOfProposals;
 	}
 

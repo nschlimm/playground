@@ -3,6 +3,7 @@ package com.schlimm.java7.concurrency.forkjoin.pricingengine;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -34,6 +35,7 @@ public class WorkSharingTaskExample implements Callable<Map<String, Double>> {
 						"Hinkel", "4026", "AAA", true, true, true));
 		CompletionService<Map<String, Double>> pool = new ExecutorCompletionService<>(Executors.newCachedThreadPool());
 		Collection<Future<Map<String, Double>>> futures = new ArrayList<>();
+		System.out.println(new Date());
 		for (int i = 0; i < proposals.size(); i++) {
 			futures.add(pool.submit(new WorkSharingTaskExample(proposals.get(i))));
 		}
@@ -42,5 +44,6 @@ public class WorkSharingTaskExample implements Callable<Map<String, Double>> {
 			prices.add(pool.take().get());
 		}
 		System.out.println(prices);
+		System.out.println(new Date());
 	}
 }

@@ -4,15 +4,15 @@ import java.util.List;
 
 public abstract class DecomposableInput<A> {
 	
-	protected A composition;
+	protected A rawInput;
 	
-	public DecomposableInput(A composition) {
+	public DecomposableInput(A rawInput) {
 		super();
-		this.composition = composition;
+		this.rawInput = rawInput;
 	}
 
-	public A getComposition() {
-		return composition;
+	public A getRawInput() {
+		return rawInput;
 	}
 	
 	public abstract boolean computeDirectly();

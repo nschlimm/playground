@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
 @SuppressWarnings("rawtypes")
-public class GenericRecursiveTask extends RecursiveTask<ComposableResult> implements Prototype<GenericRecursiveTask, DecomposableInput> {
+public class GenericRecursiveTask extends RecursiveTask<ComposableResult> implements Prototype<GenericRecursiveTask> {
 
 	/**
 	 * Serial UID
@@ -17,11 +17,11 @@ public class GenericRecursiveTask extends RecursiveTask<ComposableResult> implem
 	
 	private ForkAndJoinProcessor<GenericRecursiveTask> processor;
 
-	public GenericRecursiveTask(DecomposableInput input, ComputationActivity activity, ForkAndJoinProcessor<GenericRecursiveTask> processor) {
+	public GenericRecursiveTask(DecomposableInput input, ComputationActivity activity) {
 		super();
 		this.input = input;
 		this.activity = activity;
-		this.processor = processor;
+		this.processor = createForkAndJoinProcessor();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -32,14 +32,19 @@ public class GenericRecursiveTask extends RecursiveTask<ComposableResult> implem
 			return activity.compute(input);
 		}
 
-		List<DecomposableInput> decomposedInputs = input.decompose();
-		return processor.forkAndJoin(this, decomposedInputs);
+		List<DecomposableInput<?>> decomposedInputs = input.decompose();
+		return processor.forkAndJoin(decomposedInputs);
 
 	}
 
 	@Override
 	public GenericRecursiveTask prototype(DecomposableInput input) {
-		return new GenericRecursiveTask(input, activity, processor);
+		return new GenericRecursiveTask(input, activity);
 	}
-	
+
+	@Override
+	public ForkAndJoinProcessor<GenericRecursiveTask> createForkAndJoinProcessor() {
+		return new GenericSplitProcessor(this);
+	}
+
 }

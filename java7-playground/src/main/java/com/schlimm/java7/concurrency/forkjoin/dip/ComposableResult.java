@@ -2,17 +2,17 @@ package com.schlimm.java7.concurrency.forkjoin.dip;
 
 public abstract class ComposableResult<A> {
 
-	protected A composedResult;
+	protected A rawResult;
 
 	public ComposableResult(A firstPeace) {
 		super();
-		composedResult = firstPeace;
+		rawResult = firstPeace;
 	}
 
 	public abstract ComposableResult<A> compose(ComposableResult<A> anotherPeace);
 	
-	public A getComposedResult() {
-		return composedResult;
+	public A getRawResult() {
+		return rawResult;
 	}
 	
 }

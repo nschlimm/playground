@@ -2,9 +2,15 @@ package com.schlimm.java7.concurrency.forkjoin.dip;
 
 import java.util.List;
 
-public interface ForkAndJoinProcessor<A extends Prototype<?,?>> {
+public abstract class ForkAndJoinProcessor<A extends Prototype<?>> {
 	
-	@SuppressWarnings("rawtypes")
-	public abstract ComposableResult<?> forkAndJoin(A forkAndJoinTask, List<DecomposableInput> decomposedInput);
+	protected A forkAndJoinTask;
+	
+	public ForkAndJoinProcessor(A forkAndJoinTask) {
+		super();
+		this.forkAndJoinTask = forkAndJoinTask;
+	}
+
+	public abstract ComposableResult<?> forkAndJoin(List<DecomposableInput<?>> decomposedInput);
 
 }

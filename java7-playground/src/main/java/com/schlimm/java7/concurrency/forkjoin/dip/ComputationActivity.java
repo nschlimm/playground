@@ -1,7 +1,7 @@
 package com.schlimm.java7.concurrency.forkjoin.dip;
 
-public interface ComputationActivity {
+public interface ComputationActivity<A, B> {
 	
-	ComposableResult<?> compute(DecomposableInput<?> task);
+	ComposableResult<B> compute(DecomposableInput<A> input);
 
 }

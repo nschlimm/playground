@@ -1,7 +1,8 @@
 package com.schlimm.java7.concurrency.forkjoin.dip;
 
-public interface Prototype<A, B> {
+public interface Prototype<A> {
 	
-	A prototype(B input);
-
+	A prototype(DecomposableInput<?> input);
+	ForkAndJoinProcessor<? extends A> createForkAndJoinProcessor();
+	
 }

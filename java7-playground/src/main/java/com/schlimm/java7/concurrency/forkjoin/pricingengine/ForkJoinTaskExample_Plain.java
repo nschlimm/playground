@@ -8,14 +8,10 @@ import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
-
 public class ForkJoinTaskExample_Plain extends RecursiveTask<List<Map<String, Double>>> {
 
 	private List<Proposal> proposals;
 
-	/**
-	 * Serial ID
-	 */
 	private static final long serialVersionUID = -2703342063482619328L;
 
 	public ForkJoinTaskExample_Plain(List<Proposal> proposals) {
