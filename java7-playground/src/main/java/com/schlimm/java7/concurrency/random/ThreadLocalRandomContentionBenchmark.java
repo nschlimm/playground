@@ -1,4 +1,4 @@
-package com.schlimm.java7.consurrency.random;
+package com.schlimm.java7.concurrency.random;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;

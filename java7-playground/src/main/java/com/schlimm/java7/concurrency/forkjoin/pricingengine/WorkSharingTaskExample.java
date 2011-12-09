@@ -13,6 +13,9 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.schlimm.java7.concurrency.forkjoin.dippricingengine.PricingEngine;
+import com.schlimm.java7.concurrency.forkjoin.dippricingengine.Proposal;
+
 
 public class WorkSharingTaskExample implements Callable<Map<String, Double>> {
 

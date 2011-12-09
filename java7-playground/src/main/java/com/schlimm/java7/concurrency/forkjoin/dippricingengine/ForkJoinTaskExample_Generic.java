@@ -1,4 +1,4 @@
-package com.schlimm.java7.concurrency.forkjoin.pricingengine;
+package com.schlimm.java7.concurrency.forkjoin.dippricingengine;
 
 import java.util.ArrayList;
 import java.util.Date;
