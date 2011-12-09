@@ -13,22 +13,24 @@ public class PhaserExample {
 		final Phaser phaser = new Phaser(1) {
 			/**
 			 * onAdvance() is invoked when all threads reached the synchronization barrier. It returns true if the
-			 * phaser should terminate, false if phaser should continue with next phase When terminated: (1) attempts to
-			 * register upon termination have no effect and (2) synchronization methods immediately return without
-			 * waiting for advance. When continue:
-			 * <p>
+			 * phaser should terminate, false if phaser should continue with next phase. When terminated: (1) attempts
+			 * to register new parties have no effect and (2) synchronization methods immediately return without waiting
+			 * for advance. When continue:
 			 * 
 			 * <pre>
 			 *       -> set unarrived parties = registered parties
 			 *       -> set arrived parties = 0
 			 *       -> set phase = phase + 1
 			 * </pre>
+			 * 
+			 * This causes another iteration for all thread parties in a new phase (cycle).
+			 * 
 			 */
 			protected boolean onAdvance(int phase, int registeredParties) {
 				System.out.println("On advance" + " -> Registered: " + getRegisteredParties() + " - Unarrived: "
 						+ getUnarrivedParties() + " - Arrived: " + getArrivedParties() + " - Phase: " + getPhase());
 				/**
-				 * this onAdvance() implementation causes the phaser to cycle 10 times
+				 * This onAdvance() implementation causes the phaser to cycle 1 time (= 2 iterations).
 				 */
 				return phase >= 1 || registeredParties == 0;
 			}
@@ -36,7 +38,7 @@ public class PhaserExample {
 
 		dumpPhaserState("After phaser init", phaser);
 
-		/** Create and start threads */
+		/** Create and start threads. */
 		for (final Runnable task : tasks) {
 			/**
 			 * Increase the number of unarrived parties -> equals the number of parties required to advance to the next
@@ -48,9 +50,9 @@ public class PhaserExample {
 				public void run() {
 					do {
 						/**
-						 * Wait for all threads reaching the synchronization barrier: wait for arrived parties =
-						 * registered parties. If arrived parties = registered parties: phase advances and onAdvance()
-						 * is invoked.
+						 * Wait for all threads reaching the synchronization barrier: more precisely, wait for arrived
+						 * parties = registered parties. If arrived parties = registered parties: phase advances and
+						 * onAdvance() is invoked.
 						 */
 						phaser.arriveAndAwaitAdvance();
 						task.run();
