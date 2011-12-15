@@ -1,15 +1,9 @@
 package com.schlimm.java7.concurrency.forkjoin.dippricingengine;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.schlimm.java7.concurrency.forkjoin.dip.ComposableResult;
-import com.schlimm.java7.concurrency.forkjoin.dip.ComputationActivity;
-import com.schlimm.java7.concurrency.forkjoin.dip.DecomposableInput;
-
-public class PricingEngine implements ComputationActivity<List<Proposal>, List<Map<String, Double>>> {
+public class PricingEngine {
 
 	private double comprehensiveCoverBasePrice = 132.01;
 	private double partInsuranceCoverBasePrice = 70.01;
@@ -49,14 +43,6 @@ public class PricingEngine implements ComputationActivity<List<Proposal>, List<M
 			a = a + b;
 			b = a - b;
 		}
-	}
-
-	@Override
-	public ComposableResult<List<Map<String, Double>>> compute(DecomposableInput<List<Proposal>> input) {
-		Map<String, Double> result = calculatePrices(input.getRawInput().get(0));
-		List<Map<String, Double>> priceList = new ArrayList<>();
-		priceList.add(result);
-		return new ListOfPrices(priceList);
 	}
 
 }

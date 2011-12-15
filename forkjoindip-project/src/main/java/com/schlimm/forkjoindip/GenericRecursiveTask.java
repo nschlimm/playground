@@ -1,10 +1,18 @@
-package com.schlimm.java7.concurrency.forkjoin.dip;
+package com.schlimm.forkjoindip;
 
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
+/**
+ * A generic recursive task that implements the typical fork and join workflow. Input objects are split into two sub
+ * lists by using {@link GenericSplitProcessor}.
+ * 
+ * @author Niklas Schlimm
+ * 
+ */
 @SuppressWarnings("rawtypes")
-public class GenericRecursiveTask extends RecursiveTask<ComposableResult> implements Prototype<GenericRecursiveTask> {
+public class GenericRecursiveTask extends RecursiveTask<ComposableResult> implements
+		ForkAndJoinTaskPrototype<GenericRecursiveTask> {
 
 	/**
 	 * Serial UID
@@ -13,11 +21,11 @@ public class GenericRecursiveTask extends RecursiveTask<ComposableResult> implem
 
 	private DecomposableInput input;
 
-	private ComputationActivity activity;
-	
+	private ComputationActivityBridge activity;
+
 	private ForkAndJoinProcessor<GenericRecursiveTask> processor;
 
-	public GenericRecursiveTask(DecomposableInput input, ComputationActivity activity) {
+	public GenericRecursiveTask(DecomposableInput input, ComputationActivityBridge activity) {
 		super();
 		this.input = input;
 		this.activity = activity;

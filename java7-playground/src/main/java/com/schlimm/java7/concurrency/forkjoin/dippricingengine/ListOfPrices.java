@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.schlimm.java7.concurrency.forkjoin.dip.ComposableResult;
+import com.schlimm.forkjoindip.ComposableResult;
 
 public class ListOfPrices extends ComposableResult<List<Map<String, Double>>> {
 

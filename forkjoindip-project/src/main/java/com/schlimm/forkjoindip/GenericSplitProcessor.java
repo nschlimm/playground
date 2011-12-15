@@ -1,7 +1,15 @@
-package com.schlimm.java7.concurrency.forkjoin.dip;
+package com.schlimm.forkjoindip;
 
 import java.util.List;
+import java.util.concurrent.ForkJoinTask;
 
+/**
+ * Generic implementation of a scenario where an input is decomposed into two parts that get distributed accross two
+ * threads using {@link ForkJoinTask#fork()}
+ * 
+ * @author Niklas Schlimm
+ * 
+ */
 public class GenericSplitProcessor extends ForkAndJoinProcessor<GenericRecursiveTask> {
 
 	public GenericSplitProcessor(GenericRecursiveTask forkAndJoinTask) {
@@ -11,7 +19,7 @@ public class GenericSplitProcessor extends ForkAndJoinProcessor<GenericRecursive
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public ComposableResult forkAndJoin(List<DecomposableInput<?>> decomposedInput) {
-		if (decomposedInput.size()!=2)
+		if (decomposedInput.size() != 2)
 			throw new IllegalArgumentException("Expected exactly two list entries!");
 		GenericRecursiveTask f1 = forkAndJoinTask.prototype(decomposedInput.get(0));
 		f1.fork();

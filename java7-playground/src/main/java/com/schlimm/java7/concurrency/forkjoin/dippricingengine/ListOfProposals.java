@@ -3,7 +3,7 @@ package com.schlimm.java7.concurrency.forkjoin.dippricingengine;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.schlimm.java7.concurrency.forkjoin.dip.DecomposableInput;
+import com.schlimm.forkjoindip.DecomposableInput;
 
 public class ListOfProposals extends DecomposableInput<List<Proposal>> {
 
