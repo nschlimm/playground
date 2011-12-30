@@ -3,15 +3,17 @@ package com.schlimm.java7.concurrency.random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadLocalRandom;
 
+public class ThreadLocalRandomGenerator implements Callable<Long> {
 
-public class ThreadLocalRandomGenerator implements Callable<Double> {
+	private double r;
+	private long i;
 	@Override
-	public Double call() throws Exception {
-		Double r = 0.0;
-		for (int i = 0; i < 100; i++) {
+	public Long call() throws Exception {
+		do {
 			r = r + ThreadLocalRandom.current().nextDouble();
-		}
-		return r;
+			i++;
+		} while (!Thread.currentThread().isInterrupted());
+		return i;
 	}
-
+	
 }

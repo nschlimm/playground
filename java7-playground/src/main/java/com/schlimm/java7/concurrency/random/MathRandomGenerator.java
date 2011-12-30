@@ -2,16 +2,16 @@ package com.schlimm.java7.concurrency.random;
 
 import java.util.concurrent.Callable;
 
+public class MathRandomGenerator implements Callable<Long>{
 
-public class MathRandomGenerator implements Callable<Double> {
-
+	private double r;
+	private long i;
 	@Override
-	public Double call() throws Exception {
-		Double r = 0.0;
-		for (int i = 0; i < 100; i++) {
+	public Long call() throws Exception {
+		do {
 			r = r + Math.random();
-		}
-		return r;
+			i++;
+		} while (!Thread.currentThread().isInterrupted());
+		return i;
 	}
-
 }
