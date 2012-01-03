@@ -36,9 +36,8 @@ public class PerformanceHarness implements Callable<Average> {
 		return avg;
 	}
 
-	public void warmUp() {
-		check.start(false);
-		check.start(false);
+	public long warmUp() {
+		return check.start(false);
 	}
 
 	@Override

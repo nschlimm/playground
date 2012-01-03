@@ -6,6 +6,8 @@ import java.util.concurrent.Phaser;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.schlimm.java7.concurrency.random.BenchmarkRunnable;
+
 /**
  * The PerformanceChecker tries to run the task as often as possible in the allotted time. It then returns the number of
  * times that the task was called. To make sure that the timer stops the test timeously, we check that the difference
@@ -24,7 +26,7 @@ public class PerformanceChecker {
 	/** The number of milliseconds that each test should run */
 	private final long testTime;
 	/** The task to execute for the duration of the test run. */
-	private final Runnable task;
+	private final BenchmarkRunnable task;
 	private final Phaser testExecPhaser;
 	private final Lock gcLock = new ReentrantLock();
 	/**
@@ -46,7 +48,7 @@ public class PerformanceChecker {
 	 * @param task
 	 *            the task that should be executed repeatedly until the time is used up.
 	 */
-	public PerformanceChecker(long testTime, Runnable task, int threadCount) {
+	public PerformanceChecker(long testTime, BenchmarkRunnable task, int threadCount) {
 		this.testTime = testTime;
 		this.task = task;
 		this.testExecPhaser = new Phaser(threadCount);
@@ -62,6 +64,7 @@ public class PerformanceChecker {
 		int runs = 0;
 		if (concurrent)
 			testExecPhaser.arriveAndAwaitAdvance();
+		System.out.println("... entering benchmark intervall ... " + Thread.currentThread().getName());
 		do {
 			if (++runs > MAXIMUM_ATTEMPTS) {
 				throw new IllegalStateException("Test not accurate");
@@ -82,12 +85,17 @@ public class PerformanceChecker {
 			start = System.currentTimeMillis() - start;
 			timer.cancel();
 		} while (Math.abs(start - testTime) > EPSILON);
+		System.out.println("... leaving benchmark intervall ... " + Thread.currentThread().getName() + " result: " + task.getResult());
+		if (concurrent)
+			testExecPhaser.arriveAndAwaitAdvance();
 		gcLock.lock();
 		try {
 			collectGarbage();
 		} finally {
 			gcLock.unlock();
 		}
+		if (concurrent)
+			testExecPhaser.arriveAndAwaitAdvance();
 		return numberOfLoops;
 	}
 
