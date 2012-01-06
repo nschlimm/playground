@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Phaser;
 
+import com.schlimm.java7.concurrency.random.generators.MathRandomFieldGenerator;
 import com.schlimm.java7.concurrency.random.heinz.Average;
 import com.schlimm.java7.concurrency.random.heinz.PerformanceChecker;
 import com.schlimm.java7.concurrency.random.heinz.PerformanceHarness;
@@ -61,7 +62,8 @@ public class ConcurrentBenchmark {
 						phaser.arriveAndAwaitAdvance();
 						try {
 							Average average = harness.call();
-							results.put(Thread.currentThread().getName(), average);
+							String name = Thread.currentThread().getName();
+							results.put(name, average);
 							latch.countDown();
 						} catch (Exception e) {
 							throw new RuntimeException(e);
@@ -79,7 +81,7 @@ public class ConcurrentBenchmark {
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
-		new ConcurrentBenchmark().benchmark(4, 5000, 5, new MathRandomGenerator());
+		new ConcurrentBenchmark().benchmark(1, 1000, 5, new MathRandomFieldGenerator());
 //		harness = new PerformanceHarness(new PerformanceChecker(1000, new MathRandomGenerator(), 2), 5);
 //		new ConcurrentBenchmark().benchmark(" - Math.random() - ", harness, 2);
 	}

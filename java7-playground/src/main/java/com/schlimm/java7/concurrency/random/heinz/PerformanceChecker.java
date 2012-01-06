@@ -33,7 +33,7 @@ public class PerformanceChecker {
 	 * Accuracy of test. It must finish within 20ms of the testTime otherwise we retry the test. This could be
 	 * configurable.
 	 */
-	public static final int EPSILON = 20;
+	public static final int EPSILON = 100;
 	/**
 	 * Number of repeats before giving up with this test.
 	 */

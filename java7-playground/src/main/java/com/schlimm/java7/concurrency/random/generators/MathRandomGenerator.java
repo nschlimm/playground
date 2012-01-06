@@ -1,4 +1,6 @@
-package com.schlimm.java7.concurrency.random;
+package com.schlimm.java7.concurrency.random.generators;
+
+import com.schlimm.java7.concurrency.random.BenchmarkRunnable;
 
 
 public class MathRandomGenerator implements BenchmarkRunnable {
