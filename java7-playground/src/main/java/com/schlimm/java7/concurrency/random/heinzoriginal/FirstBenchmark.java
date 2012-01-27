@@ -10,8 +10,7 @@ import com.schlimm.java7.concurrency.random.generators.ThreadLocalRandomGenerato
 
 public class FirstBenchmark {
 
-	private static List<BenchmarkRunnable> benchmarkTargets = Arrays.asList(new MathRandomGenerator(),
-			new ThreadLocalRandomGenerator());
+	private static List<BenchmarkRunnable> benchmarkTargets = Arrays.asList((BenchmarkRunnable)new ThreadLocalRandomGenerator(), (BenchmarkRunnable)new MathRandomGenerator());
 
 	public static void main(String[] args) {
 		DecimalFormat df = new DecimalFormat("#.##");
@@ -20,7 +19,7 @@ public class FirstBenchmark {
 			System.out.println("Benchmark target: " + runnable.getClass().getSimpleName());
 			System.out.println("Mean execution count: " + df.format(average.mean()));
 			System.out.println("Standard deviation: " + df.format(average.stddev()));
-			System.out.println("To avoid dead code coptimization: " + runnable.getResult());
+			System.out.println("To avoid dead code optimization: " + runnable.getResult());
 		}
 	}
 	

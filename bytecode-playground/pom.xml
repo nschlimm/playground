@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.schlimm.java7</groupId>
-  <artifactId>java7-playground</artifactId>
+  <groupId>com.schlimm.bytecode</groupId>
+  <artifactId>bytecode-playground</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>java7-playground</name>
+  <name>bytecode-playground</name>
   <url>http://maven.apache.org</url>
 
   <properties>
