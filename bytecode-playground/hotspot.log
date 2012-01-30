@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='908' time_ms='1327665704683'>
+<hotspot_log version='160 1' process='2688' time_ms='1327929557304'>
 <vm_version>
 <name>
 Java HotSpot(TM) Client VM
@@ -16,7 +16,7 @@ Java HotSpot(TM) Client VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fa
 -Dfile.encoding=Cp1252 
 </args>
 <command>
-com.schlimm.bytecode.InvokeDynamicClassGenerator
+com.schlimm.bytecode.invokedynamic.generator.VarArgsParameterDynamicInvokerGenerator
 </command>
 <launcher>
 SUN_STANDARD
@@ -37,15 +37,15 @@ java.vm.specification.vendor=Oracle Corporation
 java.vm.specification.version=1.7
 java.vm.vendor=Oracle Corporation
 file.encoding=Cp1252
-sun.java.command=com.schlimm.bytecode.InvokeDynamicClassGenerator
+sun.java.command=com.schlimm.bytecode.invokedynamic.generator.VarArgsParameterDynamicInvokerGenerator
 sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='452'/>
+<writer thread='2684'/>
 C1 Runtime statistics:
  _resolve_invoke_virtual_cnt:     0
- _resolve_invoke_opt_virtual_cnt: 5
+ _resolve_invoke_opt_virtual_cnt: 7
  _resolve_invoke_static_cnt:      0
  _handle_wrong_method_cnt:        0
  _ic_miss_cnt:                    0
@@ -78,6 +78,10 @@ C1 Runtime statistics:
  _throw_count:                                  0:
 
 <statistics type='nmethod'>
+Statistics for 1 native nmethods:
+ N. total size  = 656
+ N. relocation  = 60
+ N. main code   = 376
 Statistics for 14 bytecoded nmethods:
  total in heap  = 21760
  relocation     = 1660
@@ -89,12 +93,12 @@ Statistics for 14 bytecoded nmethods:
  dependencies   = 56
  nul chk table  = 400
 Debug Data Chunks: 510, shared 53+86, non-SP&apos;s elided 8
-PcDesc Statistics:  15 queries, 8.93 comparisons per query
-  caches=14 queries=15/0, hits=0+2, tests=38+96, adds=13
+PcDesc Statistics:  17 queries, 8.29 comparisons per query
+  caches=14 queries=17/0, hits=0+4, tests=45+96, adds=13
 </statistics>
-<writer thread='2576'/>
-<destroy_vm stamp='0.236'/>
-<tty_done stamp='0.252'/>
+<writer thread='2404'/>
+<destroy_vm stamp='0.232'/>
+<tty_done stamp='0.247'/>
 </tty>
-<hotspot_log_done stamp='0.252'/>
+<hotspot_log_done stamp='0.247'/>
 </hotspot_log>

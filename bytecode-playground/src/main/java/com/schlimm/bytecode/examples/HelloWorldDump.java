@@ -1,4 +1,4 @@
-package com.schlimm.bytecode;
+package com.schlimm.bytecode.examples;
 
 import java.io.File;
 import java.io.FileOutputStream;

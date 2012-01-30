@@ -1,4 +1,4 @@
-package com.schlimm.bytecode;
+package com.schlimm.bytecode.invokedynamic;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,17 +15,20 @@ import org.objectweb.asm.Handle;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-@SuppressWarnings("unused")
-public class InvokeDynamicClassGenerator implements Opcodes {
+import com.sun.xml.internal.ws.org.objectweb.asm.Type;
 
-	public static byte[] dump() throws Exception {
+@SuppressWarnings("unused")
+public abstract class AbstractDynamicInvokerGenerator implements Opcodes {
+
+	public byte[] dump(String dynamicInvokerClassName, String dynamicLinkageClassName, String bootstrapMethodName, String targetMethodDescriptor)
+			throws Exception {
 
 		ClassWriter cw = new ClassWriter(0);
 		FieldVisitor fv;
 		MethodVisitor mv;
 		AnnotationVisitor av0;
 
-		cw.visit(V1_7, ACC_PUBLIC + ACC_SUPER, "com/schlimm/bytecode/HelloWorld", null, "java/lang/Object", null);
+		cw.visit(V1_7, ACC_PUBLIC + ACC_SUPER, dynamicInvokerClassName, null, "java/lang/Object", null);
 
 		{
 			mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
@@ -41,11 +44,12 @@ public class InvokeDynamicClassGenerator implements Opcodes {
 			mv.visitCode();
 			MethodType mt = MethodType.methodType(CallSite.class, MethodHandles.Lookup.class, String.class,
 					MethodType.class);
-			Handle bootstrap = new Handle(Opcodes.H_INVOKESTATIC, "com/schlimm/bytecode/DynamicLinkageExample",
-					"bootstrapDynamic", mt.toMethodDescriptorString());
-			mv.visitInvokeDynamicInsn("runCalculation", "()V", bootstrap);
+			Handle bootstrap = new Handle(Opcodes.H_INVOKESTATIC, dynamicLinkageClassName, bootstrapMethodName,
+					mt.toMethodDescriptorString());
+			int maxStackSize = addMethodParameters(mv);
+			mv.visitInvokeDynamicInsn("runCalculation", targetMethodDescriptor, bootstrap);
 			mv.visitInsn(RETURN);
-			mv.visitMaxs(0, 1);
+			mv.visitMaxs(maxStackSize, 1);
 			mv.visitEnd();
 		}
 		cw.visitEnd();
@@ -53,9 +57,6 @@ public class InvokeDynamicClassGenerator implements Opcodes {
 		return cw.toByteArray();
 	}
 
-	public static void main(String[] args) throws IOException, Exception {
-		FileOutputStream fos = new FileOutputStream(new File("com/schlimm/bytecode/HelloWorld.class"));
-		fos.write(dump());
-	}
+	protected abstract int addMethodParameters(MethodVisitor mv);
 
 }
