@@ -9,17 +9,17 @@ import java.lang.invoke.MethodType;
 @SuppressWarnings({ "unused", "rawtypes" })
 public class SimpleDynamicLinkageExample {
 	
-	private static MethodHandle printArgs;
+	private static MethodHandle sayHello;
 
-	private static void printArgs() {
+	private static void sayHello() {
 		System.out.println("There we go!");
 	}
 
 	public static CallSite bootstrapDynamic(MethodHandles.Lookup caller, String name, MethodType type) throws NoSuchMethodException, IllegalAccessException {
 		MethodHandles.Lookup lookup = MethodHandles.lookup();
 		Class thisClass = lookup.lookupClass(); // (who am I?)
-		printArgs = lookup.findStatic(thisClass, "printArgs", MethodType.methodType(void.class));
-		return new ConstantCallSite(printArgs.asType(type));
+		sayHello = lookup.findStatic(thisClass, "sayHello", MethodType.methodType(void.class));
+		return new ConstantCallSite(sayHello.asType(type));
 	}
 
 }
