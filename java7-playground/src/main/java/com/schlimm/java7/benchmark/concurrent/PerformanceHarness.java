@@ -1,4 +1,4 @@
-package com.schlimm.java7.concurrency.random.heinz;
+package com.schlimm.java7.benchmark.concurrent;
 
 import java.util.concurrent.Callable;
 

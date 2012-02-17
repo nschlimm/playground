@@ -4,7 +4,10 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
-import com.schlimm.java7.concurrency.random.BenchmarkRunnable;
+import com.schlimm.java7.benchmark.original.Average;
+import com.schlimm.java7.benchmark.original.BenchmarkRunnable;
+import com.schlimm.java7.benchmark.original.PerformanceChecker;
+import com.schlimm.java7.benchmark.original.PerformanceHarness;
 import com.schlimm.java7.concurrency.random.generators.MathRandomGenerator;
 import com.schlimm.java7.concurrency.random.generators.ThreadLocalRandomGenerator;
 

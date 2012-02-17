@@ -1,4 +1,4 @@
-package com.schlimm.java7.concurrency.random.heinzoriginal;
+package com.schlimm.java7.benchmark.original;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package com.schlimm.java7.concurrency.random;
+package com.schlimm.java7.benchmark.concurrent;
 
 import java.text.DecimalFormat;
 import java.util.Map;
@@ -6,10 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Phaser;
 
+import com.schlimm.java7.benchmark.original.BenchmarkRunnable;
 import com.schlimm.java7.concurrency.random.generators.MathRandomFieldGenerator;
-import com.schlimm.java7.concurrency.random.heinz.Average;
-import com.schlimm.java7.concurrency.random.heinz.PerformanceChecker;
-import com.schlimm.java7.concurrency.random.heinz.PerformanceHarness;
 
 public class ConcurrentBenchmark {
 	

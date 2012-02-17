@@ -1,6 +1,6 @@
 package com.schlimm.java7.concurrency.random.generators;
 
-import com.schlimm.java7.concurrency.random.BenchmarkRunnable;
+import com.schlimm.java7.benchmark.original.BenchmarkRunnable;
 import com.schlimm.java7.concurrency.random.MySillyThreadLocalRandom;
 
 

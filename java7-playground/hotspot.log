@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='2884' time_ms='1329149153094'>
+<hotspot_log version='160 1' process='19416' time_ms='1329495359164'>
 <vm_version>
 <name>
 Java HotSpot(TM) Client VM
@@ -13,10 +13,10 @@ Java HotSpot(TM) Client VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fa
 </vm_version>
 <vm_arguments>
 <args>
--XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining -Dfile.encoding=Cp1252 
+-Dfile.encoding=Cp1252 
 </args>
 <command>
-com.schlimm.java7.concurrency.random.heinzoriginal.FirstBenchmark
+com.schlimm.java7.nio.MyAsynchronousFileChannelExample
 </command>
 <launcher>
 SUN_STANDARD
@@ -29,7 +29,7 @@ java.vm.info=mixed mode, sharing
 java.ext.dirs=E:\dev_home\openjdk7\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext
 java.endorsed.dirs=E:\dev_home\openjdk7\jre\lib\endorsed
 sun.boot.library.path=E:\dev_home\openjdk7\jre\bin
-java.library.path=E:\dev_home\openjdk7\bin;.;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;e:\dev_home\maven-3.0.3\bin;e:\dev_home\java-7-1\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Programme\IBM\Personal Communications\;C:\Programme\IBM\Trace Facility\;C:\Programme\RationalRoseJEdition\common;C:\Programme\Oracle\jre\1.1.8\bin;C:\Programme\oracle\ora92\bin;C:\Programme\ProPheT\isiscomm\w3\lib;c:\programme\Java\jre1.6.0_26\bin;c:\Dokumente und Einstellungen\pd05417.PROVINZIAL\.vmwebclient\Java\bin
+java.library.path=E:\dev_home\openjdk7\bin;.;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;e:\dev_home\maven-3.0.3\bin;e:\dev_home\java-7-1\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Programme\IBM\Personal Communications\;C:\Programme\IBM\Trace Facility\;C:\Programme\RationalRoseJEdition\common;C:\Programme\Oracle\jre\1.1.8\bin;C:\Programme\oracle\ora92\bin;C:\Programme\ProPheT\isiscomm\w3\lib;c:\programme\Java\jre1.6.0_26\bin;c:\Dokumente und Einstellungen\pd05417.PROVINZIAL\.vmwebclient\Java\bin;E:\dev_home\Mercurial
 java.home=E:\dev_home\openjdk7\jre
 java.class.path=E:\dev_home\repositories\git\playground\java7-playground\target\test-classes;E:\dev_home\repositories\git\playground\java7-playground\target\classes;C:\Dokumente und Einstellungen\pd05417\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;E:\dev_home\repositories\git\playground\forkjoindip-project\target\test-classes;E:\dev_home\repositories\git\playground\forkjoindip-project\target\classes
 sun.boot.class.path=E:\dev_home\openjdk7\jre\lib\resources.jar;E:\dev_home\openjdk7\jre\lib\rt.jar;E:\dev_home\openjdk7\jre\lib\sunrsasign.jar;E:\dev_home\openjdk7\jre\lib\jsse.jar;E:\dev_home\openjdk7\jre\lib\jce.jar;E:\dev_home\openjdk7\jre\lib\charsets.jar;E:\dev_home\openjdk7\jre\classes
@@ -37,172 +37,69 @@ java.vm.specification.vendor=Oracle Corporation
 java.vm.specification.version=1.7
 java.vm.vendor=Oracle Corporation
 file.encoding=Cp1252
-sun.java.command=com.schlimm.java7.concurrency.random.heinzoriginal.FirstBenchmark
+sun.java.command=com.schlimm.java7.nio.MyAsynchronousFileChannelExample
 sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='316'/>
-                            @ 83   java.lang.String::indexOfSupplementary (88 bytes)   callee is too large
-                            @ 136   java.lang.String::&lt;init&gt; (20 bytes)
-                              @ 1   java.lang.Object::&lt;init&gt; (1 bytes)
-                            @ 1   java.lang.String::length (5 bytes)
-                            @ 31   java.lang.String::charAt (33 bytes)
-                            @ 61   java.io.Win32FileSystem::normalize (231 bytes)   callee is too large
-                            @ 90   java.io.Win32FileSystem::normalize (231 bytes)   callee is too large
-                            @ 111   java.io.Win32FileSystem::normalize (231 bytes)   callee is too large
-                            @ 137   java.io.Win32FileSystem::normalize (231 bytes)   callee is too large
-                            @ 12   java.io.BufferedInputStream::fill (194 bytes)   callee is too large
-                            @ 29   java.io.BufferedInputStream::getBufIfOpen (21 bytes)
-                            @ 11   java.io.BufferedReader::ensureOpen (18 bytes)
-                            @ 44   java.io.BufferedReader::fill (170 bytes)   callee is too large
-              s             @ 63   java.lang.StringBuffer::length (5 bytes)
-              s             @ 70   java.lang.StringBuffer::toString (17 bytes)
-                              @ 13   java.lang.String::&lt;init&gt; (72 bytes)   callee is too large
-                            @ 208   java.lang.String::&lt;init&gt; (72 bytes)   callee is too large
-              s             @ 226   java.lang.StringBuffer::append (10 bytes)
-                              @ 4   java.lang.AbstractStringBuilder::append (40 bytes)   callee is too large
-              s             @ 231   java.lang.StringBuffer::toString (17 bytes)
-                              @ 13   java.lang.String::&lt;init&gt; (72 bytes)   callee is too large
-                            @ 275   java.lang.StringBuffer::&lt;init&gt; (6 bytes)
-                              @ 2   java.lang.AbstractStringBuilder::&lt;init&gt; (12 bytes)
-                                @ 1   java.lang.Object::&lt;init&gt; (1 bytes)
-              s             @ 289   java.lang.StringBuffer::append (10 bytes)
-                              @ 4   java.lang.AbstractStringBuilder::append (40 bytes)   callee is too large
-                            @ 1   java.nio.ByteBuffer::array (35 bytes)
-                            @ 6   java.nio.ByteBuffer::arrayOffset (35 bytes)
-                            @ 10   java.nio.Buffer::position (5 bytes)
-                            @ 17   java.nio.ByteBuffer::arrayOffset (35 bytes)
-                            @ 21   java.nio.Buffer::limit (5 bytes)
-                            @ 28   java.nio.CharBuffer::array (35 bytes)
-                            @ 34   java.nio.CharBuffer::arrayOffset (35 bytes)
-                            @ 38   java.nio.Buffer::position (5 bytes)
-                            @ 45   java.nio.CharBuffer::arrayOffset (35 bytes)
-                            @ 49   java.nio.Buffer::limit (5 bytes)
-                            @ 100   sun.nio.cs.SingleByte$Decoder::decode (11 bytes)
-                            @ 113   java.nio.charset.CoderResult::unmappableForLength (8 bytes)
-                              @ 4   java.nio.charset.CoderResult$Cache::access$200 (6 bytes)
-              s                 @ 2   java.nio.charset.CoderResult$Cache::get (109 bytes)   callee is too large
-                            @ 122   sun.nio.cs.SingleByte::access$000 (10 bytes)
-                              @ 6   sun.nio.cs.SingleByte::withResult (25 bytes)
-                                @ 3   java.nio.ByteBuffer::arrayOffset (35 bytes)   callee is too large
-                                @ 7   java.nio.Buffer::position (43 bytes)   callee is too large
-                                @ 15   java.nio.CharBuffer::arrayOffset (35 bytes)   callee is too large
-                                @ 19   java.nio.Buffer::position (43 bytes)   callee is too large
-                            @ 150   sun.nio.cs.SingleByte::access$000 (10 bytes)
-                              @ 6   sun.nio.cs.SingleByte::withResult (25 bytes)
-                                @ 3   java.nio.ByteBuffer::arrayOffset (35 bytes)   callee is too large
-                                @ 7   java.nio.Buffer::position (43 bytes)   callee is too large
-                                @ 15   java.nio.CharBuffer::arrayOffset (35 bytes)   callee is too large
-                                @ 19   java.nio.Buffer::position (43 bytes)   callee is too large
-                            @ 26   java.lang.Math::min (11 bytes)
-                            @ 64   java.lang.String::lastIndexOfSupplementary (86 bytes)   callee is too large
-                            @ 1   java.lang.String::length (5 bytes)
-                            @ 15   java.lang.String::toCharArray (20 bytes)
-                              @ 15   java.lang.String::getChars (66 bytes)   callee is too large
-                            @ 21   java.lang.String::length (5 bytes)
-                            @ 142   java.util.BitSet::get (69 bytes)   callee is too large
-                            @ 152   sun.net.www.ParseUtil::escape (42 bytes)   callee is too large
-                            @ 193   sun.net.www.ParseUtil::escape (42 bytes)   callee is too large
-                            @ 212   sun.net.www.ParseUtil::escape (42 bytes)   callee is too large
-                            @ 230   sun.net.www.ParseUtil::escape (42 bytes)   callee is too large
-                            @ 252   sun.net.www.ParseUtil::escape (42 bytes)   callee is too large
-                            @ 270   sun.net.www.ParseUtil::escape (42 bytes)   callee is too large
-                            @ 313   java.lang.System::arraycopy (0 bytes)
-                            @ 332   java.lang.String::&lt;init&gt; (72 bytes)   callee is too large
-                            @ 8   java.lang.NullPointerException::&lt;init&gt; (5 bytes)   don&apos;t inline Throwable constructors
-                            @ 48   java.lang.String::codePointAt (44 bytes)   callee is too large
-                            @ 57   java.lang.Character::toLowerCase (9 bytes)
-                              @ 1   java.lang.CharacterData::of (120 bytes)   callee is too large
-                            @ 69   java.lang.Character::charCount (12 bytes)
-                            @ 79   java.lang.Character::toLowerCase (6 bytes)
-                              @ 1   java.lang.Character::toLowerCase (9 bytes)
-                                @ 1   java.lang.CharacterData::of (120 bytes)   callee is too large
-                            @ 117   java.lang.System::arraycopy (0 bytes)
-                            @ 121   java.util.Locale::getLanguage (8 bytes)
-                              @ 4   sun.util.locale.BaseLocale::getLanguage (5 bytes)
-                            @ 199   java.lang.String::codePointAt (44 bytes)   callee is too large
-                            @ 206   java.lang.Character::charCount (12 bytes)
-                            @ 258   java.lang.Character::toLowerCase (9 bytes)
-                              @ 1   java.lang.CharacterData::of (120 bytes)   callee is too large
-                            @ 337   java.lang.Character::toChars (37 bytes)   callee is too large
-                            @ 351   java.lang.Character::toChars (43 bytes)   callee is too large
-                            @ 390   java.lang.System::arraycopy (0 bytes)
-                            @ 473   java.lang.String::&lt;init&gt; (20 bytes)
-                              @ 1   java.lang.Object::&lt;init&gt; (1 bytes)
-                            @ 1   java.lang.CharacterData::of (120 bytes)   callee is too large
-                            @ 4   java.lang.CharacterDataLatin1::getProperties (11 bytes)
-                            @ 12   java.lang.AbstractStringBuilder::expandCapacity (50 bytes)   callee is too large
-                            @ 0   java.lang.Thread::currentThread (0 bytes)
-                            @ 6   java.lang.ThreadLocal::getMap (5 bytes)
-                            @ 16   java.lang.ThreadLocal$ThreadLocalMap::access$000 (6 bytes)
-                              @ 2   java.lang.ThreadLocal$ThreadLocalMap::getEntry (42 bytes)   callee is too large
-                            @ 30   java.lang.ThreadLocal::setInitialValue (36 bytes)   callee is too large
-                            @ 5   java.util.concurrent.ThreadLocalRandom::current (10 bytes)
-                              @ 3   java.lang.ThreadLocal::get (34 bytes)   callee is too large
-                            @ 8   java.util.Random::nextDouble (24 bytes)
-                              @ 3   java.util.concurrent.ThreadLocalRandom::next (31 bytes)
-                              @ 13   java.util.concurrent.ThreadLocalRandom::next (31 bytes)
-                            @ 3   java.lang.ThreadLocal::get (34 bytes)
-                              @ 0   java.lang.Thread::currentThread (0 bytes)
-                              @ 6   java.lang.ThreadLocal::getMap (5 bytes)
-                              @ 16   java.lang.ThreadLocal$ThreadLocalMap::access$000 (6 bytes)
-                                @ 2   java.lang.ThreadLocal$ThreadLocalMap::getEntry (42 bytes)   callee is too large
-                              @ 30   java.lang.ThreadLocal::setInitialValue (36 bytes)   callee is too large
-                            @ 2   java.lang.ThreadLocal$ThreadLocalMap::getEntry (42 bytes)   callee is too large
-                            @ 1   java.lang.ThreadLocal::access$400 (5 bytes)
-                            @ 25   java.lang.ref.Reference::get (5 bytes)
-                            @ 38   java.lang.ThreadLocal$ThreadLocalMap::getEntryAfterMiss (63 bytes)   callee is too large
-                            @ 27   java.lang.System::currentTimeMillis (0 bytes)
-                            @ 37   java.util.Timer::&lt;init&gt; (26 bytes)
-                              @ 5   java.lang.StringBuilder::&lt;init&gt; (7 bytes)
-                                @ 3   java.lang.AbstractStringBuilder::&lt;init&gt; (12 bytes)
-                                  @ 1   java.lang.Object::&lt;init&gt; (1 bytes)
-                              @ 10   java.lang.StringBuilder::append (8 bytes)
-                                @ 2   java.lang.AbstractStringBuilder::append (48 bytes)   callee is too large
-                              @ 13   java.util.Timer::serialNumber (7 bytes)
-                                @ 3   java.util.concurrent.atomic.AtomicInteger::getAndIncrement (23 bytes)
-                                  @ 1   java.util.concurrent.atomic.AtomicInteger::get (5 bytes)
-                                  @ 12   java.util.concurrent.atomic.AtomicInteger::compareAndSet (13 bytes)
-                              @ 16   java.lang.StringBuilder::append (8 bytes)
-                                @ 2   java.lang.AbstractStringBuilder::append (62 bytes)   callee is too large
-                              @ 19   java.lang.StringBuilder::toString (17 bytes)
-                                @ 13   java.lang.String::&lt;init&gt; (72 bytes)   callee is too large
-                              @ 22   java.util.Timer::&lt;init&gt; (58 bytes)   callee is too large
-                            @ 49   com.schlimm.java7.concurrency.random.heinzoriginal.PerformanceChecker$1::&lt;init&gt; (10 bytes)
-                              @ 6   java.util.TimerTask::&lt;init&gt; (26 bytes)
-                                @ 1   java.lang.Object::&lt;init&gt; (1 bytes)
-                                @ 9   java.lang.Object::&lt;init&gt; (1 bytes)
-                            @ 56   java.util.Timer::schedule (28 bytes)
-                              @ 18   java.lang.System::currentTimeMillis (0 bytes)
-               !m             @ 24   java.util.Timer::sched (158 bytes)   callee is too large
-                            @ 82   java.lang.System::currentTimeMillis (0 bytes)
-               !m           @ 90   java.util.Timer::cancel (40 bytes)   callee is too large
-               !            @ 110   com.schlimm.java7.concurrency.random.heinzoriginal.PerformanceChecker::collectGarbage (36 bytes)   callee is too large
-                            @ 27   java.lang.System::currentTimeMillis (0 bytes)
-                            @ 37   java.util.Timer::&lt;init&gt; (26 bytes)
-                              @ 5   java.lang.StringBuilder::&lt;init&gt; (7 bytes)
-                                @ 3   java.lang.AbstractStringBuilder::&lt;init&gt; (12 bytes)
-                                  @ 1   java.lang.Object::&lt;init&gt; (1 bytes)
-                              @ 10   java.lang.StringBuilder::append (8 bytes)
-                                @ 2   java.lang.AbstractStringBuilder::append (48 bytes)   callee is too large
-                              @ 13   java.util.Timer::serialNumber (7 bytes)
-                                @ 3   java.util.concurrent.atomic.AtomicInteger::getAndIncrement (23 bytes)
-                                  @ 1   java.util.concurrent.atomic.AtomicInteger::get (5 bytes)
-                                  @ 12   java.util.concurrent.atomic.AtomicInteger::compareAndSet (13 bytes)
-                              @ 16   java.lang.StringBuilder::append (8 bytes)
-                                @ 2   java.lang.AbstractStringBuilder::append (62 bytes)   callee is too large
-                              @ 19   java.lang.StringBuilder::toString (17 bytes)
-                                @ 13   java.lang.String::&lt;init&gt; (72 bytes)   callee is too large
-                              @ 22   java.util.Timer::&lt;init&gt; (58 bytes)   callee is too large
-                            @ 49   com.schlimm.java7.concurrency.random.heinzoriginal.PerformanceChecker$1::&lt;init&gt; (10 bytes)
-                              @ 6   java.util.TimerTask::&lt;init&gt; (26 bytes)
-                                @ 1   java.lang.Object::&lt;init&gt; (1 bytes)
-                                @ 9   java.lang.Object::&lt;init&gt; (1 bytes)
-                            @ 56   java.util.Timer::schedule (28 bytes)
-                              @ 18   java.lang.System::currentTimeMillis (0 bytes)
-               !m             @ 24   java.util.Timer::sched (158 bytes)   callee is too large
-                            @ 82   java.lang.System::currentTimeMillis (0 bytes)
-               !m           @ 90   java.util.Timer::cancel (40 bytes)   callee is too large
-                            @ 99   java.lang.Math::abs (13 bytes)
-               !            @ 110   com.schlimm.java7.concurrency.random.heinzoriginal.PerformanceChecker::collectGarbage (36 bytes)   callee is too large
+<writer thread='15416'/>
+C1 Runtime statistics:
+ _resolve_invoke_virtual_cnt:     40
+ _resolve_invoke_opt_virtual_cnt: 123
+ _resolve_invoke_static_cnt:      20
+ _handle_wrong_method_cnt:        0
+ _ic_miss_cnt:                    25
+ _generic_arraycopy_cnt:          0
+ _generic_arraycopystub_cnt:      0
+ _byte_arraycopy_cnt:             0
+ _short_arraycopy_cnt:            0
+ _int_arraycopy_cnt:              0
+ _long_arraycopy_cnt:             0
+ _primitive_arraycopy_cnt:        0
+ _oop_arraycopy_cnt (C):          0
+ _oop_arraycopy_cnt (stub):       0
+ _arraycopy_slowcase_cnt:         0
+ _arraycopy_checkcast_cnt:        0
+ _arraycopy_checkcast_attempt_cnt:0
+ _new_type_array_slowcase_cnt:    0
+ _new_object_array_slowcase_cnt:  0
+ _new_instance_slowcase_cnt:      34
+ _new_multi_array_slowcase_cnt:   0
+ _monitorenter_slowcase_cnt:      722744
+ _monitorexit_slowcase_cnt:       722230
+ _patch_code_slowcase_cnt:        1
+ _throw_range_check_exception_count:            0:
+ _throw_index_exception_count:                  0:
+ _throw_div0_exception_count:                   0:
+ _throw_null_pointer_exception_count:           0:
+ _throw_class_cast_exception_count:             0:
+ _throw_incompatible_class_change_error_count:  0:
+ _throw_array_store_exception_count:            0:
+ _throw_count:                                  0:
+
+<statistics type='nmethod'>
+Statistics for 18 native nmethods:
+ N. total size  = 11376
+ N. relocation  = 1032
+ N. main code   = 6528
+Statistics for 237 bytecoded nmethods:
+ total in heap  = 300492
+ relocation     = 20500
+ main code      = 87408
+ stub code      = 17340
+ oops           = 3048
+ scopes data    = 38100
+ scopes pcs     = 71584
+ dependencies   = 1176
+ handler table  = 6744
+ nul chk table  = 3564
+Debug Data Chunks: 8315, shared 1048+1905, non-SP&apos;s elided 167
+PcDesc Statistics:  45128 queries, 3.30 comparisons per query
+  caches=237 queries=45128/0, hits=0+40440, tests=117995+30908, adds=4689
+</statistics>
+<writer thread='15752'/>
+<destroy_vm stamp='8.781'/>
+<tty_done stamp='8.936'/>
+</tty>
+<hotspot_log_done stamp='8.936'/>
+</hotspot_log>

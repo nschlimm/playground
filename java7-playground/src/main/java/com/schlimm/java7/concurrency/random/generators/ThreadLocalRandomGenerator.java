@@ -2,7 +2,7 @@ package com.schlimm.java7.concurrency.random.generators;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.schlimm.java7.concurrency.random.BenchmarkRunnable;
+import com.schlimm.java7.benchmark.original.BenchmarkRunnable;
 
 public class ThreadLocalRandomGenerator implements BenchmarkRunnable {
 

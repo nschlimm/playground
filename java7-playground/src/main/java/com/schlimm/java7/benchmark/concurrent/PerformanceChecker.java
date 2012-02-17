@@ -1,4 +1,4 @@
-package com.schlimm.java7.concurrency.random.heinz;
+package com.schlimm.java7.benchmark.concurrent;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -6,7 +6,7 @@ import java.util.concurrent.Phaser;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.schlimm.java7.concurrency.random.BenchmarkRunnable;
+import com.schlimm.java7.benchmark.original.BenchmarkRunnable;
 
 /**
  * The PerformanceChecker tries to run the task as often as possible in the allotted time. It then returns the number of
