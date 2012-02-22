@@ -9,17 +9,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import com.schlimm.java7.benchmark.original.Average;
 import com.schlimm.java7.benchmark.original.PerformanceChecker;
 import com.schlimm.java7.benchmark.original.PerformanceHarness;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class MyAsynchronousFileChannelExample implements Runnable {
+public class MyAsynchronousFileChannelExample_RejectedExecutionException implements Runnable {
 
 	private static AsynchronousFileChannel fileChannel;
-	private static ExecutorService pool = Executors.newFixedThreadPool(2);
+	private static ExecutorService pool = Executors.newFixedThreadPool(50);
 	{
 		try {
 			fileChannel = AsynchronousFileChannel.open(
@@ -36,12 +35,12 @@ public class MyAsynchronousFileChannelExample implements Runnable {
 	public static void main(String[] args) throws InterruptedException, IOException {
 		try {
 			Average average = new PerformanceHarness().calculatePerf(new PerformanceChecker(2000,
-					new MyAsynchronousFileChannelExample()), 5);
+					new MyAsynchronousFileChannelExample_RejectedExecutionException()), 5);
 			System.out.println(average.mean());
 			System.out.println(average.stddev());
 			System.out.println(fileChannel.size());
-			pool.awaitTermination(10, TimeUnit.DAYS);
 		} finally {
+			pool.shutdown();
 			fileChannel.close();
 		}
 	}

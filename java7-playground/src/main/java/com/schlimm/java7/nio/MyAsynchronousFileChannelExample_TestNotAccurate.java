@@ -16,10 +16,10 @@ import com.schlimm.java7.benchmark.original.PerformanceChecker;
 import com.schlimm.java7.benchmark.original.PerformanceHarness;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class MyAsynchronousFileChannelExample implements Runnable {
+public class MyAsynchronousFileChannelExample_TestNotAccurate implements Runnable {
 
 	private static AsynchronousFileChannel fileChannel;
-	private static ExecutorService pool = Executors.newFixedThreadPool(2);
+	private static ExecutorService pool = Executors.newFixedThreadPool(50);
 	{
 		try {
 			fileChannel = AsynchronousFileChannel.open(
@@ -36,7 +36,7 @@ public class MyAsynchronousFileChannelExample implements Runnable {
 	public static void main(String[] args) throws InterruptedException, IOException {
 		try {
 			Average average = new PerformanceHarness().calculatePerf(new PerformanceChecker(2000,
-					new MyAsynchronousFileChannelExample()), 5);
+					new MyAsynchronousFileChannelExample_TestNotAccurate()), 5);
 			System.out.println(average.mean());
 			System.out.println(average.stddev());
 			System.out.println(fileChannel.size());
