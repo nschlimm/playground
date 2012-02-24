@@ -3,13 +3,12 @@ package com.schlimm.java7.nio;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import com.schlimm.java7.benchmark.original.Average;
-import com.schlimm.java7.benchmark.original.PerformanceChecker;
-import com.schlimm.java7.benchmark.original.PerformanceHarness;
+public class MyConventionalFileAccessExample_Simple implements Runnable {
 
-public class MyConventionalFileAccessExample implements Runnable {
-
+	private static volatile boolean expired;
 	private static FileOutputStream fileos;
 	{
 		try {
@@ -20,12 +19,20 @@ public class MyConventionalFileAccessExample implements Runnable {
 	}
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-		Average average = new PerformanceHarness().calculatePerf(new PerformanceChecker(500,
-				new MyConventionalFileAccessExample()), 1);
-		System.out.println(average.mean());
-		System.out.println(average.stddev());
-		fileos.flush();
-		System.out.println(fileos.getChannel().size());
+		int numberOfLoops = 0;
+		MyConventionalFileAccessExample_Simple task = new MyConventionalFileAccessExample_Simple();
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				expired = true;
+			}
+		}, 1000);
+		while (!expired) {
+			task.run();
+			numberOfLoops++;
+		}
+		timer.cancel();
+		System.out.println("Loops: " + numberOfLoops);
 		fileos.close();
 		new File("E:/temp/afile.out").delete();
 	}

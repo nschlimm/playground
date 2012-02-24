@@ -57,7 +57,7 @@ public class PerformanceChecker {
    */
   public long start() {
     long numberOfLoops;
-    long start;
+    long start = 0;
     int runs = 0;
     do {
       if (++runs > MAXIMUM_ATTEMPTS) {
@@ -78,6 +78,7 @@ public class PerformanceChecker {
       }
       start = System.currentTimeMillis() - start;
       timer.cancel();
+      System.out.println(numberOfLoops+"."+start);
     } while (Math.abs(start - testTime) > EPSILON);
     collectGarbage();
     return numberOfLoops;

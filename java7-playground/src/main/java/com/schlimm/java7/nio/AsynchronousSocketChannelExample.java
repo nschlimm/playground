@@ -60,7 +60,8 @@ class Client extends Thread {
         connectFuture = client.connect(server);
     }
     
-    public void run() {
+    @SuppressWarnings("unused")
+	public void run() {
         // if the connect hasn't happened yet cancel it
         if (!connectFuture.isDone()) {
             connectFuture.cancel(true);
