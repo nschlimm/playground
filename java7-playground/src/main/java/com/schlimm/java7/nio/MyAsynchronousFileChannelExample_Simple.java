@@ -54,13 +54,17 @@ public class MyAsynchronousFileChannelExample_Simple implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			while (!pool.getQueue().isEmpty()) {
+			while (!pool.getQueue().isEmpty()) { // need to do this first to ensure that all io ops are performed prior close call
 				Thread.sleep(100); // find a more elegant way to wait for all operations to finish
 			}
 			log.close(); // find out whether close is performed as the last operation - should not cause problems with
-							// fifo queue and one pool thread. Performas detachFromThreadPool which disconnects channel
-							// from channel group and thread pool.
-			pool.shutdown(); // channel group is already shut down through close
+							// fifo queue and one pool thread. Performs iocp.detachFromThreadPool which shuts channel group.
+		    /** iocp.detachFromThreadPool doku
+		     * For use by AsynchronousFileChannel to release resources without shutting
+		     * down the thread pool.
+		     */
+
+			pool.shutdown(); // channel group is already shut down through close - now shut down thread pool
 			pool.awaitTermination(10, TimeUnit.MINUTES);
 		}
 	}
