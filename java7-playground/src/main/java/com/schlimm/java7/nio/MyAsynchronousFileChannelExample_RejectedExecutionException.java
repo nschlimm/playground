@@ -18,7 +18,7 @@ import com.schlimm.java7.benchmark.original.PerformanceHarness;
 public class MyAsynchronousFileChannelExample_RejectedExecutionException implements Runnable {
 
 	private static AsynchronousFileChannel fileChannel;
-	private static ExecutorService pool = Executors.newFixedThreadPool(50);
+	private static ExecutorService pool = Executors.newFixedThreadPool(1);
 	{
 		try {
 			fileChannel = AsynchronousFileChannel.open(

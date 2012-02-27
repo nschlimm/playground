@@ -6,7 +6,7 @@ import java.nio.channels.AsynchronousFileChannel;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-public class MyAsynchronousFileChannelExample_OOMException {
+public class AsynchronousFileChannel_OOMException {
 
 	private static AsynchronousFileChannel fileChannel;
 	
@@ -20,7 +20,7 @@ public class MyAsynchronousFileChannelExample_OOMException {
 	}
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-		new MyAsynchronousFileChannelExample_OOMException();
+		new AsynchronousFileChannel_OOMException();
 		try {
 			for (int i = 0; i < 10000000; i++) {
 				fileChannel.write(ByteBuffer.wrap("Hello".getBytes()), fileChannel.size());

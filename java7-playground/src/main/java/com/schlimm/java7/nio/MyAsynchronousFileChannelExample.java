@@ -36,7 +36,7 @@ public class MyAsynchronousFileChannelExample implements Runnable {
 	public static void main(String[] args) throws InterruptedException, IOException {
 		try {
 			MyAsynchronousFileChannelExample ex = new MyAsynchronousFileChannelExample();
-			Average average = new PerformanceHarness().calculatePerf(new PerformanceChecker(500, ex), 1);
+			Average average = new PerformanceHarness().calculatePerf(new PerformanceChecker(100, ex), 1);
 			System.out.println(average.mean());
 			System.out.println(average.stddev());
 		} catch (Exception e) {

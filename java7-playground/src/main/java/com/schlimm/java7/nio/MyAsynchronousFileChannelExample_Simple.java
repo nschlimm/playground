@@ -36,21 +36,8 @@ public class MyAsynchronousFileChannelExample_Simple implements Runnable {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		try {
-			int numberOfLoops = 0;
 			MyAsynchronousFileChannelExample_Simple task = new MyAsynchronousFileChannelExample_Simple();
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask() {
-				public void run() {
-					expired = true;
-				}
-			}, 1000);
-			while (!expired) {
-				task.run();
-				numberOfLoops++;
-			}
-			timer.cancel();
-			System.out.println("Loops: " + numberOfLoops);
-			System.out.println("Last time: " + times);
+			runTask(task);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -67,6 +54,22 @@ public class MyAsynchronousFileChannelExample_Simple implements Runnable {
 			pool.shutdown(); // channel group is already shut down through close - now shut down thread pool
 			pool.awaitTermination(10, TimeUnit.MINUTES);
 		}
+	}
+
+	private static void runTask(MyAsynchronousFileChannelExample_Simple task) {
+		int numberOfLoops = 0;
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				expired = true;
+			}
+		}, 1000);
+		while (!expired) {
+			task.run();
+			numberOfLoops++;
+		}
+		timer.cancel();
+		System.out.println("Loops: " + numberOfLoops);
 	}
 
 	@Override
