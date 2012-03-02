@@ -12,32 +12,22 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class MyAsynchronousFileChannelExample_CallGraph_CustomPool implements Runnable {
+public class CallGraph_CustomPool_1_AsynchronousFileChannel {
 
 	private static AsynchronousFileChannel fileChannel;
 	private static ExecutorService pool = Executors.newFixedThreadPool(50);
 
-	public static void main(String[] args) throws InterruptedException, IOException {
+	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
 		try {
-			new MyAsynchronousFileChannelExample_CallGraph_CustomPool().run();
+			fileChannel = AsynchronousFileChannel.open(
+					Paths.get("E:/temp/afile.out"),
+					new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.READ, StandardOpenOption.WRITE,
+							StandardOpenOption.CREATE, StandardOpenOption.DELETE_ON_CLOSE)), pool);
+			Future<Integer> future = fileChannel.write(ByteBuffer.wrap("Hello".getBytes()), fileChannel.size());
+			future.get();
 		} finally {
-			pool.shutdown();
 			fileChannel.close();
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void run() {
-		try {
-			fileChannel = AsynchronousFileChannel.open(
-					Paths.get("E:/temp/afile.out"),
-					new HashSet(Arrays.asList(StandardOpenOption.READ, StandardOpenOption.WRITE,
-							StandardOpenOption.CREATE, StandardOpenOption.DELETE_ON_CLOSE)), pool);
-			Future<Integer> future = fileChannel.write(ByteBuffer.wrap("Hello".getBytes()), fileChannel.size());
-			future.get();
-		} catch (InterruptedException | ExecutionException | IOException e) {
-			e.printStackTrace();
-		}
-	}
 }

@@ -32,7 +32,7 @@ public class PerformanceChecker {
   /**
    * Number of repeats before giving up with this test.
    */
-  private static final int MAXIMUM_ATTEMPTS = 3;
+  public static final int MAXIMUM_ATTEMPTS = 3;
 
   /**
    * Set up the number of milliseconds that the test should run, and
@@ -78,7 +78,7 @@ public class PerformanceChecker {
       }
       start = System.currentTimeMillis() - start;
       timer.cancel();
-      System.out.println(numberOfLoops+"."+start);
+      System.out.println("EPSILON:"+EPSILON+":TESTTIME:"+testTime+":ACTTIME:"+start+":LOOPS:"+numberOfLoops);
     } while (Math.abs(start - testTime) > EPSILON);
     collectGarbage();
     return numberOfLoops;

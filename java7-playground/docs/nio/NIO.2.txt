@@ -1,0 +1,24 @@
+# Heap status on OutOfMemoryError: unable to create new native thread
+
+Exception in thread "main" java.lang.OutOfMemoryError: unable to create new native thread
+	at java.lang.Thread.start0(Native Method)
+	at java.lang.Thread.start(Thread.java:691)
+	at java.util.concurrent.ThreadPoolExecutor.addWorker(ThreadPoolExecutor.java:943)
+	at java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1336)
+	at sun.nio.ch.AsynchronousChannelGroupImpl.executeOnPooledThread(AsynchronousChannelGroupImpl.java:188)
+	at sun.nio.ch.PendingIoCache.clearPendingIoMap(PendingIoCache.java:158)
+	at sun.nio.ch.PendingIoCache.close(PendingIoCache.java:115)
+	at sun.nio.ch.WindowsAsynchronousFileChannelImpl.close(WindowsAsynchronousFileChannelImpl.java:147)
+	at com.schlimm.java7.nio.Performance_OOM_AsynchronousFileChannel_1.main(Performance_OOM_AsynchronousFileChannel_1.java:36)
+[GC [DefNew: 7174K->832K(7616K), 0.0901018 secs][Tenured: 16969K->6829K(17044K), 0.3821705 secs] 23652K->6829K(24660K), [Perm : 2251K->2251K(12288K)], 0.4767345 secs] [Times: user=0.48 sys=0.00, real=0.48 secs] 
+Heap
+ def new generation   total 7616K, used 95K [0x10040000, 0x10880000, 0x15590000)
+  eden space 6784K,   1% used [0x10040000, 0x100585b8, 0x106e0000)
+  from space 832K,   0% used [0x106e0000, 0x106e0000, 0x107b0000)
+  to   space 832K,   0% used [0x107b0000, 0x107b0000, 0x10880000)
+ tenured generation   total 16788K, used 6829K [0x15590000, 0x165f5000, 0x20040000)
+   the space 16788K,  40% used [0x15590000, 0x15c3b710, 0x15c3b800, 0x165f5000)
+ compacting perm gen  total 12288K, used 2257K [0x20040000, 0x20c40000, 0x24040000)
+   the space 12288K,  18% used [0x20040000, 0x202744b8, 0x20274600, 0x20c40000)
+No shared spaces configured.
+[Verifying threads permgen tenured generation def new generation remset ref_proc syms strs zone dict hand C-heap code cache ]
