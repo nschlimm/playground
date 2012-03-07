@@ -1,0 +1,61 @@
+CBA1
+
+Thread: Thread-56
+Average run count: 74489,4
+Standard deviation: 733,54
+Thread: Thread-55
+Average run count: 74004,4
+Standard deviation: 687,52
+Thread: Thread-54
+Average run count: 73302,6
+Standard deviation: 1140,54
+Thread: Thread-53
+Average run count: 72547,2
+Standard deviation: 689,8
+Total started thread count: 82
+Peak thread count: 18
+Deamon thread count: 9
+Thread count: 10
+Thread names: Thread-4...Thread-3...Thread-2...Thread-1...Thread-0...Attach Listener...Signal Dispatcher...Finalizer...Reference Handler...main...
+
+CBA2
+
+ - Benchmark intervall results - 
+Thread: Thread-50
+Average run count: 82957,8
+Standard deviation: 980,29
+Thread: Thread-52
+Average run count: 82501,8
+Standard deviation: 1025,9
+Thread: Thread-51
+Average run count: 82749,8
+Standard deviation: 1257,9
+Thread: Thread-49
+Average run count: 83097,2
+Standard deviation: 1108,57
+Total started thread count: 78
+Peak thread count: 14
+Deamon thread count: 5
+Thread count: 6
+Thread names: Thread-0...Attach Listener...Signal Dispatcher...Finalizer...Reference Handler...main...
+
+CBC1
+
+ - Benchmark intervall results - 
+Thread: Thread-50
+Average run count: 52582,6
+Standard deviation: 6887,6
+Thread: Thread-48
+Average run count: 52558
+Standard deviation: 6728,89
+Thread: Thread-51
+Average run count: 52866,2
+Standard deviation: 6862,51
+Thread: Thread-49
+Average run count: 52615,6
+Standard deviation: 6746,18
+Total started thread count: 77
+Peak thread count: 13
+Deamon thread count: 4
+Thread count: 5
+Thread names: Attach Listener...Signal Dispatcher...Finalizer...Reference Handler...main...

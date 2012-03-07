@@ -7,11 +7,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Phaser;
 
 import com.schlimm.java7.benchmark.original.BenchmarkRunnable;
-import com.schlimm.java7.concurrency.random.generators.MathRandomFieldGenerator;
 
 public class ConcurrentBenchmark {
 	
-	private void benchmark(int threadCount, int testIntervallTime, int testRuns, BenchmarkRunnable runnable) throws InterruptedException {
+	public void benchmark(int threadCount, int testIntervallTime, int testRuns, BenchmarkRunnable runnable) throws InterruptedException {
 
 		PerformanceHarness harness = new PerformanceHarness(new PerformanceChecker(testIntervallTime, runnable, threadCount), testRuns);
 
@@ -76,12 +75,6 @@ public class ConcurrentBenchmark {
 		
 		return results;
 		
-	}
-	
-	public static void main(String[] args) throws InterruptedException {
-		new ConcurrentBenchmark().benchmark(1, 1000, 5, new MathRandomFieldGenerator());
-//		harness = new PerformanceHarness(new PerformanceChecker(1000, new MathRandomGenerator(), 2), 5);
-//		new ConcurrentBenchmark().benchmark(" - Math.random() - ", harness, 2);
 	}
 	
 }

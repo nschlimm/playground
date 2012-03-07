@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.schlimm.java7.benchmark.addon.SystemInformation;
 import com.schlimm.java7.benchmark.original.Average;
 import com.schlimm.java7.benchmark.original.PerformanceChecker;
 import com.schlimm.java7.benchmark.original.PerformanceHarness;
@@ -14,7 +15,7 @@ import com.schlimm.java7.benchmark.original.PerformanceHarness;
 public class Performance_QueueBenchmark_FixedThreadPool implements Runnable {
 
 	private static AtomicInteger counter = new AtomicInteger(0);
-	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.SECONDS,
+	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(10, 200, 0L, TimeUnit.SECONDS,
 			new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
 				@Override
 				public Thread newThread(Runnable r) {
@@ -30,6 +31,7 @@ public class Performance_QueueBenchmark_FixedThreadPool implements Runnable {
 		System.out.println("Mean: " + DecimalFormat.getInstance().format(average.mean()));
 		System.out.println("Std. Deviation: " + DecimalFormat.getInstance().format(average.stddev()));
 		System.out.println(counter.get());
+		new SystemInformation().printThreadInfo(true);
 	}
 
 	class WorkerTask implements Runnable {

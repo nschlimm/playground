@@ -1,0 +1,55 @@
+Test: Performance_Benchmark_AsynchronousFileChannel_1
+Warming up ...
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:91350
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:195081
+Starting test intervall ...
+EPSILON:20:TESTTIME:1000:ACTTIME:1015:LOOPS:196177
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:195051
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:193286
+EPSILON:20:TESTTIME:1000:ACTTIME:1015:LOOPS:194225
+EPSILON:20:TESTTIME:1000:ACTTIME:1015:LOOPS:192986
+Mean: 194.345
+Std. Deviation: 1.169,395
+Total started thread count: 17
+Peak thread count: 11
+Deamon thread count: 9
+Thread count: 10
+Thread names: Thread-4...Thread-3...Thread-2...Thread-1...Thread-0...Attach Listener...Signal Dispatcher...Finalizer...Reference Handler...main...
+
+
+Test: Performance_Benchmark_AsynchronousFileChannel_2
+Warming up ...
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:106210
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:201175
+Starting test intervall ...
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:199832
+EPSILON:20:TESTTIME:1000:ACTTIME:1015:LOOPS:200437
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:198804
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:196019
+EPSILON:20:TESTTIME:1000:ACTTIME:1015:LOOPS:198881
+Mean: 198.794,6
+Std. Deviation: 1.515,598
+Total started thread count: 13
+Peak thread count: 7
+Deamon thread count: 5
+Thread count: 6
+Thread names: Thread-0...Attach Listener...Signal Dispatcher...Finalizer...Reference Handler...main...
+
+
+Test: Performance_Benchmark_ConventionalFileAccessExample_1
+Warming up ...
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:365913
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:376355
+Starting test intervall ...
+EPSILON:20:TESTTIME:1000:ACTTIME:1015:LOOPS:375438
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:373320
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:373786
+EPSILON:20:TESTTIME:1000:ACTTIME:1015:LOOPS:374530
+EPSILON:20:TESTTIME:1000:ACTTIME:1014:LOOPS:372462
+Mean: 373.907,2
+Std. Deviation: 1.017,775
+Total started thread count: 12
+Peak thread count: 6
+Deamon thread count: 4
+Thread count: 5
+Thread names: Attach Listener...Signal Dispatcher...Finalizer...Reference Handler...main...
