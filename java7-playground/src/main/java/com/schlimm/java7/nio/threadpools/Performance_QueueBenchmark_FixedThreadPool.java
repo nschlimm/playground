@@ -1,4 +1,4 @@
-package com.schlimm.java7.nio;
+package com.schlimm.java7.nio.threadpools;
 
 import java.text.DecimalFormat;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -15,6 +15,7 @@ import com.schlimm.java7.benchmark.original.PerformanceHarness;
 public class Performance_QueueBenchmark_FixedThreadPool implements Runnable {
 
 	private static AtomicInteger counter = new AtomicInteger(0);
+	private static WorkerTask task = new WorkerTask();
 	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(10, 200, 0L, TimeUnit.SECONDS,
 			new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
 				@Override
@@ -34,7 +35,7 @@ public class Performance_QueueBenchmark_FixedThreadPool implements Runnable {
 		new SystemInformation().printThreadInfo(true);
 	}
 
-	class WorkerTask implements Runnable {
+	static class WorkerTask implements Runnable {
 		@Override
 		public void run() {
 			counter.getAndIncrement();
@@ -43,6 +44,6 @@ public class Performance_QueueBenchmark_FixedThreadPool implements Runnable {
 
 	@Override
 	public void run() {
-		pool.execute(new WorkerTask());
+		pool.execute(task);
 	}
 }

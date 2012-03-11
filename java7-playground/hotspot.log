@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='3200' time_ms='1331117678152'>
+<hotspot_log version='160 1' process='22820' time_ms='1331205469292'>
 <vm_version>
 <name>
 Java HotSpot(TM) 64-Bit Server VM
@@ -13,10 +13,10 @@ Java HotSpot(TM) 64-Bit Server VM (21.0-b12-fastdebug) for windows-amd64 JRE (1.
 </vm_version>
 <vm_arguments>
 <args>
--Dfile.encoding=Cp1252 
+-verbose:gc -XX:+PrintCompilation -Dfile.encoding=Cp1252 
 </args>
 <command>
-com.schlimm.java7.nio.Performance_QueueBenchmark_FixedThreadPool
+com.schlimm.java7.nio.threadpools.Performance_QueueBenchmark_CachedThreadPool
 </command>
 <launcher>
 SUN_STANDARD
@@ -37,16 +37,94 @@ java.vm.specification.vendor=Oracle Corporation
 java.vm.specification.version=1.7
 java.vm.vendor=Oracle Corporation
 file.encoding=Cp1252
-sun.java.command=com.schlimm.java7.nio.Performance_QueueBenchmark_FixedThreadPool
+sun.java.command=com.schlimm.java7.nio.threadpools.Performance_QueueBenchmark_CachedThreadPool
 sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='5832'/>
+<writer thread='22196'/>
+    251    1             java.util.concurrent.ThreadLocalRandom::next (31 bytes)
+<writer thread='4908'/>
+    252    3     n       sun.misc.Unsafe::compareAndSwapLong (0 bytes)   
+<writer thread='21492'/>
+    255    6     n       java.lang.Thread::currentThread (0 bytes)   (static)
+<writer thread='22196'/>
+    259    2             java.util.concurrent.atomic.AtomicLong::addAndGet (26 bytes)
+    261    4             java.util.concurrent.atomic.AtomicLong::compareAndSet (13 bytes)
+    262    5             java.util.concurrent.atomic.AtomicLong::get (5 bytes)
+    262    7             java.lang.ThreadLocal::getMap (5 bytes)
+    263    8             com.schlimm.java7.nio.threadpools.Performance_QueueBenchmark_CachedThreadPool::access$0 (4 bytes)
+    263    9             com.schlimm.java7.nio.threadpools.Performance_QueueBenchmark_CachedThreadPool::access$1 (4 bytes)
+    263   10             java.util.concurrent.ThreadLocalRandom::current (10 bytes)
+    267   11             java.lang.ThreadLocal::get (34 bytes)
+    270   12             java.lang.ThreadLocal::access$400 (5 bytes)
+    270   13             java.util.Random::nextLong (19 bytes)
+    272   14             java.lang.ref.Reference::get (5 bytes)
+    272   15             java.lang.ThreadLocal$ThreadLocalMap::access$000 (6 bytes)
+    274   16             com.schlimm.java7.nio.threadpools.Performance_QueueBenchmark_CachedThreadPool$WorkerTask::run (29 bytes)
+    282   17             java.lang.ThreadLocal$ThreadLocalMap::getEntry (42 bytes)
+    284    1 %           com.schlimm.java7.nio.threadpools.Performance_QueueBenchmark_CachedThreadPool$WorkerTask::run @ 5 (29 bytes)
+<writer thread='17992'/>
+    423    2 %           java.util.concurrent.atomic.AtomicLong::addAndGet @ 0 (26 bytes)
+<writer thread='18372'/>
+[GC 24576K-&gt;448K(94016K), 0.0158123 secs]
+[GC 25024K-&gt;480K(90496K), 0.0043320 secs]
+[GC 25056K-&gt;640K(90624K), 0.0065279 secs]
+<writer thread='5708'/>
+   5876   18     n       java.lang.Thread::isInterrupted (0 bytes)   
+<writer thread='18372'/>
+[GC 25216K-&gt;672K(90688K), 0.0059256 secs]
+<writer thread='1760'/>
+   6095   19     n       java.lang.System::nanoTime (0 bytes)   (static)
+<writer thread='22196'/>
+   6257   20             java.lang.Thread::isInterrupted (6 bytes)
+<writer thread='17992'/>
+   6267   21             java.util.concurrent.SynchronousQueue$TransferStack::awaitFulfill (180 bytes)
+<writer thread='18372'/>
+[GC 25248K-&gt;672K(93440K), 0.0058513 secs]
+[GC 24672K-&gt;672K(89536K), 0.0058435 secs]
+[GC 24096K-&gt;684K(88640K), 0.0058162 secs]
+[GC 1361K-&gt;724K(88448K), 0.0032540 secs]
+[Full GC 724K-&gt;646K(88448K), 0.0455287 secs]
+[GC 2945K-&gt;774K(88448K), 0.0030859 secs]
+[Full GC 774K-&gt;701K(88448K), 0.0468866 secs]
+[GC 2486K-&gt;829K(88448K), 0.0031819 secs]
+[Full GC 829K-&gt;744K(88448K), 0.0470763 secs]
+[GC 2221K-&gt;904K(88512K), 0.0047439 secs]
+[Full GC 904K-&gt;761K(88512K), 0.0515028 secs]
+[GC 769K-&gt;889K(88448K), 0.0028959 secs]
+[Full GC 889K-&gt;769K(88448K), 0.0476945 secs]
+[GC 1119K-&gt;897K(88448K), 0.0065690 secs]
+[Full GC 897K-&gt;809K(88448K), 0.0655435 secs]
+<writer thread='22196'/>
+  34011   22             java.util.concurrent.atomic.AtomicInteger::get (5 bytes)
+<writer thread='17992'/>
+  41305   23             java.lang.Object::&lt;init&gt; (1 bytes)
+<writer thread='8724'/>
+  41756   21             java.util.concurrent.SynchronousQueue$TransferStack::awaitFulfill (180 bytes)   made not entrant
+<writer thread='18372'/>
+[GC 947K-&gt;873K(88384K), 0.0046894 secs]
+[Full GC 873K-&gt;820K(88384K), 0.0518284 secs]
+<writer thread='22196'/>
+  42368    3 %           java.util.concurrent.SynchronousQueue$TransferStack::awaitFulfill @ 51 (180 bytes)
+<writer thread='17992'/>
+  42385   24             java.util.concurrent.SynchronousQueue$TransferStack::awaitFulfill (180 bytes)
+<writer thread='18372'/>
+[GC 833K-&gt;948K(89280K), 0.0032272 secs]
+[Full GC 948K-&gt;803K(89280K), 0.0521992 secs]
+[GC 806K-&gt;931K(88448K), 0.0042531 secs]
+[Full GC 931K-&gt;806K(88448K), 0.0519398 secs]
+<writer thread='21480'/>
+  49606   25     n       java.lang.System::arraycopy (0 bytes)   (static)
+<writer thread='22196'/>
+  49607   26             sun.nio.cs.SingleByte$Encoder::encode (32 bytes)
+<writer thread='17992'/>
+  49608    4 %           java.lang.String::indexOf @ 51 (87 bytes)
+<writer thread='21480'/>
 C1 Runtime statistics:
  _resolve_invoke_virtual_cnt:     0
- _resolve_invoke_opt_virtual_cnt: 38
- _resolve_invoke_static_cnt:      4
+ _resolve_invoke_opt_virtual_cnt: 2
+ _resolve_invoke_static_cnt:      1
  _handle_wrong_method_cnt:        0
  _ic_miss_cnt:                    0
  _generic_arraycopy_cnt:          0
@@ -79,79 +157,78 @@ C1 Runtime statistics:
 
 <statistics type='deoptimization'>
 Deoptimization traps recorded:
-     2 (100.0%) total
-                  unloaded/reinterpret/new: 2 (100.0%)
+     1 (100.0%) total
+           unreached/reinterpret/if_acmpeq: 1 (100.0%)
 </statistics>
 <statistics type='nmethod'>
 Statistics for 5 native nmethods:
- N. total size  = 5240
- N. relocation  = 528
- N. main code   = 3240
-Statistics for 49 bytecoded nmethods:
- total in heap  = 112992
- relocation     = 5704
- main code      = 39200
- stub code      = 2712
- oops           = 2856
- scopes data    = 16512
- scopes pcs     = 27248
- dependencies   = 480
- handler table  = 3072
- nul chk table  = 672
-Debug Data Chunks: 5347, shared 502+2642, non-SP&apos;s elided 17
-PcDesc Statistics:  405 queries, 9.74 comparisons per query
-  caches=49 queries=405/0, hits=0+88, tests=1704+2239, adds=317
+ N. total size  = 5328
+ N. relocation  = 544
+ N. main code   = 3328
+Statistics for 23 bytecoded nmethods:
+ total in heap  = 35480
+ relocation     = 1560
+ main code      = 12160
+ stub code      = 984
+ oops           = 728
+ scopes data    = 4472
+ scopes pcs     = 8336
+ dependencies   = 232
+ handler table  = 672
+ nul chk table  = 328
+Debug Data Chunks: 1177, shared 214+389, non-SP&apos;s elided 4
+PcDesc Statistics:  1879 queries, 2.57 comparisons per query
+  caches=24 queries=1879/0, hits=0+1792, tests=4351+487, adds=87
 </statistics>
 <statistics type='opto'>
 --- Compiler Statistics ---
-Methods seen: 396  Methods parsed: 396  Nodes created: 42919
-Blocks parsed: 958  Blocks seen: 1041
-959 original NULL checks - 752 elided (78%); optimizer leaves 196,
-69 made implicit (35%)
-CCP: 49  constants found: 0
-Total frameslots = 416, Max frameslots = 40
+Methods seen: 119  Methods parsed: 119  Nodes created: 14941
+Blocks parsed: 279  Blocks seen: 294
+250 original NULL checks - 192 elided (76%); optimizer leaves 73,
+30 made implicit (41%)
+CCP: 24  constants found: 0
+Total frameslots = 356, Max frameslots = 40
 Inserted 0 spill loads, 0 spill stores, 0 mem-mem moves and 0 copies.
 Total load cost=      0, store cost =      0, mem-mem cost =  0.00, copy cost =     0.
 Adjusted spill cost =       0.
-Conservatively coalesced 113 copies, 0 pairs, 358 post alloc.
-Used cisc instruction  2,  remained in register 60
-Average allocation trips 1.349206
+Conservatively coalesced 91 copies, 0 pairs, 130 post alloc.
+Used cisc instruction  3,  remained in register 73
+Average allocation trips 1.263158
 High Pressure Blocks = 0, Low Pressure Blocks = 0
-Nops added 0 bytes to total of 40295 bytes, for 0.00%
+Nops added 0 bytes to total of 13560 bytes, for 0.00%
 Peephole: peephole rules applied: 0
-PhaseIdealLoop=180, sum _unique=134418
+PhaseIdealLoop=92, sum _unique=40761
 </statistics>
 <statistics type='intrinsic'>
 Compiler intrinsic usage:
-     3 ( 2.8%) _currentTimeMillis (worked)
-     8 ( 7.5%) _isInterrupted (worked)
-    44 (41.5%) _currentThread (worked)
+     5 (15.2%) _nanoTime (worked)
+     4 (12.1%) _isInterrupted (worked)
+     9 (27.3%) _currentThread (worked)
+     0 ( 0.0%) _Reference_get (disabled)
      0 ( 0.0%) _park (failed)
-     0 ( 0.0%) _unpark (failed)
-     2 ( 1.9%) _putObject (worked)
-     1 ( 0.9%) _compareAndSwapObject (worked)
-    48 (45.3%) _compareAndSwapInt (worked)
-   106 (100.0%) total (worked,failed)
+     4 (12.1%) _putObject (worked)
+    11 (33.3%) _compareAndSwapLong (worked)
+    33 (100.0%) total (worked,failed,disabled)
 </statistics>
 <statistics type='SharedRuntime'>
-    1 monitor enter slow
-  426 new instance requires GC
     0 inline cache miss in compiled
     0 wrong method
-    4 unresolved static call site
+    1 unresolved static call site
     0 unresolved virtual call site
-   38 unresolved opt virtual call site
-   10 slow partial subtype
+    2 unresolved opt virtual call site
+    7 slow partial subtype
    12 byte array copies
    12 short array copies
    12 int array copies
    12 long array copies
-AdapterHandlerTable: empty 181 longest 3 total 133 average 1.187500
-AdapterHandlerTable: lookups 4846 buckets 5057 equals 4715 hits 4713 compact 4713
+AdapterHandlerTable: empty 177 longest 3 total 138 average 1.189655
+AdapterHandlerTable: lookups 5098 buckets 5327 equals 4962 hits 4960 compact 4960
 </statistics>
-<writer thread='5860'/>
-<destroy_vm stamp='10.835'/>
-<tty_done stamp='15.125'/>
+<writer thread='22196'/>
+  49609   27             sun.nio.cs.SingleByte$Encoder::encodeArrayLoop (236 bytes)
+<writer thread='18372'/>
+<destroy_vm stamp='49.599'/>
+<tty_done stamp='49.825'/>
 </tty>
-<hotspot_log_done stamp='15.125'/>
+<hotspot_log_done stamp='49.825'/>
 </hotspot_log>
