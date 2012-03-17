@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -24,11 +26,12 @@ public class ThreadPoolPerformance {
 	private static String tasktype;
 	private static ExecutorService pool;
 	private static final String AFILE_OUT = "afile.out";
+	private static int count = 0;
 
 	public static void doTest(int it) throws InterruptedException, ExecutionException {
 		List<Future<?>> results = new ArrayList<>();
 		for (int i = 0; i < it; i++) {
-			results.add(pool.submit(new AsynchronousTask(tasktype, td)));
+			results.add(pool.submit(new AsynchronousTask(count++, tasktype, td)));
 		}
 		for (Future<?> future : results) {
 			future.get();
@@ -41,10 +44,10 @@ public class ThreadPoolPerformance {
 			long start = System.currentTimeMillis();
 			doTest(tc);
 			start = System.currentTimeMillis() - start;
+			gc();
 			ThreadMXBean thread = ManagementFactory.getThreadMXBean();
-			String output = String.format("%1$s;%2$s;%3$s;%4$s;%5$s;%6$s;%7$s;%8$s;%9$s%n", tasktype, tc, td,
-					((ThreadPoolExecutor) pool).getLargestPoolSize(), thread.getTotalStartedThreadCount(),
-					thread.getPeakThreadCount(), thread.getDaemonThreadCount(), thread.getThreadCount(), start);
+			String output = String.format("%1$s;%2$s;%3$s;%4$s;%5$s;%6$s;%7$s;%8$s;%9$s;%10$s;%11$s%n", args[2], tasktype, tc, td, ((ThreadPoolExecutor) pool).getLargestPoolSize(),
+					thread.getTotalStartedThreadCount(), thread.getPeakThreadCount(), thread.getDaemonThreadCount(), thread.getThreadCount(), start, Runtime.getRuntime().totalMemory());
 			outputfile.write(output.getBytes());
 			System.out.println(output);
 		} catch (RuntimeException e) {
@@ -57,6 +60,14 @@ public class ThreadPoolPerformance {
 		}
 	}
 
+	public static void gc() throws InterruptedException {
+		for (int i = 0; i < 5; i++) {
+			System.gc();
+			Thread.sleep(200);
+		}
+		Thread.sleep(1000);
+	}
+
 	private static void init(String[] args) throws FileNotFoundException {
 		outputfile = new FileOutputStream(new File(args[0]), true);
 		tasktype = args[1];
@@ -66,9 +77,18 @@ public class ThreadPoolPerformance {
 			break;
 
 		case "FIXED":
-			pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+			pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
 			break;
 
+		case "CACHED_TUNED":
+			pool = new ThreadPoolExecutor(0, 3, 60, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+			((ThreadPoolExecutor)pool).setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+			break;
+			
+		case "FIXED_TUNED":
+			pool = new ThreadPoolExecutor(3, 3, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+			break;
+			
 		default:
 			throw new IllegalArgumentException("Unknown pool type requested! " + args[2]);
 		}
@@ -76,35 +96,45 @@ public class ThreadPoolPerformance {
 		td = Integer.valueOf(args[4]);
 	}
 
-	static class AsynchronousTask implements Runnable {
+	public static class AsynchronousTask implements Runnable {
 
+		private static final String IO = "IO";
+		private static final String COMPUTE = "COMPUTE";
+		private static final String SLEEP = "SLEEP";
+		private static final String IO2 = "IO2";
 		private int td;
 		private String type;
 		public int result;
+		private int id;
 
-		public AsynchronousTask(String type, int td) {
+		public AsynchronousTask(int id, String type, int td) {
 			super();
 			this.td = td;
 			this.type = type;
+			this.id = id;
 		}
 
 		@Override
 		public void run() {
 			switch (type) {
-			case "SLEEP":
+			case SLEEP:
 				sleep();
 				break;
 
-			case "COMPUTE":
+			case COMPUTE:
 				compute();
 				break;
 
-			case "IO":
+			case IO:
 				write();
 				break;
 
-			default:
+			case IO2:
+				write2();
 				break;
+
+			default:
+				throw new IllegalArgumentException("Unknown task type! " + type);
 			}
 		}
 
@@ -113,6 +143,16 @@ public class ThreadPoolPerformance {
 				fileos.write(String.format("%1$-" + td + "s", "s").getBytes());
 			} catch (NumberFormatException | IOException e) {
 				e.printStackTrace();
+			}
+		}
+
+		private void write2() {
+			try (FileOutputStream fileos = new FileOutputStream(new File(String.valueOf(id)), true)) {
+				fileos.write(String.format("%1$-" + td + "s", "s").getBytes());
+			} catch (NumberFormatException | IOException e) {
+				e.printStackTrace();
+			} finally {
+				new File(String.valueOf(id)).delete();
 			}
 		}
 
