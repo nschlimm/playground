@@ -81,12 +81,12 @@ public class ThreadPoolPerformance {
 			break;
 
 		case "CACHED_TUNED":
-			pool = new ThreadPoolExecutor(0, 3, 60, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+			pool = new ThreadPoolExecutor(0, 50, 60, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 			((ThreadPoolExecutor)pool).setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 			break;
 			
 		case "FIXED_TUNED":
-			pool = new ThreadPoolExecutor(3, 3, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+			pool = new ThreadPoolExecutor(50, 50, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 			break;
 			
 		default:
