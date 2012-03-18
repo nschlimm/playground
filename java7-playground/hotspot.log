@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='3016' time_ms='1332007234893'>
+<hotspot_log version='160 1' process='4764' time_ms='1332072409080'>
 <vm_version>
 <name>
 Java HotSpot(TM) 64-Bit Server VM
@@ -16,7 +16,7 @@ Java HotSpot(TM) 64-Bit Server VM (21.0-b12-fastdebug) for windows-amd64 JRE (1.
 -Dfile.encoding=Cp1252 
 </args>
 <command>
-com.schlimm.java7.nio.threadpools.ThreadCountCalculator 0.1
+com.schlimm.java7.nio.threadpools.ThreadCountCalculator 1.0
 </command>
 <launcher>
 SUN_STANDARD
@@ -37,15 +37,15 @@ java.vm.specification.vendor=Oracle Corporation
 java.vm.specification.version=1.7
 java.vm.vendor=Oracle Corporation
 file.encoding=Cp1252
-sun.java.command=com.schlimm.java7.nio.threadpools.ThreadCountCalculator 0.1
+sun.java.command=com.schlimm.java7.nio.threadpools.ThreadCountCalculator 1.0
 sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='70932'/>
+<writer thread='4648'/>
 C1 Runtime statistics:
  _resolve_invoke_virtual_cnt:     7
- _resolve_invoke_opt_virtual_cnt: 3
+ _resolve_invoke_opt_virtual_cnt: 2
  _resolve_invoke_static_cnt:      1
  _handle_wrong_method_cnt:        0
  _ic_miss_cnt:                    5
@@ -82,39 +82,39 @@ Statistics for 1 native nmethods:
  N. total size  = 1088
  N. relocation  = 112
  N. main code   = 688
-Statistics for 32 bytecoded nmethods:
- total in heap  = 54952
- relocation     = 1520
- main code      = 16224
- stub code      = 960
- oops           = 704
- scopes data    = 7488
- scopes pcs     = 16944
- dependencies   = 256
- handler table  = 744
- nul chk table  = 624
-Debug Data Chunks: 2017, shared 262+707, non-SP&apos;s elided 5
-PcDesc Statistics:  81 queries, 4.73 comparisons per query
-  caches=32 queries=81/0, hits=0+61, tests=222+161, adds=20
+Statistics for 26 bytecoded nmethods:
+ total in heap  = 46624
+ relocation     = 1376
+ main code      = 14144
+ stub code      = 800
+ oops           = 576
+ scopes data    = 6296
+ scopes pcs     = 14240
+ dependencies   = 208
+ handler table  = 720
+ nul chk table  = 552
+Debug Data Chunks: 1678, shared 222+569, non-SP&apos;s elided 3
+PcDesc Statistics:  80 queries, 4.70 comparisons per query
+  caches=26 queries=80/0, hits=0+61, tests=220+156, adds=19
 </statistics>
 <statistics type='opto'>
 --- Compiler Statistics ---
-Methods seen: 84  Methods parsed: 84  Nodes created: 23970
-Blocks parsed: 350  Blocks seen: 357
-337 original NULL checks - 270 elided (80%); optimizer leaves 76,
-57 made implicit (75%)
-CCP: 32  constants found: 0
-Total frameslots = 416, Max frameslots = 40
+Methods seen: 69  Methods parsed: 69  Nodes created: 21065
+Blocks parsed: 277  Blocks seen: 278
+305 original NULL checks - 246 elided (80%); optimizer leaves 70,
+51 made implicit (72%)
+CCP: 26  constants found: 0
+Total frameslots = 380, Max frameslots = 40
 Inserted 0 spill loads, 0 spill stores, 0 mem-mem moves and 0 copies.
 Total load cost=      0, store cost =      0, mem-mem cost =  0.00, copy cost =     0.
 Adjusted spill cost =       0.
-Conservatively coalesced 98 copies, 0 pairs, 296 post alloc.
-Used cisc instruction  20,  remained in register 269
-Average allocation trips 1.543478
+Conservatively coalesced 86 copies, 0 pairs, 272 post alloc.
+Used cisc instruction  12,  remained in register 233
+Average allocation trips 1.400000
 High Pressure Blocks = 0, Low Pressure Blocks = 0
-Nops added 0 bytes to total of 17469 bytes, for 0.00%
+Nops added 0 bytes to total of 15464 bytes, for 0.00%
 Peephole: peephole rules applied: 0
-PhaseIdealLoop=131, sum _unique=58105
+PhaseIdealLoop=114, sum _unique=51621
 </statistics>
 <statistics type='intrinsic'>
 Compiler intrinsic usage:
@@ -123,23 +123,22 @@ Compiler intrinsic usage:
      6 (100.0%) total (worked)
 </statistics>
 <statistics type='SharedRuntime'>
-    3 new array requires GC
     5 inline cache miss in compiled
     0 wrong method
     1 unresolved static call site
     7 unresolved virtual call site
-    3 unresolved opt virtual call site
+    2 unresolved opt virtual call site
  2010 slow partial subtype
    12 byte array copies
- 8122 short array copies
+ 3985 short array copies
    12 int array copies
    12 long array copies
 AdapterHandlerTable: empty 177 longest 3 total 142 average 1.224138
 AdapterHandlerTable: lookups 5648 buckets 5956 equals 5511 hits 5506 compact 5506
 </statistics>
-<writer thread='23848'/>
-<destroy_vm stamp='9.514'/>
-<tty_done stamp='9.555'/>
+<writer thread='4992'/>
+<destroy_vm stamp='9.537'/>
+<tty_done stamp='9.578'/>
 </tty>
-<hotspot_log_done stamp='9.555'/>
+<hotspot_log_done stamp='9.578'/>
 </hotspot_log>

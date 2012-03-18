@@ -10,7 +10,7 @@ public class ThreadCountCalculator {
 
 	public static void main(String[] args) throws InterruptedException {
 		for (int i = 0; i < 1000; i++) {
-			AsynchronousTask task = new AsynchronousTask(i, "IO2", 100);
+			AsynchronousTask task = new AsynchronousTask(i, "IO2", 30);
 			task.run();
 		}
 		System.gc(); System.gc(); System.gc(); System.gc(); System.gc(); System.gc(); System.gc();
@@ -19,22 +19,24 @@ public class ThreadCountCalculator {
 		long start = System.nanoTime();
 		long cpu = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime();
 		for (int i = 0; i < 1000; i++) {
-			AsynchronousTask task = new AsynchronousTask(i, "IO2", 100);
+			AsynchronousTask task = new AsynchronousTask(i, "IO2", 30);
 			task.run();
 		}
 		start = System.nanoTime() - start;
 		cpu = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime() - cpu;
-		System.out.println(start);
-		System.out.println(cpu);
 		long wait = start - cpu;
-		System.out.println(wait);
-		BigDecimal waitbd = new BigDecimal(wait);
-		BigDecimal cpubd = new BigDecimal(cpu);
-		BigDecimal countcpubd = new BigDecimal(Runtime.getRuntime().availableProcessors());
-		BigDecimal utilbd = new BigDecimal(args[0]);
-		BigDecimal result1 = new BigDecimal(1).add(waitbd.divide(cpubd, RoundingMode.HALF_UP));
-		BigDecimal result = countcpubd.multiply(utilbd).multiply(result1);
-		System.out.println(result);
+		BigDecimal waitTime = new BigDecimal(wait);
+		BigDecimal computeTime = new BigDecimal(cpu);
+		BigDecimal numberOfCPU = new BigDecimal(Runtime.getRuntime().availableProcessors());
+		BigDecimal targetUtilization = new BigDecimal(args[0]);
+		BigDecimal optimalthreadcount = numberOfCPU.multiply(targetUtilization).multiply(new BigDecimal(1).add(waitTime.divide(computeTime, RoundingMode.HALF_UP)));
+		System.out.println("Number of CPU: "+numberOfCPU);
+		System.out.println("Target utilization: "+targetUtilization);
+		System.out.println("Elapsed time: "+start);
+		System.out.println("Compute time: "+cpu);
+		System.out.println("Wait time: "+wait);
+		System.out.println("Formula: " + numberOfCPU + " * " + targetUtilization + " * (1 + " + waitTime + " / " + computeTime + ")");
+		System.out.println("Optimal thread count: "+ optimalthreadcount);
 	}
 
 }
