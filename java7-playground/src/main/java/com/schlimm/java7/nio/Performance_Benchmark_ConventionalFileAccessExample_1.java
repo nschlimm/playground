@@ -15,8 +15,8 @@ public class Performance_Benchmark_ConventionalFileAccessExample_1 implements Ru
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		try {
-			outputfile = new FileOutputStream(new File("E:/temp/afile.out"));
-			Average average = new PerformanceHarness().calculatePerf(new PerformanceChecker(500, new Performance_Benchmark_ConventionalFileAccessExample_1()), 5);
+			outputfile = new FileOutputStream(new File("E:/temp/afile.out"), true);
+			Average average = new PerformanceHarness().calculatePerf(new PerformanceChecker(1000, new Performance_Benchmark_ConventionalFileAccessExample_1()), 5);
 			System.out.println("Mean: " + average.mean());
 			System.out.println("Std. Deviation: " + average.stddev());
 		} finally {

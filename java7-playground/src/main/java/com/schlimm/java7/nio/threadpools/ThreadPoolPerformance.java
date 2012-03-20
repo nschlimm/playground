@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -46,8 +45,10 @@ public class ThreadPoolPerformance {
 			start = System.currentTimeMillis() - start;
 			gc();
 			ThreadMXBean thread = ManagementFactory.getThreadMXBean();
-			String output = String.format("%1$s;%2$s;%3$s;%4$s;%5$s;%6$s;%7$s;%8$s;%9$s;%10$s;%11$s%n", args[2], tasktype, tc, td, ((ThreadPoolExecutor) pool).getLargestPoolSize(),
-					thread.getTotalStartedThreadCount(), thread.getPeakThreadCount(), thread.getDaemonThreadCount(), thread.getThreadCount(), start, Runtime.getRuntime().totalMemory());
+			String output = String.format("%1$s;%2$s;%3$s;%4$s;%5$s;%6$s;%7$s;%8$s;%9$s;%10$s;%11$s%n", args[2],
+					tasktype, tc, td, ((ThreadPoolExecutor) pool).getLargestPoolSize(),
+					thread.getTotalStartedThreadCount(), thread.getPeakThreadCount(), thread.getDaemonThreadCount(),
+					thread.getThreadCount(), start, Runtime.getRuntime().totalMemory());
 			outputfile.write(output.getBytes());
 			System.out.println(output);
 		} catch (RuntimeException e) {
@@ -82,13 +83,13 @@ public class ThreadPoolPerformance {
 
 		case "CACHED_TUNED":
 			pool = new ThreadPoolExecutor(0, 50, 60, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
-			((ThreadPoolExecutor)pool).setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+			((ThreadPoolExecutor) pool).setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 			break;
-			
+
 		case "FIXED_TUNED":
 			pool = new ThreadPoolExecutor(50, 50, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 			break;
-			
+
 		default:
 			throw new IllegalArgumentException("Unknown pool type requested! " + args[2]);
 		}
@@ -96,78 +97,4 @@ public class ThreadPoolPerformance {
 		td = Integer.valueOf(args[4]);
 	}
 
-	public static class AsynchronousTask implements Runnable {
-
-		private static final String IO = "IO";
-		private static final String COMPUTE = "COMPUTE";
-		private static final String SLEEP = "SLEEP";
-		private static final String IO2 = "IO2";
-		private int td;
-		private String type;
-		public int result;
-		private int id;
-
-		public AsynchronousTask(int id, String type, int td) {
-			super();
-			this.td = td;
-			this.type = type;
-			this.id = id;
-		}
-
-		@Override
-		public void run() {
-			switch (type) {
-			case SLEEP:
-				sleep();
-				break;
-
-			case COMPUTE:
-				compute();
-				break;
-
-			case IO:
-				write();
-				break;
-
-			case IO2:
-				write2();
-				break;
-
-			default:
-				throw new IllegalArgumentException("Unknown task type! " + type);
-			}
-		}
-
-		private void write() {
-			try (FileOutputStream fileos = new FileOutputStream(new File(AFILE_OUT), true)) {
-				fileos.write(String.format("%1$-" + td + "s", "s").getBytes());
-			} catch (NumberFormatException | IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		private void write2() {
-			try (FileOutputStream fileos = new FileOutputStream(new File(String.valueOf(id)), true)) {
-				fileos.write(String.format("%1$-" + td + "s", "s").getBytes());
-			} catch (NumberFormatException | IOException e) {
-				e.printStackTrace();
-			} finally {
-				new File(String.valueOf(id)).delete();
-			}
-		}
-
-		private void compute() {
-			for (int i = 1; i <= td; i++)
-				result += ThreadLocalRandom.current().nextInt();
-		}
-
-		private void sleep() {
-			try {
-				Thread.sleep(td);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
 }
