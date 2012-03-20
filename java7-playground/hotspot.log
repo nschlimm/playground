@@ -1,14 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<<<<<<< HEAD
 <hotspot_log version='160 1' process='7952' time_ms='1332260901613'>
+=======
+<hotspot_log version='160 1' process='4764' time_ms='1332072409080'>
+>>>>>>> FETCH_HEAD
 <vm_version>
 <name>
-Java HotSpot(TM) Client VM
+Java HotSpot(TM) 64-Bit Server VM
 </name>
 <release>
 21.0-b12-fastdebug
 </release>
 <info>
-Java HotSpot(TM) Client VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fastdebug-b142), built on May 12 2011 01:36:54 by &quot;java_re&quot; with unknown MS VC++:1600
+Java HotSpot(TM) 64-Bit Server VM (21.0-b12-fastdebug) for windows-amd64 JRE (1.7.0-ea-fastdebug-b142), built on May 12 2011 01:31:30 by &quot;java_re&quot; with unknown MS VC++:1600
 </info>
 </vm_version>
 <vm_arguments>
@@ -16,7 +20,11 @@ Java HotSpot(TM) Client VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fa
 -Dfile.encoding=Cp1252 
 </args>
 <command>
+<<<<<<< HEAD
 com.schlimm.java7.nio.SimpleChannelClose_AsynchronousCloseException
+=======
+com.schlimm.java7.nio.threadpools.ThreadCountCalculator 1.0
+>>>>>>> FETCH_HEAD
 </command>
 <launcher>
 SUN_STANDARD
@@ -24,24 +32,29 @@ SUN_STANDARD
 <properties>
 java.vm.specification.name=Java Virtual Machine Specification
 java.vm.version=21.0-b12-fastdebug
-java.vm.name=Java HotSpot(TM) Client VM
+java.vm.name=Java HotSpot(TM) 64-Bit Server VM
 java.vm.info=mixed mode, sharing
-java.ext.dirs=E:\dev_home\openjdk7\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext
-java.endorsed.dirs=E:\dev_home\openjdk7\jre\lib\endorsed
-sun.boot.library.path=E:\dev_home\openjdk7\jre\bin
-java.library.path=E:\dev_home\openjdk7\bin;.;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;e:\dev_home\maven-3.0.3\bin;e:\dev_home\java-7-1\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Programme\IBM\Personal Communications\;C:\Programme\IBM\Trace Facility\;C:\Programme\RationalRoseJEdition\common;C:\Programme\Oracle\jre\1.1.8\bin;C:\Programme\oracle\ora92\bin;C:\Programme\ProPheT\isiscomm\w3\lib;c:\programme\Java\jre1.6.0_26\bin;c:\Dokumente und Einstellungen\pd05417.PROVINZIAL\.vmwebclient\Java\bin;E:\dev_home\Mercurial
-java.home=E:\dev_home\openjdk7\jre
-java.class.path=E:\dev_home\repositories\git\playground\java7-playground\target\test-classes;E:\dev_home\repositories\git\playground\java7-playground\target\classes;C:\Dokumente und Einstellungen\pd05417\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;E:\dev_home\repositories\git\playground\forkjoindip-project\target\test-classes;E:\dev_home\repositories\git\playground\forkjoindip-project\target\classes
-sun.boot.class.path=E:\dev_home\openjdk7\jre\lib\resources.jar;E:\dev_home\openjdk7\jre\lib\rt.jar;E:\dev_home\openjdk7\jre\lib\sunrsasign.jar;E:\dev_home\openjdk7\jre\lib\jsse.jar;E:\dev_home\openjdk7\jre\lib\jce.jar;E:\dev_home\openjdk7\jre\lib\charsets.jar;E:\dev_home\openjdk7\jre\classes
+java.ext.dirs=D:\dev_home\openjdk-7-b142\jre\lib\ext;C:\Windows\Sun\Java\lib\ext
+java.endorsed.dirs=D:\dev_home\openjdk-7-b142\jre\lib\endorsed
+sun.boot.library.path=D:\dev_home\openjdk-7-b142\jre\bin
+java.library.path=D:\dev_home\openjdk-7-b142\bin;.;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;d:\dev_home\java-7-1\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\EgisTec MyWinLocker\x86;C:\Program Files (x86)\EgisTec MyWinLocker\x64;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\QuickTime\QTSystem\;D:\dev_home\java-6-26\bin
+java.home=D:\dev_home\openjdk-7-b142\jre
+java.class.path=D:\dev_home\repositories\git\playground\java7-playground\target\test-classes;D:\dev_home\repositories\git\playground\java7-playground\target\classes;C:\Users\nschlimm\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;D:\dev_home\repositories\git\playground\forkjoindip-project\target\classes
+sun.boot.class.path=D:\dev_home\openjdk-7-b142\jre\lib\resources.jar;D:\dev_home\openjdk-7-b142\jre\lib\rt.jar;D:\dev_home\openjdk-7-b142\jre\lib\sunrsasign.jar;D:\dev_home\openjdk-7-b142\jre\lib\jsse.jar;D:\dev_home\openjdk-7-b142\jre\lib\jce.jar;D:\dev_home\openjdk-7-b142\jre\lib\charsets.jar;D:\dev_home\openjdk-7-b142\jre\classes
 java.vm.specification.vendor=Oracle Corporation
 java.vm.specification.version=1.7
 java.vm.vendor=Oracle Corporation
 file.encoding=Cp1252
+<<<<<<< HEAD
 sun.java.command=com.schlimm.java7.nio.SimpleChannelClose_AsynchronousCloseException
+=======
+sun.java.command=com.schlimm.java7.nio.threadpools.ThreadCountCalculator 1.0
+>>>>>>> FETCH_HEAD
 sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
+<<<<<<< HEAD
 <writer thread='7972'/>
 C1 Runtime statistics:
  _resolve_invoke_virtual_cnt:     29
@@ -49,6 +62,15 @@ C1 Runtime statistics:
  _resolve_invoke_static_cnt:      8
  _handle_wrong_method_cnt:        0
  _ic_miss_cnt:                    18
+=======
+<writer thread='4648'/>
+C1 Runtime statistics:
+ _resolve_invoke_virtual_cnt:     7
+ _resolve_invoke_opt_virtual_cnt: 2
+ _resolve_invoke_static_cnt:      1
+ _handle_wrong_method_cnt:        0
+ _ic_miss_cnt:                    5
+>>>>>>> FETCH_HEAD
  _generic_arraycopy_cnt:          0
  _generic_arraycopystub_cnt:      0
  _byte_arraycopy_cnt:             0
@@ -78,6 +100,7 @@ C1 Runtime statistics:
  _throw_count:                                  0:
 
 <statistics type='nmethod'>
+<<<<<<< HEAD
 Statistics for 8 native nmethods:
  N. total size  = 5012
  N. relocation  = 456
@@ -102,4 +125,69 @@ PcDesc Statistics:  58430 queries, 2.31 comparisons per query
 <tty_done stamp='0.799'/>
 </tty>
 <hotspot_log_done stamp='0.799'/>
+=======
+Statistics for 1 native nmethods:
+ N. total size  = 1088
+ N. relocation  = 112
+ N. main code   = 688
+Statistics for 26 bytecoded nmethods:
+ total in heap  = 46624
+ relocation     = 1376
+ main code      = 14144
+ stub code      = 800
+ oops           = 576
+ scopes data    = 6296
+ scopes pcs     = 14240
+ dependencies   = 208
+ handler table  = 720
+ nul chk table  = 552
+Debug Data Chunks: 1678, shared 222+569, non-SP&apos;s elided 3
+PcDesc Statistics:  80 queries, 4.70 comparisons per query
+  caches=26 queries=80/0, hits=0+61, tests=220+156, adds=19
+</statistics>
+<statistics type='opto'>
+--- Compiler Statistics ---
+Methods seen: 69  Methods parsed: 69  Nodes created: 21065
+Blocks parsed: 277  Blocks seen: 278
+305 original NULL checks - 246 elided (80%); optimizer leaves 70,
+51 made implicit (72%)
+CCP: 26  constants found: 0
+Total frameslots = 380, Max frameslots = 40
+Inserted 0 spill loads, 0 spill stores, 0 mem-mem moves and 0 copies.
+Total load cost=      0, store cost =      0, mem-mem cost =  0.00, copy cost =     0.
+Adjusted spill cost =       0.
+Conservatively coalesced 86 copies, 0 pairs, 272 post alloc.
+Used cisc instruction  12,  remained in register 233
+Average allocation trips 1.400000
+High Pressure Blocks = 0, Low Pressure Blocks = 0
+Nops added 0 bytes to total of 15464 bytes, for 0.00%
+Peephole: peephole rules applied: 0
+PhaseIdealLoop=114, sum _unique=51621
+</statistics>
+<statistics type='intrinsic'>
+Compiler intrinsic usage:
+     3 (50.0%) _min (worked)
+     3 (50.0%) _arraycopy (worked)
+     6 (100.0%) total (worked)
+</statistics>
+<statistics type='SharedRuntime'>
+    5 inline cache miss in compiled
+    0 wrong method
+    1 unresolved static call site
+    7 unresolved virtual call site
+    2 unresolved opt virtual call site
+ 2010 slow partial subtype
+   12 byte array copies
+ 3985 short array copies
+   12 int array copies
+   12 long array copies
+AdapterHandlerTable: empty 177 longest 3 total 142 average 1.224138
+AdapterHandlerTable: lookups 5648 buckets 5956 equals 5511 hits 5506 compact 5506
+</statistics>
+<writer thread='4992'/>
+<destroy_vm stamp='9.537'/>
+<tty_done stamp='9.578'/>
+</tty>
+<hotspot_log_done stamp='9.578'/>
+>>>>>>> FETCH_HEAD
 </hotspot_log>
