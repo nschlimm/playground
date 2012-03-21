@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='2684' time_ms='1332325379249'>
+<hotspot_log version='160 1' process='4648' time_ms='1332331355580'>
 <vm_version>
 <name>
 Java HotSpot(TM) Client VM
@@ -16,7 +16,7 @@ Java HotSpot(TM) Client VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fa
 -Dfile.encoding=Cp1252 
 </args>
 <command>
-com.schlimm.java7.nio.Performance_Benchmark_AsynchronousFileChannel_2a
+com.schlimm.java7.nio.SimpleChannelClose_Graceful
 </command>
 <launcher>
 SUN_STANDARD
@@ -37,18 +37,18 @@ java.vm.specification.vendor=Oracle Corporation
 java.vm.specification.version=1.7
 java.vm.vendor=Oracle Corporation
 file.encoding=Cp1252
-sun.java.command=com.schlimm.java7.nio.Performance_Benchmark_AsynchronousFileChannel_2a
+sun.java.command=com.schlimm.java7.nio.SimpleChannelClose_Graceful
 sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='3712'/>
+<writer thread='896'/>
 C1 Runtime statistics:
- _resolve_invoke_virtual_cnt:     47
- _resolve_invoke_opt_virtual_cnt: 114
- _resolve_invoke_static_cnt:      18
+ _resolve_invoke_virtual_cnt:     4
+ _resolve_invoke_opt_virtual_cnt: 17
+ _resolve_invoke_static_cnt:      0
  _handle_wrong_method_cnt:        0
- _ic_miss_cnt:                    22
+ _ic_miss_cnt:                    4
  _generic_arraycopy_cnt:          0
  _generic_arraycopystub_cnt:      0
  _byte_arraycopy_cnt:             0
@@ -63,11 +63,11 @@ C1 Runtime statistics:
  _arraycopy_checkcast_attempt_cnt:0
  _new_type_array_slowcase_cnt:    0
  _new_object_array_slowcase_cnt:  0
- _new_instance_slowcase_cnt:      43
+ _new_instance_slowcase_cnt:      0
  _new_multi_array_slowcase_cnt:   0
- _monitorenter_slowcase_cnt:      1353307
- _monitorexit_slowcase_cnt:       1346591
- _patch_code_slowcase_cnt:        16
+ _monitorenter_slowcase_cnt:      0
+ _monitorexit_slowcase_cnt:       0
+ _patch_code_slowcase_cnt:        0
  _throw_range_check_exception_count:            0:
  _throw_index_exception_count:                  0:
  _throw_div0_exception_count:                   0:
@@ -78,28 +78,28 @@ C1 Runtime statistics:
  _throw_count:                                  0:
 
 <statistics type='nmethod'>
-Statistics for 11 native nmethods:
- N. total size  = 6952
- N. relocation  = 636
- N. main code   = 3968
-Statistics for 221 bytecoded nmethods:
- total in heap  = 311956
- relocation     = 21812
- main code      = 93616
- stub code      = 17228
- oops           = 3088
- scopes data    = 41488
- scopes pcs     = 75280
- dependencies   = 1128
- handler table  = 6828
- nul chk table  = 3964
-Debug Data Chunks: 9163, shared 1175+2263, non-SP&apos;s elided 173
-PcDesc Statistics:  7254 queries, 9.38 comparisons per query
-  caches=221 queries=7254/0, hits=0+1732, tests=31413+36623, adds=5522
+Statistics for 4 native nmethods:
+ N. total size  = 2500
+ N. relocation  = 228
+ N. main code   = 1428
+Statistics for 79 bytecoded nmethods:
+ total in heap  = 97756
+ relocation     = 6684
+ main code      = 29152
+ stub code      = 5476
+ oops           = 704
+ scopes data    = 12348
+ scopes pcs     = 24128
+ dependencies   = 336
+ handler table  = 696
+ nul chk table  = 1212
+Debug Data Chunks: 2603, shared 354+598, non-SP&apos;s elided 45
+PcDesc Statistics:  120 queries, 8.88 comparisons per query
+  caches=79 queries=120/0, hits=0+14, tests=381+684, adds=106
 </statistics>
-<writer thread='1216'/>
-<destroy_vm stamp='11.324'/>
-<tty_done stamp='11.350'/>
+<writer thread='2620'/>
+<destroy_vm stamp='0.330'/>
+<tty_done stamp='0.354'/>
 </tty>
-<hotspot_log_done stamp='11.350'/>
+<hotspot_log_done stamp='0.354'/>
 </hotspot_log>
