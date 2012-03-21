@@ -142,7 +142,7 @@ public abstract class PoolSizeCalculator {
 	 * @return memory usage of a single {@link Runnable} element in the thread pools work queue
 	 */
 	public long calculateMemoryUsage() {
-		BlockingQueue<Runnable> queue = createWorkerQueue();
+		BlockingQueue<Runnable> queue = createWorkQueue();
 		for (int i = 0; i < SAMPLE_QUEUE_SIZE; i++) {
 			queue.add(creatTask());
 		}
@@ -151,7 +151,7 @@ public abstract class PoolSizeCalculator {
 		queue = null;
 		collectGarbage(15);
 		mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-		queue = createWorkerQueue();
+		queue = createWorkQueue();
 		for (int i = 0; i < SAMPLE_QUEUE_SIZE; i++) {
 			queue.add(creatTask());
 		}
@@ -172,7 +172,7 @@ public abstract class PoolSizeCalculator {
 	 * 
 	 * @return queue instance
 	 */
-	protected abstract BlockingQueue<Runnable> createWorkerQueue();
+	protected abstract BlockingQueue<Runnable> createWorkQueue();
 
 	/**
 	 * Calculate current cpu time. Various frameworks may be used here, depending on the operating system in use. (e.g.

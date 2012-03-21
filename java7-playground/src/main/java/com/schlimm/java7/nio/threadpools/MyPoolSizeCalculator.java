@@ -21,7 +21,7 @@ public class MyPoolSizeCalculator extends PoolSizeCalculator {
 		return new AsynchronousTask(0, "IO", 1000000);
 	}
 	
-	protected BlockingQueue<Runnable> createWorkerQueue() {
+	protected BlockingQueue<Runnable> createWorkQueue() {
 		return new LinkedBlockingQueue<>();
 	}
 
