@@ -62,9 +62,9 @@ public class PerformanceChecker {
 		long numberOfLoops;
 		long start;
 		int runs = 0;
+		System.out.println("... entering benchmark intervall ... " + Thread.currentThread().getName());
 		if (concurrent)
 			testExecPhaser.arriveAndAwaitAdvance();
-		System.out.println("... entering benchmark intervall ... " + Thread.currentThread().getName());
 		do {
 			if (++runs > MAXIMUM_ATTEMPTS) {
 				throw new IllegalStateException("Test not accurate");
@@ -85,9 +85,9 @@ public class PerformanceChecker {
 			start = System.currentTimeMillis() - start;
 			timer.cancel();
 		} while (Math.abs(start - testTime) > EPSILON);
-		System.out.println("... leaving benchmark intervall ... " + Thread.currentThread().getName() + " result: " + task.getResult());
 		if (concurrent)
 			testExecPhaser.arriveAndAwaitAdvance();
+		System.out.println("... leaving benchmark intervall ... " + Thread.currentThread().getName() + " result: " + task.getResult());
 		gcLock.lock();
 		try {
 			collectGarbage();
