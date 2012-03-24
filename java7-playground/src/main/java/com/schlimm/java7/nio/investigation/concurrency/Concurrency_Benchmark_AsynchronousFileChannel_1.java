@@ -14,7 +14,8 @@ import com.schlimm.java7.benchmark.original.BenchmarkRunnable;
 public class Concurrency_Benchmark_AsynchronousFileChannel_1 implements BenchmarkRunnable {
 
 	private static AsynchronousFileChannel outputfile;
-	private static AtomicInteger fileindex = new AtomicInteger(0);
+	private static AtomicInteger globalFilePosition = new AtomicInteger(0);
+	private final static String stringToAdd = "Hello";
 
 	public Concurrency_Benchmark_AsynchronousFileChannel_1() {
 		super();
@@ -34,7 +35,7 @@ public class Concurrency_Benchmark_AsynchronousFileChannel_1 implements Benchmar
 
 	@Override
 	public void run() {
-		outputfile.write(ByteBuffer.wrap("Hello".getBytes()), fileindex.getAndIncrement() * 5);
+		outputfile.write(ByteBuffer.wrap(stringToAdd.getBytes()), globalFilePosition.getAndAdd(stringToAdd.length()));
 	}
 
 	@Override

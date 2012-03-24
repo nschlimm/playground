@@ -12,7 +12,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.schlimm.java7.benchmark.addon.SystemInformation;
 import com.schlimm.java7.benchmark.original.Average;
@@ -28,7 +27,7 @@ import com.schlimm.java7.benchmark.original.PerformanceHarness;
 public class Performance_Benchmark_AsynchronousFileChannel_2 implements Runnable {
 
 	private static AsynchronousFileChannel outputfile;
-	private static AtomicInteger fileindex = new AtomicInteger(0);
+	private static int fileindex = 0;
 	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
 				@Override
@@ -58,6 +57,6 @@ public class Performance_Benchmark_AsynchronousFileChannel_2 implements Runnable
 
 	@Override
 	public void run() {
-		outputfile.write(ByteBuffer.wrap("Hello".getBytes()), fileindex.getAndIncrement() * 5);
+		outputfile.write(ByteBuffer.wrap("Hello".getBytes()), fileindex++ * 5);
 	}
 }

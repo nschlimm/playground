@@ -26,7 +26,8 @@ import com.schlimm.java7.benchmark.original.BenchmarkRunnable;
 public class Concurrency_Benchmark_AsynchronousFileChannel_2 implements BenchmarkRunnable {
 
 	private static AsynchronousFileChannel outputfile;
-	private static AtomicInteger fileindex = new AtomicInteger(0);
+	private static AtomicInteger globalFilePosition = new AtomicInteger();
+	private final static String stringToAdd = "Hello";
 	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
 				@Override
@@ -42,8 +43,7 @@ public class Concurrency_Benchmark_AsynchronousFileChannel_2 implements Benchmar
 			System.out.println("Test: " + Concurrency_Benchmark_AsynchronousFileChannel_2.class.getSimpleName());
 			outputfile = AsynchronousFileChannel.open(
 					Paths.get("E:/temp/afile.out"),
-					new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.WRITE, StandardOpenOption.CREATE,
-							StandardOpenOption.DELETE_ON_CLOSE)), pool);
+					new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.WRITE, StandardOpenOption.CREATE)), pool);
 			new ConcurrentBenchmark().benchmark(4, 1000, 5, new Concurrency_Benchmark_AsynchronousFileChannel_2());
 		} finally {
 			new SystemInformation().printThreadInfo(true);
@@ -51,9 +51,10 @@ public class Concurrency_Benchmark_AsynchronousFileChannel_2 implements Benchmar
 		}
 	}
 
+
 	@Override
 	public void run() {
-		outputfile.write(ByteBuffer.wrap("Hello".getBytes()), fileindex.getAndIncrement() * 5);
+		outputfile.write(ByteBuffer.wrap(stringToAdd.getBytes()), globalFilePosition.getAndAdd(stringToAdd.length()));
 	}
 
 	@Override

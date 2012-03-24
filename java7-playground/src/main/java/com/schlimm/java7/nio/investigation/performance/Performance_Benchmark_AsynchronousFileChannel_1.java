@@ -6,7 +6,6 @@ import java.nio.channels.AsynchronousFileChannel;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.schlimm.java7.benchmark.addon.SystemInformation;
 import com.schlimm.java7.benchmark.original.Average;
@@ -22,7 +21,7 @@ import com.schlimm.java7.benchmark.original.PerformanceHarness;
 public class Performance_Benchmark_AsynchronousFileChannel_1 implements Runnable {
 
 	private static AsynchronousFileChannel outputfile;
-	private static AtomicInteger fileindex = new AtomicInteger(0);
+	private static int fileindex = 0;
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		try {
@@ -41,6 +40,6 @@ public class Performance_Benchmark_AsynchronousFileChannel_1 implements Runnable
 
 	@Override
 	public void run() {
-		outputfile.write(ByteBuffer.wrap("Hello".getBytes()), fileindex.getAndIncrement() * 5);
+		outputfile.write(ByteBuffer.wrap("Hello".getBytes()), fileindex++ * 5);
 	}
 }

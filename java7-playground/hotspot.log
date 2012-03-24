@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='5852' time_ms='1332593009039'>
+<hotspot_log version='160 1' process='4024' time_ms='1332597778399'>
 <vm_version>
 <name>
 Java HotSpot(TM) 64-Bit Server VM
@@ -16,7 +16,7 @@ Java HotSpot(TM) 64-Bit Server VM (21.0-b12-fastdebug) for windows-amd64 JRE (1.
 -Dfile.encoding=Cp1252 
 </args>
 <command>
-com.schlimm.java7.nio.investigation.performance.Performance_Benchmark_AsynchronousFileChannel_1
+com.schlimm.java7.nio.investigation.concurrency.Concurrency_Benchmark_AsynchronousFileChannel_1
 </command>
 <launcher>
 SUN_STANDARD
@@ -37,19 +37,19 @@ java.vm.specification.vendor=Oracle Corporation
 java.vm.specification.version=1.7
 java.vm.vendor=Oracle Corporation
 file.encoding=Cp1252
-sun.java.command=com.schlimm.java7.nio.investigation.performance.Performance_Benchmark_AsynchronousFileChannel_1
+sun.java.command=com.schlimm.java7.nio.investigation.concurrency.Concurrency_Benchmark_AsynchronousFileChannel_1
 sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='3172'/>
-<dependency_failed type='leaf_type' ctxk='java/io/IOException' witness='java/io/FileNotFoundException' stamp='7.902'/>
+<writer thread='2916'/>
+<dependency_failed type='leaf_type' ctxk='java/io/IOException' witness='java/io/FileNotFoundException' stamp='7.072'/>
 C1 Runtime statistics:
- _resolve_invoke_virtual_cnt:     6
- _resolve_invoke_opt_virtual_cnt: 69
- _resolve_invoke_static_cnt:      9
- _handle_wrong_method_cnt:        0
- _ic_miss_cnt:                    3
+ _resolve_invoke_virtual_cnt:     13
+ _resolve_invoke_opt_virtual_cnt: 182
+ _resolve_invoke_static_cnt:      16
+ _handle_wrong_method_cnt:        12
+ _ic_miss_cnt:                    7
  _generic_arraycopy_cnt:          0
  _generic_arraycopystub_cnt:      0
  _byte_arraycopy_cnt:             0
@@ -80,88 +80,90 @@ C1 Runtime statistics:
 
 <statistics type='deoptimization'>
 Deoptimization traps recorded:
-    18 (100.0%) total
-  class_check/maybe_recompile/invokevirtual: 4 (22.2%)
-                  unloaded/reinterpret/new: 1 (5.6%)
-           unreached/reinterpret/ifnonnull: 1 (5.6%)
-           unreached/reinterpret/if_acmpne: 5 (27.8%)
-           unreached/reinterpret/if_acmpeq: 2 (11.1%)
-                       constraint/none/nop: 5 (27.8%)
+    27 (100.0%) total
+  class_check/maybe_recompile/invokevirtual: 8 (29.6%)
+   bimorphic/maybe_recompile/invokevirtual: 1 (3.7%)
+         unloaded/reinterpret/invokestatic: 2 (7.4%)
+              unreached/reinterpret/ifnull: 8 (29.6%)
+           unreached/reinterpret/if_acmpne: 1 (3.7%)
+           unreached/reinterpret/if_acmpeq: 1 (3.7%)
+                       constraint/none/nop: 5 (18.5%)
+     1 ( 3.7%) unaccounted
 </statistics>
 <statistics type='nmethod'>
-Statistics for 7 native nmethods:
- N. total size  = 7368
- N. relocation  = 752
- N. main code   = 4568
-Statistics for 141 bytecoded nmethods:
- total in heap  = 452216
- relocation     = 17936
+Statistics for 8 native nmethods:
+ N. total size  = 8424
+ N. relocation  = 856
+ N. main code   = 5224
+Statistics for 163 bytecoded nmethods:
+ total in heap  = 506496
+ relocation     = 20064
  constants      = 32
- main code      = 158560
- stub code      = 9320
- oops           = 10136
- scopes data    = 79784
- scopes pcs     = 117584
- dependencies   = 1720
- handler table  = 12344
- nul chk table  = 2976
-Debug Data Chunks: 30345, shared 2242+18256, non-SP&apos;s elided 42
-PcDesc Statistics:  5593 queries, 11.13 comparisons per query
-  caches=141 queries=5593/0, hits=0+961, tests=25364+36899, adds=4632
+ main code      = 175712
+ stub code      = 10488
+ oops           = 11744
+ scopes data    = 87672
+ scopes pcs     = 132240
+ dependencies   = 1968
+ handler table  = 14680
+ nul chk table  = 3464
+Debug Data Chunks: 31437, shared 2590+18058, non-SP&apos;s elided 52
+PcDesc Statistics:  44507 queries, 11.21 comparisons per query
+  caches=163 queries=44507/0, hits=2+6458, tests=206607+292475, adds=38046
 </statistics>
 <statistics type='opto'>
 --- Compiler Statistics ---
-Methods seen: 1059  Methods parsed: 1058  Nodes created: 164989
-Reasons for parse failures (NOT cumulative):
-Blocks parsed: 3113  Blocks seen: 3701
-3418 original NULL checks - 2796 elided (81%); optimizer leaves 633,
-308 made implicit (48%)
-CCP: 141  constants found: 0
-Total frameslots = 1236, Max frameslots = 40
+Methods seen: 1292  Methods parsed: 1292  Nodes created: 188508
+Blocks parsed: 3652  Blocks seen: 4349
+3936 original NULL checks - 3158 elided (80%); optimizer leaves 736,
+357 made implicit (48%)
+CCP: 163  constants found: 0
+Total frameslots = 1360, Max frameslots = 40
 Inserted 0 spill loads, 0 spill stores, 0 mem-mem moves and 0 copies.
 Total load cost=      0, store cost =      0, mem-mem cost =  0.00, copy cost =     0.
 Adjusted spill cost =       0.
-Conservatively coalesced 363 copies, 0 pairs, 3220 post alloc.
-Used cisc instruction  135,  remained in register 899
-Average allocation trips 1.483871
+Conservatively coalesced 417 copies, 0 pairs, 3416 post alloc.
+Used cisc instruction  138,  remained in register 979
+Average allocation trips 1.463277
 High Pressure Blocks = 0, Low Pressure Blocks = 0
-Nops added 0 bytes to total of 157888 bytes, for 0.00%
+Nops added 0 bytes to total of 174753 bytes, for 0.00%
 Peephole: peephole rules applied: 0
-PhaseIdealLoop=476, sum _unique=494222
+PhaseIdealLoop=585, sum _unique=562415
 </statistics>
 <statistics type='intrinsic'>
 Compiler intrinsic usage:
-     4 ( 4.0%) _hashCode (worked,virtual)
-     6 ( 5.9%) _min (worked)
-     5 ( 5.0%) _currentTimeMillis (worked)
-    44 (43.6%) _currentThread (worked)
-     8 ( 7.9%) _equals (worked)
+     6 ( 4.8%) _hashCode (worked,virtual)
+     6 ( 4.8%) _min (worked)
+     5 ( 4.0%) _currentTimeMillis (worked)
+     2 ( 1.6%) _isInterrupted (worked)
+    70 (55.6%) _currentThread (worked)
+    17 (13.5%) _equals (worked)
      0 ( 0.0%) _Reference_get (disabled)
-     7 ( 6.9%) _putByte_raw (worked)
-    27 (26.7%) _compareAndSwapInt (worked)
-   101 (100.0%) total (worked,disabled,virtual)
+     6 ( 4.8%) _putByte_raw (worked)
+    14 (11.1%) _compareAndSwapInt (worked)
+   126 (100.0%) total (worked,disabled,virtual)
 </statistics>
 <statistics type='SharedRuntime'>
-11959 monitor enter slow
-   66 monitor exit slow
- 5159 new instance requires GC
-   59 new array requires GC
-    3 inline cache miss in compiled
-    0 wrong method
-    9 unresolved static call site
-    6 unresolved virtual call site
-   69 unresolved opt virtual call site
-1215688 slow partial subtype
+1019374 monitor enter slow
+ 3869 monitor exit slow
+80196 new instance requires GC
+ 3037 new array requires GC
+    7 inline cache miss in compiled
+   12 wrong method
+   16 unresolved static call site
+   13 unresolved virtual call site
+  182 unresolved opt virtual call site
+4244180 slow partial subtype
    12 byte array copies
    12 short array copies
    12 int array copies
    12 long array copies
-AdapterHandlerTable: empty 154 longest 4 total 181 average 1.302158
-AdapterHandlerTable: lookups 6926 buckets 7268 equals 6750 hits 6745 compact 6745
+AdapterHandlerTable: empty 151 longest 4 total 185 average 1.302817
+AdapterHandlerTable: lookups 7111 buckets 7453 equals 6931 hits 6926 compact 6926
 </statistics>
-<writer thread='284'/>
-<destroy_vm stamp='7.955'/>
-<tty_done stamp='8.296'/>
+<writer thread='288'/>
+<destroy_vm stamp='20.882'/>
+<tty_done stamp='21.222'/>
 </tty>
-<hotspot_log_done stamp='8.296'/>
+<hotspot_log_done stamp='21.222'/>
 </hotspot_log>
