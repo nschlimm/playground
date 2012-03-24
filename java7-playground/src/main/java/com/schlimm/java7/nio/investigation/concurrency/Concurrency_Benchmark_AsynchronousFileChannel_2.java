@@ -1,4 +1,4 @@
-package com.schlimm.java7.nio.investigation.concurrency1;
+package com.schlimm.java7.nio.investigation.concurrency;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

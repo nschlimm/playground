@@ -1,4 +1,4 @@
-package com.schlimm.java7.nio;
+package com.schlimm.java7.nio.investigation.closing;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Niklas Schlimm
  * 
  */
-public class SimpleChannelClose_AsynchronousCloseException {
+public class SimpleChannelClose_RejectedExecutionException {
 
 	private static final String FILE_NAME = "E:/temp/afile.out";
 	private static AsynchronousFileChannel outputfile;
@@ -39,15 +39,11 @@ public class SimpleChannelClose_AsynchronousCloseException {
 		for (int i = 0; i < 10000; i++) {
 			futures.add(outputfile.write(ByteBuffer.wrap("Hello".getBytes()), fileindex.getAndIncrement() * 5));
 		}
-		outputfile.close();
 		pool.shutdown();
 		pool.awaitTermination(60, TimeUnit.SECONDS);
+		outputfile.close();
 		for (Future<Integer> future : futures) {
-			try {
-				future.get();
-			} catch (ExecutionException e) {
-				System.out.println("Task wasn't executed!");
-			}
+			System.out.println(future.get());
 		}
 	}
 }

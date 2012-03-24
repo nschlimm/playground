@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='4592' time_ms='1332339260803'>
+<hotspot_log version='160 1' process='5876' time_ms='1332589816181'>
 <vm_version>
 <name>
-Java HotSpot(TM) Client VM
+Java HotSpot(TM) 64-Bit Server VM
 </name>
 <release>
 21.0-b12-fastdebug
 </release>
 <info>
-Java HotSpot(TM) Client VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fastdebug-b142), built on May 12 2011 01:36:54 by &quot;java_re&quot; with unknown MS VC++:1600
+Java HotSpot(TM) 64-Bit Server VM (21.0-b12-fastdebug) for windows-amd64 JRE (1.7.0-ea-fastdebug-b142), built on May 12 2011 01:31:30 by &quot;java_re&quot; with unknown MS VC++:1600
 </info>
 </vm_version>
 <vm_arguments>
@@ -16,7 +16,7 @@ Java HotSpot(TM) Client VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fa
 -Dfile.encoding=Cp1252 
 </args>
 <command>
-com.schlimm.java7.nio.Performance_Benchmark_AsynchronousFileChannel_2b
+com.schlimm.java7.nio.investigation.concurrency.Concurrency_Benchmark_ConventionalFileAccessExample_1
 </command>
 <launcher>
 SUN_STANDARD
@@ -24,31 +24,35 @@ SUN_STANDARD
 <properties>
 java.vm.specification.name=Java Virtual Machine Specification
 java.vm.version=21.0-b12-fastdebug
-java.vm.name=Java HotSpot(TM) Client VM
+java.vm.name=Java HotSpot(TM) 64-Bit Server VM
 java.vm.info=mixed mode, sharing
-java.ext.dirs=E:\dev_home\openjdk7\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext
-java.endorsed.dirs=E:\dev_home\openjdk7\jre\lib\endorsed
-sun.boot.library.path=E:\dev_home\openjdk7\jre\bin
-java.library.path=E:\dev_home\openjdk7\bin;.;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;e:\dev_home\maven-3.0.3\bin;e:\dev_home\java-7-1\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Programme\IBM\Personal Communications\;C:\Programme\IBM\Trace Facility\;C:\Programme\RationalRoseJEdition\common;C:\Programme\Oracle\jre\1.1.8\bin;C:\Programme\oracle\ora92\bin;C:\Programme\ProPheT\isiscomm\w3\lib;c:\programme\Java\jre1.6.0_26\bin;c:\Dokumente und Einstellungen\pd05417.PROVINZIAL\.vmwebclient\Java\bin;E:\dev_home\Mercurial
-java.home=E:\dev_home\openjdk7\jre
-java.class.path=E:\dev_home\repositories\git\playground\java7-playground\target\test-classes;E:\dev_home\repositories\git\playground\java7-playground\target\classes;C:\Dokumente und Einstellungen\pd05417\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;E:\dev_home\repositories\git\playground\forkjoindip-project\target\test-classes;E:\dev_home\repositories\git\playground\forkjoindip-project\target\classes
-sun.boot.class.path=E:\dev_home\openjdk7\jre\lib\resources.jar;E:\dev_home\openjdk7\jre\lib\rt.jar;E:\dev_home\openjdk7\jre\lib\sunrsasign.jar;E:\dev_home\openjdk7\jre\lib\jsse.jar;E:\dev_home\openjdk7\jre\lib\jce.jar;E:\dev_home\openjdk7\jre\lib\charsets.jar;E:\dev_home\openjdk7\jre\classes
+java.ext.dirs=D:\dev_home\openjdk-7-b142\jre\lib\ext;C:\Windows\Sun\Java\lib\ext
+java.endorsed.dirs=D:\dev_home\openjdk-7-b142\jre\lib\endorsed
+sun.boot.library.path=D:\dev_home\openjdk-7-b142\jre\bin
+java.library.path=D:\dev_home\openjdk-7-b142\bin;.;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;d:\dev_home\java-7-1\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\EgisTec MyWinLocker\x86;C:\Program Files (x86)\EgisTec MyWinLocker\x64;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\QuickTime\QTSystem\;D:\dev_home\java-6-26\bin
+java.home=D:\dev_home\openjdk-7-b142\jre
+java.class.path=D:\dev_home\repositories\git\playground\java7-playground\target\test-classes;D:\dev_home\repositories\git\playground\java7-playground\target\classes;C:\Users\nschlimm\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;D:\dev_home\repositories\git\playground\forkjoindip-project\target\classes
+sun.boot.class.path=D:\dev_home\openjdk-7-b142\jre\lib\resources.jar;D:\dev_home\openjdk-7-b142\jre\lib\rt.jar;D:\dev_home\openjdk-7-b142\jre\lib\sunrsasign.jar;D:\dev_home\openjdk-7-b142\jre\lib\jsse.jar;D:\dev_home\openjdk-7-b142\jre\lib\jce.jar;D:\dev_home\openjdk-7-b142\jre\lib\charsets.jar;D:\dev_home\openjdk-7-b142\jre\classes
 java.vm.specification.vendor=Oracle Corporation
 java.vm.specification.version=1.7
 java.vm.vendor=Oracle Corporation
 file.encoding=Cp1252
-sun.java.command=com.schlimm.java7.nio.Performance_Benchmark_AsynchronousFileChannel_2b
+sun.java.command=com.schlimm.java7.nio.investigation.concurrency.Concurrency_Benchmark_ConventionalFileAccessExample_1
 sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='6116'/>
+<writer thread='5604'/>
+<dependency_failed type='leaf_type' ctxk='java/io/IOException' witness='java/io/FileNotFoundException' stamp='6.538'/>
+<dependency_failed type='leaf_type' ctxk='java/io/IOException' witness='java/io/FileNotFoundException' stamp='6.538'/>
+<dependency_failed type='leaf_type' ctxk='java/io/IOException' witness='java/io/FileNotFoundException' stamp='6.538'/>
+<dependency_failed type='leaf_type' ctxk='java/io/IOException' witness='java/io/FileNotFoundException' stamp='6.538'/>
 C1 Runtime statistics:
- _resolve_invoke_virtual_cnt:     11
- _resolve_invoke_opt_virtual_cnt: 55
- _resolve_invoke_static_cnt:      5
+ _resolve_invoke_virtual_cnt:     0
+ _resolve_invoke_opt_virtual_cnt: 221
+ _resolve_invoke_static_cnt:      34
  _handle_wrong_method_cnt:        0
- _ic_miss_cnt:                    2
+ _ic_miss_cnt:                    0
  _generic_arraycopy_cnt:          0
  _generic_arraycopystub_cnt:      0
  _byte_arraycopy_cnt:             0
@@ -61,13 +65,13 @@ C1 Runtime statistics:
  _arraycopy_slowcase_cnt:         0
  _arraycopy_checkcast_cnt:        0
  _arraycopy_checkcast_attempt_cnt:0
- _new_type_array_slowcase_cnt:    22
+ _new_type_array_slowcase_cnt:    0
  _new_object_array_slowcase_cnt:  0
- _new_instance_slowcase_cnt:      165
+ _new_instance_slowcase_cnt:      0
  _new_multi_array_slowcase_cnt:   0
- _monitorenter_slowcase_cnt:      3
- _monitorexit_slowcase_cnt:       4
- _patch_code_slowcase_cnt:        1
+ _monitorenter_slowcase_cnt:      0
+ _monitorexit_slowcase_cnt:       0
+ _patch_code_slowcase_cnt:        0
  _throw_range_check_exception_count:            0:
  _throw_index_exception_count:                  0:
  _throw_div0_exception_count:                   0:
@@ -77,29 +81,76 @@ C1 Runtime statistics:
  _throw_array_store_exception_count:            0:
  _throw_count:                                  0:
 
-<statistics type='nmethod'>
-Statistics for 4 native nmethods:
- N. total size  = 2556
- N. relocation  = 232
- N. main code   = 1468
-Statistics for 67 bytecoded nmethods:
- total in heap  = 131872
- relocation     = 9100
- main code      = 43648
- stub code      = 6292
- oops           = 1092
- scopes data    = 19968
- scopes pcs     = 33696
- dependencies   = 336
- handler table  = 1908
- nul chk table  = 1452
-Debug Data Chunks: 4552, shared 585+1332, non-SP&apos;s elided 62
-PcDesc Statistics:  9540420 queries, 2.91 comparisons per query
-  caches=67 queries=9540420/0, hits=0+9566599, tests=27715213+35747, adds=5655
+<statistics type='deoptimization'>
+Deoptimization traps recorded:
+     4 (100.0%) total
+         unloaded/reinterpret/invokestatic: 4 (100.0%)
 </statistics>
-<writer thread='5224'/>
-<destroy_vm stamp='10.836'/>
-<tty_done stamp='10.860'/>
+<statistics type='nmethod'>
+Statistics for 3 native nmethods:
+ N. total size  = 3168
+ N. relocation  = 320
+ N. main code   = 1968
+Statistics for 13 bytecoded nmethods:
+ total in heap  = 96536
+ relocation     = 5560
+ main code      = 37440
+ stub code      = 2632
+ oops           = 1560
+ scopes data    = 15888
+ scopes pcs     = 23392
+ dependencies   = 200
+ handler table  = 5376
+ nul chk table  = 592
+Debug Data Chunks: 4944, shared 404+2602, non-SP&apos;s elided 21
+PcDesc Statistics:  12724 queries, 11.54 comparisons per query
+  caches=13 queries=12724/0, hits=1+611, tests=61987+84841, adds=12112
+</statistics>
+<statistics type='opto'>
+--- Compiler Statistics ---
+Methods seen: 181  Methods parsed: 181  Nodes created: 37290
+Blocks parsed: 424  Blocks seen: 450
+634 original NULL checks - 507 elided (79%); optimizer leaves 126,
+62 made implicit (49%)
+CCP: 13  constants found: 0
+Total frameslots = 368, Max frameslots = 40
+Inserted 0 spill loads, 0 spill stores, 0 mem-mem moves and 0 copies.
+Total load cost=      0, store cost =      0, mem-mem cost =  0.00, copy cost =     0.
+Adjusted spill cost =       0.
+Conservatively coalesced 122 copies, 0 pairs, 532 post alloc.
+Used cisc instruction  18,  remained in register 107
+Average allocation trips 1.333333
+High Pressure Blocks = 0, Low Pressure Blocks = 0
+Nops added 0 bytes to total of 38977 bytes, for 0.00%
+Peephole: peephole rules applied: 0
+PhaseIdealLoop=74, sum _unique=104372
+</statistics>
+<statistics type='intrinsic'>
+Compiler intrinsic usage:
+     9 (37.5%) _currentTimeMillis (worked)
+     2 ( 8.3%) _isInterrupted (worked)
+    13 (54.2%) _currentThread (worked)
+    24 (100.0%) total (worked)
+</statistics>
+<statistics type='SharedRuntime'>
+   36 monitor enter slow
+   91 new instance requires GC
+    0 inline cache miss in compiled
+    0 wrong method
+   34 unresolved static call site
+    0 unresolved virtual call site
+  221 unresolved opt virtual call site
+   18 slow partial subtype
+   12 byte array copies
+   12 short array copies
+   12 int array copies
+   12 long array copies
+AdapterHandlerTable: empty 173 longest 3 total 148 average 1.233333
+AdapterHandlerTable: lookups 5838 buckets 6091 equals 5695 hits 5690 compact 5690
+</statistics>
+<writer thread='5100'/>
+<destroy_vm stamp='19.474'/>
+<tty_done stamp='19.497'/>
 </tty>
-<hotspot_log_done stamp='10.860'/>
+<hotspot_log_done stamp='19.497'/>
 </hotspot_log>
