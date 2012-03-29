@@ -25,6 +25,8 @@ public class CallGraph_CustomPool_1_AsynchronousFileChannel {
 							StandardOpenOption.CREATE, StandardOpenOption.DELETE_ON_CLOSE)), pool);
 			Future<Integer> future = fileChannel.write(ByteBuffer.wrap("Hello".getBytes()), fileChannel.size());
 			future.get();
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			fileChannel.close();
 		}

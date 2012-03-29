@@ -32,6 +32,8 @@ public class Performance_Benchmark_AsynchronousFileChannel_1 implements Runnable
 					new Performance_Benchmark_AsynchronousFileChannel_1()), 5);
 			System.out.println("Mean: " + DecimalFormat.getInstance().format(average.mean()));
 			System.out.println("Std. Deviation: " + DecimalFormat.getInstance().format(average.stddev()));
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			new SystemInformation().printThreadInfo(true);
 			outputfile.close();

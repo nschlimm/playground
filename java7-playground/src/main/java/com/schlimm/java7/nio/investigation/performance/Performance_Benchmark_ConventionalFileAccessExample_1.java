@@ -22,6 +22,8 @@ public class Performance_Benchmark_ConventionalFileAccessExample_1 implements Ru
 			Average average = new PerformanceHarness().calculatePerf(new PerformanceChecker(1000, new Performance_Benchmark_ConventionalFileAccessExample_1()), 5);
 			System.out.println("Mean: " + DecimalFormat.getInstance().format(average.mean()));
 			System.out.println("Std. Deviation: " + DecimalFormat.getInstance().format(average.stddev()));
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			new SystemInformation().printThreadInfo(true);
 			outputfile.close();

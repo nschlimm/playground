@@ -16,12 +16,12 @@ public class CallGraph_Default_AsynchronousFileChannel {
 		try {
 			fileChannel = AsynchronousFileChannel.open(Paths.get("E:/temp/afile.out"), StandardOpenOption.READ,
 					StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.DELETE_ON_CLOSE);
-			fileChannel.write(ByteBuffer.wrap("Hello".getBytes()), fileChannel.size());
-			Future<Integer> future = fileChannel.write(ByteBuffer.wrap("Hello".getBytes()), fileChannel.size());
+			Future<Integer> future = fileChannel.write(ByteBuffer.wrap("Hello".getBytes()), 0L);
 			future.get();
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			fileChannel.close();
 		}
 	}
-
 }
