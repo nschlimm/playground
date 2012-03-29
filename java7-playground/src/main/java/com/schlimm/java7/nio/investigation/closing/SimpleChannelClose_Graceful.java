@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,7 +30,7 @@ public class SimpleChannelClose_Graceful {
 
 	private static final String FILE_NAME = "E:/temp/afile.out";
 	private static AtomicInteger fileindex = new AtomicInteger(0);
-	private static ThreadPoolExecutor pool = new DefensiveThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
+	private static ThreadPoolExecutor pool = new DefensiveThreadPoolExecutor(100, 100, 0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>(10000));
 	/** System wide log file */
 	public static AsynchronousFileChannel GLOBAL_LOG_FILE;
@@ -79,7 +78,7 @@ public class SimpleChannelClose_Graceful {
 		closeLock.lock();
 		try {
 			prepareShutdown = true;
-			// TODO: make sure write to asyncchannel does not actually write or throws runtime exception
+			// TODO: here make sure write to asyncchannel does not actually write or throws runtime exception
 			if (!pool.getQueue().isEmpty()) { // only wait if queue isn't empty
 				System.out.println("Waiting for signal that queue is empty ...");
 				isEmpty.await();
@@ -111,7 +110,7 @@ public class SimpleChannelClose_Graceful {
 	 */
 	private static class DefensiveThreadPoolExecutor extends ThreadPoolExecutor {
 
-		private Semaphore bouncer = new Semaphore(1);
+		private boolean isShutdown = false;
 
 		public DefensiveThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 				BlockingQueue<Runnable> workQueue) {
@@ -125,13 +124,14 @@ public class SimpleChannelClose_Graceful {
 		protected void afterExecute(Runnable r, Throwable t) {
 			if (prepareShutdown) {
 				closeLock.lock(); // wait here until main thread awaits signal (and thereby releases close lock)
-				if (pool.getQueue().isEmpty()) {
-					try {
+				try {
+					if (pool.getQueue().isEmpty() && !isShutdown) {
 						System.out.println("Issueing signal that queue is empty ...");
 						isEmpty.signal();
-					} finally {
-						closeLock.unlock();
+						isShutdown = true;
 					}
+				} finally {
+					closeLock.unlock();
 				}
 			}
 			super.afterExecute(r, t);
