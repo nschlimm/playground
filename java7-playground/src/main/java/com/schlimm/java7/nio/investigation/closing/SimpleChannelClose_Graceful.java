@@ -58,7 +58,7 @@ public class SimpleChannelClose_Graceful {
 					}
 				} catch (NonWritableChannelException e) {
 					System.out.println("Deal with the fact that the channel was closed ...");
-				} 
+				}
 			}
 		}).start();
 
@@ -106,8 +106,7 @@ public class SimpleChannelClose_Graceful {
 		try {
 			state = PREPARE;
 			// TODO: optional hard reset to non-writable vs. silent close
-			FILE_ACCESS.set(AsynchronousFileChannel.open(Paths.get(FILE_NAME),
-					new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.READ)), pool));
+			FILE_ACCESS.set(AsynchronousFileChannel.open(Paths.get(FILE_NAME), StandardOpenOption.READ));
 			System.out.println("Channel blocked ...");
 			if (!pool.getQueue().isEmpty()) {
 				System.out.println("Waiting for signal that queue is empty ...");
@@ -131,6 +130,7 @@ public class SimpleChannelClose_Graceful {
 				System.out.println("File closed ...");
 				pool.shutdown();
 				pool.awaitTermination(10, TimeUnit.MINUTES);
+				FILE_ACCESS.get().close();
 				System.out.println("Pool closed ...");
 			} catch (InterruptedException e) {
 				Thread.interrupted();
