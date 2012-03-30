@@ -53,6 +53,7 @@ public class SimpleChannelClose_Graceful {
 			public void run() {
 				try {
 					for (;;) {
+						// TODO: Non safe
 						FILE_ACCESS.get().write(ByteBuffer.wrap("Hello".getBytes()), fileindex.getAndIncrement() * 5);
 					}
 				} catch (NonWritableChannelException e) {
@@ -104,6 +105,7 @@ public class SimpleChannelClose_Graceful {
 		closeLock.lock();
 		try {
 			state = PREPARE;
+			// TODO: optional hard reset to non-writable vs. silent close
 			FILE_ACCESS.set(AsynchronousFileChannel.open(Paths.get(FILE_NAME),
 					new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.READ)), pool));
 			System.out.println("Channel blocked ...");
