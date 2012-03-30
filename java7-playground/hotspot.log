@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='5716' time_ms='1333037046384'>
+<hotspot_log version='160 1' process='2460' time_ms='1333099784707'>
 <vm_version>
 <name>
 Java HotSpot(TM) Client VM
@@ -42,13 +42,13 @@ sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='2172'/>
+<writer thread='2592'/>
 C1 Runtime statistics:
- _resolve_invoke_virtual_cnt:     39
- _resolve_invoke_opt_virtual_cnt: 87
+ _resolve_invoke_virtual_cnt:     32
+ _resolve_invoke_opt_virtual_cnt: 91
  _resolve_invoke_static_cnt:      16
  _handle_wrong_method_cnt:        0
- _ic_miss_cnt:                    23
+ _ic_miss_cnt:                    17
  _generic_arraycopy_cnt:          0
  _generic_arraycopystub_cnt:      0
  _byte_arraycopy_cnt:             0
@@ -63,11 +63,11 @@ C1 Runtime statistics:
  _arraycopy_checkcast_attempt_cnt:0
  _new_type_array_slowcase_cnt:    0
  _new_object_array_slowcase_cnt:  0
- _new_instance_slowcase_cnt:      2
+ _new_instance_slowcase_cnt:      3
  _new_multi_array_slowcase_cnt:   0
- _monitorenter_slowcase_cnt:      43252
- _monitorexit_slowcase_cnt:       43254
- _patch_code_slowcase_cnt:        2
+ _monitorenter_slowcase_cnt:      42397
+ _monitorexit_slowcase_cnt:       42392
+ _patch_code_slowcase_cnt:        1
  _throw_range_check_exception_count:            0:
  _throw_index_exception_count:                  0:
  _throw_div0_exception_count:                   0:
@@ -82,24 +82,24 @@ Statistics for 9 native nmethods:
  N. total size  = 5672
  N. relocation  = 516
  N. main code   = 3248
-Statistics for 212 bytecoded nmethods:
- total in heap  = 247312
- relocation     = 17364
- main code      = 70320
- stub code      = 15152
- oops           = 2604
- scopes data    = 29676
- scopes pcs     = 58208
- dependencies   = 1032
- handler table  = 4308
- nul chk table  = 3020
-Debug Data Chunks: 6631, shared 850+1500, non-SP&apos;s elided 141
-PcDesc Statistics:  630 queries, 7.01 comparisons per query
-  caches=212 queries=630/0, hits=0+264, tests=2031+2385, adds=366
+Statistics for 208 bytecoded nmethods:
+ total in heap  = 255904
+ relocation     = 18024
+ main code      = 73040
+ stub code      = 15160
+ oops           = 2704
+ scopes data    = 31640
+ scopes pcs     = 60528
+ dependencies   = 1044
+ handler table  = 5748
+ nul chk table  = 3240
+Debug Data Chunks: 6995, shared 904+1590, non-SP&apos;s elided 153
+PcDesc Statistics:  642 queries, 6.82 comparisons per query
+  caches=208 queries=642/0, hits=0+269, tests=1908+2471, adds=373
 </statistics>
-<writer thread='4276'/>
-<destroy_vm stamp='0.702'/>
-<tty_done stamp='0.782'/>
+<writer thread='3256'/>
+<destroy_vm stamp='1.266'/>
+<tty_done stamp='1.821'/>
 </tty>
-<hotspot_log_done stamp='0.782'/>
+<hotspot_log_done stamp='1.821'/>
 </hotspot_log>
