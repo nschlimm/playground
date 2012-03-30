@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hotspot_log version='160 1' process='804' time_ms='1333100606388'>
+<hotspot_log version='160 1' process='2800' time_ms='1333114192199'>
 <vm_version>
 <name>
-Java HotSpot(TM) Server VM
+Java HotSpot(TM) Client VM
 </name>
 <release>
 21.0-b12-fastdebug
 </release>
 <info>
-Java HotSpot(TM) Server VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fastdebug-b142), built on May 12 2011 01:32:45 by &quot;java_re&quot; with unknown MS VC++:1600
+Java HotSpot(TM) Client VM (21.0-b12-fastdebug) for windows-x86 JRE (1.7.0-ea-fastdebug-b142), built on May 12 2011 01:36:54 by &quot;java_re&quot; with unknown MS VC++:1600
 </info>
 </vm_version>
 <vm_arguments>
 <args>
--Xint -Dfile.encoding=Cp1252 
+-Dfile.encoding=Cp1252 
 </args>
 <command>
 com.schlimm.java7.nio.investigation.closing.SimpleChannelClose_Graceful
@@ -24,8 +24,8 @@ SUN_STANDARD
 <properties>
 java.vm.specification.name=Java Virtual Machine Specification
 java.vm.version=21.0-b12-fastdebug
-java.vm.name=Java HotSpot(TM) Server VM
-java.vm.info=interpreted mode, sharing
+java.vm.name=Java HotSpot(TM) Client VM
+java.vm.info=mixed mode, sharing
 java.ext.dirs=E:\dev_home\openjdk7\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext
 java.endorsed.dirs=E:\dev_home\openjdk7\jre\lib\endorsed
 sun.boot.library.path=E:\dev_home\openjdk7\jre\bin
@@ -42,9 +42,64 @@ sun.java.launcher=SUN_STANDARD
 </properties>
 </vm_arguments>
 <tty>
-<writer thread='2036'/>
-<destroy_vm stamp='1.289'/>
-<tty_done stamp='1.772'/>
+<writer thread='3068'/>
+C1 Runtime statistics:
+ _resolve_invoke_virtual_cnt:     54
+ _resolve_invoke_opt_virtual_cnt: 111
+ _resolve_invoke_static_cnt:      19
+ _handle_wrong_method_cnt:        0
+ _ic_miss_cnt:                    16
+ _generic_arraycopy_cnt:          0
+ _generic_arraycopystub_cnt:      0
+ _byte_arraycopy_cnt:             0
+ _short_arraycopy_cnt:            0
+ _int_arraycopy_cnt:              0
+ _long_arraycopy_cnt:             0
+ _primitive_arraycopy_cnt:        0
+ _oop_arraycopy_cnt (C):          0
+ _oop_arraycopy_cnt (stub):       0
+ _arraycopy_slowcase_cnt:         0
+ _arraycopy_checkcast_cnt:        0
+ _arraycopy_checkcast_attempt_cnt:0
+ _new_type_array_slowcase_cnt:    3
+ _new_object_array_slowcase_cnt:  0
+ _new_instance_slowcase_cnt:      17
+ _new_multi_array_slowcase_cnt:   0
+ _monitorenter_slowcase_cnt:      759474
+ _monitorexit_slowcase_cnt:       758936
+ _patch_code_slowcase_cnt:        5
+ _throw_range_check_exception_count:            0:
+ _throw_index_exception_count:                  0:
+ _throw_div0_exception_count:                   0:
+ _throw_null_pointer_exception_count:           0:
+ _throw_class_cast_exception_count:             0:
+ _throw_incompatible_class_change_error_count:  0:
+ _throw_array_store_exception_count:            0:
+ _throw_count:                                  0:
+
+<statistics type='nmethod'>
+Statistics for 9 native nmethods:
+ N. total size  = 5672
+ N. relocation  = 516
+ N. main code   = 3248
+Statistics for 217 bytecoded nmethods:
+ total in heap  = 284728
+ relocation     = 20288
+ main code      = 81680
+ stub code      = 16396
+ oops           = 2992
+ scopes data    = 35992
+ scopes pcs     = 67488
+ dependencies   = 1128
+ handler table  = 8304
+ nul chk table  = 3780
+Debug Data Chunks: 7956, shared 1039+1848, non-SP&apos;s elided 178
+PcDesc Statistics:  1594 queries, 7.40 comparisons per query
+  caches=217 queries=1594/0, hits=0+676, tests=5690+6109, adds=918
+</statistics>
+<writer thread='2736'/>
+<destroy_vm stamp='8.663'/>
+<tty_done stamp='9.705'/>
 </tty>
-<hotspot_log_done stamp='1.772'/>
+<hotspot_log_done stamp='9.705'/>
 </hotspot_log>

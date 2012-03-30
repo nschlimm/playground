@@ -25,7 +25,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Graceful shutdown that garantees that submitted tasks will be processed prior shutdown and that denies submission of
- * new tasks during "prepare-shutdown" phase.
+ * new tasks when channel is shutdown.
  * 
  * @author Niklas Schlimm
  * 
@@ -35,17 +35,18 @@ public class SimpleChannelClose_Graceful {
 	private static final String FILE_NAME = "E:/temp/afile.out";
 	private static AtomicInteger fileindex = new AtomicInteger(0);
 	private static ThreadPoolExecutor pool = new DefensiveThreadPoolExecutor(100, 100, 0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>(10000));
-	/** System wide log file */
+			new LinkedBlockingQueue<Runnable>());
+	/** The channel to the asynchronous log file */
 	private static AsynchronousFileChannel GLOBAL_LOG_FILE;
-	public static AtomicReference<AsynchronousFileChannel> FILE_ACCESS = new AtomicReference<>();
+	/** System wide access to log file */
+	public static AtomicReference<AsynchronousFileChannel> GLOBAL_LOG_FILE_ACCESS = new AtomicReference<>();
 
 	public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
 		GLOBAL_LOG_FILE = AsynchronousFileChannel.open(
 				Paths.get(FILE_NAME),
 				new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.WRITE, StandardOpenOption.CREATE,
 						StandardOpenOption.DELETE_ON_CLOSE)), pool);
-		FILE_ACCESS.set(GLOBAL_LOG_FILE);
+		GLOBAL_LOG_FILE_ACCESS.set(GLOBAL_LOG_FILE);
 
 		new Thread(new Runnable() {
 
@@ -53,11 +54,14 @@ public class SimpleChannelClose_Graceful {
 			public void run() {
 				try {
 					for (;;) {
-						// TODO: Non safe
-						FILE_ACCESS.get().write(ByteBuffer.wrap("Hello".getBytes()), fileindex.getAndIncrement() * 5);
+						GLOBAL_LOG_FILE_ACCESS.get().write(ByteBuffer.wrap("Hello".getBytes()),
+								fileindex.getAndIncrement() * 5);
 					}
 				} catch (NonWritableChannelException e) {
-					System.out.println("Deal with the fact that the channel was closed ...");
+					System.out.println("Deal with the fact that the channel was closed asynchronously ... "
+							+ e.toString());
+				} catch (Exception e) {
+					System.out.println("Something unexpected happened ... " + e.toString());
 				}
 			}
 		}).start();
@@ -101,42 +105,42 @@ public class SimpleChannelClose_Graceful {
 	 * @throws InterruptedException
 	 */
 	public static void closeGracefully() {
-		// Closing resources
+		System.out.println("Starting graceful shutdown ...");
 		closeLock.lock();
 		try {
 			state = PREPARE;
-			// TODO: optional hard reset to non-writable vs. silent close
-			FILE_ACCESS.set(AsynchronousFileChannel.open(Paths.get(FILE_NAME), StandardOpenOption.READ));
-			System.out.println("Channel blocked ...");
+			GLOBAL_LOG_FILE_ACCESS.set(AsynchronousFileChannel.open(Paths.get(FILE_NAME),
+					new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.DELETE_ON_CLOSE)), pool));
+			System.out.println("Channel blocked for write access ...");
 			if (!pool.getQueue().isEmpty()) {
 				System.out.println("Waiting for signal that queue is empty ...");
 				isEmpty.await();
 				System.out.println("Received signal that queue is empty ... closing");
 			} else {
-				System.out.println("Queue is empty ...");
+				System.out.println("Don't have to wait, queue is empty ...");
 			}
 		} catch (InterruptedException e) {
 			Thread.interrupted();
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Await was interrupted ... " + e.toString());
+		} catch (Exception e) {
+			System.out.println("Something unexpected happened ... " + e.toString());
 		} finally {
 			try {
 				closeLock.unlock();
 				GLOBAL_LOG_FILE.force(false);
 				long size = Files.size(Paths.get(FILE_NAME));
-				System.out.println("File size (bytes): " + size);
-				GLOBAL_LOG_FILE.close();
+				System.out.println("Expected file size (bytes): " + (fileindex.get() - 1) * 5);
+				System.out.println("Actual file size (bytes): " + size);
+				if (size == (fileindex.get() - 1) * 5)
+					System.out.println("No write operation was lost!");
+				GLOBAL_LOG_FILE.close(); // close the writable channel
+				GLOBAL_LOG_FILE_ACCESS.get().close(); // close the read-only channel
 				System.out.println("File closed ...");
-				pool.shutdown();
-				pool.awaitTermination(10, TimeUnit.MINUTES);
-				FILE_ACCESS.get().close();
+				pool.shutdown(); // allow clean up tasks from previous close() operation to finish safely
+				pool.awaitTermination(1, TimeUnit.MINUTES);
 				System.out.println("Pool closed ...");
-			} catch (InterruptedException e) {
-				Thread.interrupted();
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println("Something unexpected happened ... " + e.toString());
 			}
 		}
 	}
@@ -152,7 +156,7 @@ public class SimpleChannelClose_Graceful {
 		}
 
 		/**
-		 * Issues a signal if queue is empty after task processing was completed.
+		 * "Last" task issues a signal that queue is empty after task processing was completed.
 		 */
 		@Override
 		protected void afterExecute(Runnable r, Throwable t) {
