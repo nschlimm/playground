@@ -1,6 +1,9 @@
 package com.schlimm.java7.nio.investigation.closing.provider;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.channels.AsynchronousFileChannel;
@@ -25,6 +28,11 @@ import java.util.concurrent.ExecutorService;
 
 import com.schlimm.java7.nio.investigation.closing.graceful.GlobalAsynchronousFileChannel;
 
+/**
+ * Expects safe URIs as Input and always returns safe File System and safe Path
+ * @author Niklas Schlimm
+ *
+ */
 public class MyFileSystemProvider extends FileSystemProvider {
 
 	private FileSystemProvider provider = FileSystems.getDefault().provider();
@@ -62,7 +70,15 @@ public class MyFileSystemProvider extends FileSystemProvider {
 	@Override
 	public Path getPath(URI uri) {
 		try {
-			return provider.getPath(new URI(provider.getScheme()+uri.getSchemeSpecificPart()));
+			Path target = provider.getPath(new URI(provider.getScheme()+":"+uri.getSchemeSpecificPart()));
+			Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{Path.class},new InvocationHandler() {
+				
+				@Override
+				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			});
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
