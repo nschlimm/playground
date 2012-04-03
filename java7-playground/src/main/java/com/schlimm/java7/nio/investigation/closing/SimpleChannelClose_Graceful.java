@@ -48,7 +48,7 @@ public class SimpleChannelClose_Graceful {
 						StandardOpenOption.DELETE_ON_CLOSE)), pool);
 		GLOBAL_LOG_FILE_ACCESS.set(GLOBAL_LOG_FILE);
 
-		new Thread(new Runnable() {
+		new Thread(new Runnable() { // arbitrary thread that writes stuff into an asynchronous I/O data sink
 
 			@Override
 			public void run() {
@@ -66,7 +66,7 @@ public class SimpleChannelClose_Graceful {
 			}
 		}).start();
 
-		Timer timer = new Timer();
+		Timer timer = new Timer(); // asynchronous channel closer
 		timer.schedule(new TimerTask() {
 			public void run() {
 				closeGracefully();
@@ -161,12 +161,12 @@ public class SimpleChannelClose_Graceful {
 		@Override
 		protected void afterExecute(Runnable r, Throwable t) {
 			if (state == PREPARE) {
-				closeLock.lock();
+				closeLock.lock(); // only one thread will pass when closer thread is awaiting signal
 				try {
 					if (pool.getQueue().isEmpty() && state < SHUTDOWN) {
 						System.out.println("Issueing signal that queue is empty ...");
 						isEmpty.signal();
-						state = SHUTDOWN;
+						state = SHUTDOWN; // -> no other thread issue empty-signal
 					}
 				} finally {
 					closeLock.unlock();
