@@ -19,7 +19,7 @@ public class MyLoggingClient {
 					public void run() {
 						try {
 							for (;;) {
-								GlobalAsynchronousFileChannel.get().write(ByteBuffer.wrap("Hello".getBytes()),
+								GracefulAsynchronousFileChannel.get().write(ByteBuffer.wrap("Hello".getBytes()),
 										fileindex.getAndIncrement() * 5);
 							}
 						} catch (NonWritableChannelException e) {
@@ -35,7 +35,7 @@ public class MyLoggingClient {
 		timer.schedule(new TimerTask() {
 			public void run() {
 				try {
-					GlobalAsynchronousFileChannel.get().close();
+					GracefulAsynchronousFileChannel.get().close();
 					long size = Files.size(Paths.get("E:/temp/afile.out"));
 					System.out.println("Expected file size (bytes): " + (fileindex.get() - 1) * 5);
 					System.out.println("Actual file size (bytes): " + size);

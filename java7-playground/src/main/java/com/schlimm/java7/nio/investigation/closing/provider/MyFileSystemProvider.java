@@ -26,10 +26,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
-import com.schlimm.java7.nio.investigation.closing.graceful.GlobalAsynchronousFileChannel;
+import sun.reflect.misc.MethodUtil;
+
+import com.schlimm.java7.nio.investigation.closing.graceful.GracefulAsynchronousFileChannel;
 
 /**
- * Expects safe URIs as Input and always returns safe File System and safe Path
+ * Expects safe URIs or safe Paths as Input
  * @author Niklas Schlimm
  *
  */
@@ -44,7 +46,7 @@ public class MyFileSystemProvider extends FileSystemProvider {
 
 	public AsynchronousFileChannel newAsynchronousFileChannel(Path file, Set<? extends OpenOption> options,
 			ExecutorService executor, FileAttribute<?>... attrs) throws IOException {
-		return GlobalAsynchronousFileChannel.get();
+		return GracefulAsynchronousFileChannel.get();
 	}
 
 	@Override
@@ -70,13 +72,17 @@ public class MyFileSystemProvider extends FileSystemProvider {
 	@Override
 	public Path getPath(URI uri) {
 		try {
-			Path target = provider.getPath(new URI(provider.getScheme()+":"+uri.getSchemeSpecificPart()));
-			Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{Path.class},new InvocationHandler() {
+			final Path target = provider.getPath(new URI(provider.getScheme()+":"+uri.getSchemeSpecificPart()));
+			return (Path)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{Path.class},new InvocationHandler() {
 				
 				@Override
 				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-					// TODO Auto-generated method stub
-					return null;
+					if (method.getName().equals("getFileSystem")) {
+						final FileSystem targetFileSystem = new MyFileSystem();
+						return targetFileSystem;
+					}
+					
+					return MethodUtil.invoke(method, target, args);
 				}
 			});
 		} catch (URISyntaxException e) {

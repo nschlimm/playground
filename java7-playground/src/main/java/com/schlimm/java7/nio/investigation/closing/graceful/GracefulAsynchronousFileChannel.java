@@ -20,9 +20,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class GlobalAsynchronousFileChannel extends AsynchronousFileChannel {
+public class GracefulAsynchronousFileChannel extends AsynchronousFileChannel {
 
-	private static GlobalAsynchronousFileChannel singleton = null;
+	private static GracefulAsynchronousFileChannel singleton = null;
 	private static Lock singletonLock = new ReentrantLock();
 	private static final String FILE_URI = "file:/E:/temp/afile.out";
 
@@ -52,7 +52,7 @@ public class GlobalAsynchronousFileChannel extends AsynchronousFileChannel {
 
 	private ThreadPoolExecutor pool;
 
-	private GlobalAsynchronousFileChannel() {
+	private GracefulAsynchronousFileChannel() {
 		super();
 		this.pool = new DefensiveThreadPoolExecutor(100, 100, 0L, TimeUnit.MILLISECONDS,
 				new LinkedBlockingQueue<Runnable>());
@@ -73,7 +73,7 @@ public class GlobalAsynchronousFileChannel extends AsynchronousFileChannel {
 			singletonLock.lock();
 			try {
 				if (singleton == null) {
-					singleton = new GlobalAsynchronousFileChannel();
+					singleton = new GracefulAsynchronousFileChannel();
 				}
 			} finally {
 				singletonLock.unlock();
