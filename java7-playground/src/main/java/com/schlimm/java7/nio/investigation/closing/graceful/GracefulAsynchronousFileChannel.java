@@ -11,7 +11,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -22,9 +25,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class GracefulAsynchronousFileChannel extends AsynchronousFileChannel {
 
-	private static GracefulAsynchronousFileChannel singleton = null;
+	private static Map<String, GracefulAsynchronousFileChannel> singletonMap = new ConcurrentHashMap<>();
 	private static Lock singletonLock = new ReentrantLock();
-	private static final String FILE_URI = "file:/E:/temp/afile.out";
 
 	/**
 	 * Lifecycle of graceful shutdown.
@@ -48,48 +50,53 @@ public class GracefulAsynchronousFileChannel extends AsynchronousFileChannel {
 	 */
 	private Condition isEmpty = closeLock.newCondition();
 
-	private volatile AsynchronousFileChannel channel;
+	private volatile AsynchronousFileChannel innerChannel;
 
 	private ThreadPoolExecutor pool;
 
-	private GracefulAsynchronousFileChannel() {
+	private URI uri;
+
+	public GracefulAsynchronousFileChannel(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
+			LinkedBlockingQueue<Runnable> workQueue, URI fileUri, Set<StandardOpenOption> options) {
 		super();
-		this.pool = new DefensiveThreadPoolExecutor(100, 100, 0L, TimeUnit.MILLISECONDS,
-				new LinkedBlockingQueue<Runnable>());
+		this.pool = new DefensiveThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
+		this.uri = fileUri;
 		try {
-			this.channel = AsynchronousFileChannel
-					.open(Paths.get(new URI(FILE_URI)),
-							new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.WRITE,
-									StandardOpenOption.CREATE)), pool);
+			this.innerChannel = AsynchronousFileChannel.open(Paths.get(fileUri), options, pool);
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static AsynchronousFileChannel get() {
-		if (singleton == null) {
+	public static AsynchronousFileChannel get(String fileUri) {
+		if (singletonMap.get(fileUri) == null) {
 			singletonLock.lock();
 			try {
-				if (singleton == null) {
-					singleton = new GracefulAsynchronousFileChannel();
+				if (singletonMap.get(fileUri) == null) {
+					singletonMap.put(
+							fileUri,
+							new GracefulAsynchronousFileChannel(100, 100, 0L, TimeUnit.MILLISECONDS,
+									new LinkedBlockingQueue<Runnable>(), new URI(fileUri), new HashSet<>(Arrays.asList(
+											StandardOpenOption.CREATE, StandardOpenOption.READ,
+											StandardOpenOption.WRITE))));
 				}
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
 			} finally {
 				singletonLock.unlock();
 			}
 		}
-		return singleton;
+		return singletonMap.get(fileUri);
 	}
 
 	@Override
 	public void close() throws IOException {
-		AsynchronousFileChannel writeableChannel = channel;
+		AsynchronousFileChannel writeableChannel = innerChannel;
 		System.out.println("Starting graceful shutdown ...");
 		closeLock.lock();
 		try {
 			state = PREPARE;
-			channel = AsynchronousFileChannel.open(Paths.get(new URI(FILE_URI)),
+			innerChannel = AsynchronousFileChannel.open(Paths.get(uri),
 					new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.READ)), pool);
 			System.out.println("Channel blocked for write access ...");
 			if (!pool.getQueue().isEmpty()) {
@@ -108,7 +115,7 @@ public class GracefulAsynchronousFileChannel extends AsynchronousFileChannel {
 			closeLock.unlock();
 			writeableChannel.force(false);
 			writeableChannel.close(); // close the writable channel
-			channel.close(); // close the read-only channel
+			innerChannel.close(); // close the read-only channel
 			System.out.println("File closed ...");
 			pool.shutdown(); // allow clean up tasks from previous close() operation to finish safely
 			try {
@@ -142,7 +149,7 @@ public class GracefulAsynchronousFileChannel extends AsynchronousFileChannel {
 					if (getQueue().isEmpty() && state < SHUTDOWN) {
 						System.out.println("Issueing signal that queue is empty ...");
 						isEmpty.signal();
-						state = SHUTDOWN; // -> no other thread issue empty-signal
+						state = SHUTDOWN; // -> no other thread can issue empty-signal
 					}
 				} finally {
 					closeLock.unlock();
@@ -154,58 +161,58 @@ public class GracefulAsynchronousFileChannel extends AsynchronousFileChannel {
 
 	@Override
 	public boolean isOpen() {
-		return channel.isOpen();
+		return innerChannel.isOpen();
 	}
 
 	@Override
 	public long size() throws IOException {
-		return channel.size();
+		return innerChannel.size();
 	}
 
 	@Override
 	public AsynchronousFileChannel truncate(long size) throws IOException {
-		return channel.truncate(size);
+		return innerChannel.truncate(size);
 	}
 
 	@Override
 	public void force(boolean metaData) throws IOException {
-		channel.force(metaData);
+		innerChannel.force(metaData);
 	}
 
 	@Override
 	public <A> void lock(long position, long size, boolean shared, A attachment,
 			CompletionHandler<FileLock, ? super A> handler) {
-		channel.lock(position, size, shared, attachment, handler);
+		innerChannel.lock(position, size, shared, attachment, handler);
 	}
 
 	@Override
 	public Future<FileLock> lock(long position, long size, boolean shared) {
-		return channel.lock(position, size, shared);
+		return innerChannel.lock(position, size, shared);
 	}
 
 	@Override
 	public FileLock tryLock(long position, long size, boolean shared) throws IOException {
-		return channel.tryLock(position, size, shared);
+		return innerChannel.tryLock(position, size, shared);
 	}
 
 	@Override
 	public <A> void read(ByteBuffer dst, long position, A attachment, CompletionHandler<Integer, ? super A> handler) {
-		channel.read(dst, position, attachment, handler);
+		innerChannel.read(dst, position, attachment, handler);
 	}
 
 	@Override
 	public Future<Integer> read(ByteBuffer dst, long position) {
-		return channel.read(dst, position);
+		return innerChannel.read(dst, position);
 	}
 
 	@Override
 	public <A> void write(ByteBuffer src, long position, A attachment, CompletionHandler<Integer, ? super A> handler) {
-		channel.write(src, position, attachment, handler);
+		innerChannel.write(src, position, attachment, handler);
 	}
 
 	@Override
 	public Future<Integer> write(ByteBuffer src, long position) {
-		return channel.write(src, position);
+		return innerChannel.write(src, position);
 	}
 
 }

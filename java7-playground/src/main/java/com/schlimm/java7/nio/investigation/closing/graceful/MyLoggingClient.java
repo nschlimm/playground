@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MyLoggingClient {
 	private static AtomicInteger fileindex = new AtomicInteger(0);
+	private static final String FILE_URI = "file:/E:/temp/afile.out";
 
 	public static void main(String[] args) throws IOException {
 		new Thread(new Runnable() { // arbitrary thread that writes stuff into an asynchronous I/O data sink
@@ -19,7 +20,7 @@ public class MyLoggingClient {
 					public void run() {
 						try {
 							for (;;) {
-								GracefulAsynchronousFileChannel.get().write(ByteBuffer.wrap("Hello".getBytes()),
+								GracefulAsynchronousFileChannel.get(FILE_URI).write(ByteBuffer.wrap("Hello".getBytes()),
 										fileindex.getAndIncrement() * 5);
 							}
 						} catch (NonWritableChannelException e) {
@@ -35,7 +36,7 @@ public class MyLoggingClient {
 		timer.schedule(new TimerTask() {
 			public void run() {
 				try {
-					GracefulAsynchronousFileChannel.get().close();
+					GracefulAsynchronousFileChannel.get(FILE_URI).close();
 					long size = Files.size(Paths.get("E:/temp/afile.out"));
 					System.out.println("Expected file size (bytes): " + (fileindex.get() - 1) * 5);
 					System.out.println("Actual file size (bytes): " + size);

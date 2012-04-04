@@ -46,11 +46,12 @@ public class MyFileSystemProvider extends FileSystemProvider {
 
 	public AsynchronousFileChannel newAsynchronousFileChannel(Path file, Set<? extends OpenOption> options,
 			ExecutorService executor, FileAttribute<?>... attrs) throws IOException {
-		return GracefulAsynchronousFileChannel.get();
+		return GracefulAsynchronousFileChannel.get("file:/E:/temp/afile.out");
 	}
 
 	@Override
 	public FileSystem newFileSystem(URI uri, Map<String, ?> env) throws IOException {
+		// TODO: implementieren
 		try {
 			return provider.newFileSystem(new URI(provider.getScheme()+uri.getSchemeSpecificPart()), env);
 		} catch (URISyntaxException e) {
@@ -61,6 +62,7 @@ public class MyFileSystemProvider extends FileSystemProvider {
 
 	@Override
 	public FileSystem getFileSystem(URI uri) {
+		// TODO: implementieren
 		try {
 			return provider.getFileSystem(new URI(provider.getScheme()+uri.getSchemeSpecificPart()));
 		} catch (URISyntaxException e) {
@@ -91,6 +93,8 @@ public class MyFileSystemProvider extends FileSystemProvider {
 		return null;
 	}
 
+	// TODO: alle safe paths umwandeln in file paths
+	
 	@Override
 	public SeekableByteChannel newByteChannel(Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs)
 			throws IOException {
