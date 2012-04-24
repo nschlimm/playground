@@ -18,6 +18,8 @@ public class Concurrency_Benchmark_ConventionalFileAccessExample_1 implements Be
 			System.out.println("Test: " + Concurrency_Benchmark_ConventionalFileAccessExample_1.class.getSimpleName());
 			outputfile = new FileOutputStream(new File("E:/temp/afile.out"));
 			new ConcurrentBenchmark().benchmark(4, 1000, 5, new Concurrency_Benchmark_ConventionalFileAccessExample_1());
+		} catch(Exception e) {
+			e.printStackTrace();
 		} finally {
 			new SystemInformation().printThreadInfo(true);
 			outputfile.close();

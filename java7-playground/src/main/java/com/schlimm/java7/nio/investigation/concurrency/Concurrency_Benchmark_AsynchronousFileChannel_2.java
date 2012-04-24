@@ -27,7 +27,7 @@ public class Concurrency_Benchmark_AsynchronousFileChannel_2 implements Benchmar
 
 	private static AsynchronousFileChannel outputfile;
 	private static AtomicInteger globalFilePosition = new AtomicInteger();
-	private final static String stringToAdd = "Hello";
+	private final static byte[] stringToAdd = "Hello".getBytes();
 	private static ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
 				@Override
@@ -54,7 +54,7 @@ public class Concurrency_Benchmark_AsynchronousFileChannel_2 implements Benchmar
 
 	@Override
 	public void run() {
-		outputfile.write(ByteBuffer.wrap(stringToAdd.getBytes()), globalFilePosition.getAndAdd(stringToAdd.length()));
+		outputfile.write(ByteBuffer.wrap(stringToAdd), globalFilePosition.getAndAdd(stringToAdd.length));
 	}
 
 	@Override

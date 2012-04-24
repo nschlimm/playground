@@ -1,4 +1,4 @@
-package com.schlimm.java7.nio;
+package com.schlimm.java7.nio.openjdktests;
 
 import java.nio.file.*;
 import java.nio.channels.*;
