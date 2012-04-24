@@ -20,12 +20,10 @@ public class MyLoggingClient {
 					public void run() {
 						try {
 							for (;;) {
-								GracefulAsynchronousFileChannel.get(FILE_URI).write(ByteBuffer.wrap("Hello".getBytes()),
-										fileindex.getAndIncrement() * 5);
+								GracefulAsynchronousFileChannel.get(FILE_URI).write(ByteBuffer.wrap("Hello".getBytes()), fileindex.getAndIncrement() * 5);
 							}
 						} catch (NonWritableChannelException e) {
-							System.out.println("Deal with the fact that the channel was closed asynchronously ... "
-									+ e.toString());
+							System.out.println("Deal with the fact that the channel was closed asynchronously ... " + e.toString());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -47,8 +45,7 @@ public class MyLoggingClient {
 					e.printStackTrace();
 				}
 			}
-		}, 1000);
-		
+		}, 3000);
 
 	}
 }
