@@ -30,9 +30,14 @@ package com.schlimm.java7.nio.openjdktests;
  */
 
 import java.io.File;
-import static java.nio.file.StandardOpenOption.*;
 import java.nio.ByteBuffer;
-import java.nio.channels.*;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.CompletionHandler;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CustomThreadPool {
@@ -40,8 +45,11 @@ public class CustomThreadPool {
     public static void main(String[] args) throws Exception {
         File blah = File.createTempFile("blah", null);
         blah.deleteOnExit();
-        AsynchronousFileChannel ch =
-            AsynchronousFileChannel.open(blah.toPath(), READ, WRITE);
+    	ExecutorService pool = Executors.newFixedThreadPool(50, new MyThreadFactory());
+		AsynchronousFileChannel ch =
+            AsynchronousFileChannel.open(blah.toPath(), 
+					new HashSet<StandardOpenOption>(Arrays.asList(StandardOpenOption.READ, StandardOpenOption.WRITE,
+							StandardOpenOption.CREATE, StandardOpenOption.DELETE_ON_CLOSE)), pool );
         ByteBuffer src = ByteBuffer.wrap("Scooby Snacks".getBytes());
 
         final AtomicReference<Thread> invoker = new AtomicReference<Thread>();

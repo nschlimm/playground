@@ -161,7 +161,7 @@ public class Lock {
         String testClasses = System.getProperty("test.classes");
         if (testClasses != null)
             command += " -cp " + testClasses;
-        command += " Lock -lockslave " + port;
+        command += " com.schlimm.java7.nio.openjdktests.Lock -lockslave " + port;
 
         Process p = Runtime.getRuntime().exec(command);
         IOHandler.handle(p.getInputStream());
