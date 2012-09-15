@@ -41,7 +41,7 @@ public abstract class DecomposableInput<A> {
 	public abstract boolean computeDirectly();
 
 	/**
-	 * Subclasses implement this method to decompose the input into smaller peaces if task is too large to be computed
+	 * Subclasses implement this method to decompose the input into smaller pieces if task is too large to be computed
 	 * directly.
 	 * 
 	 * @return a decomposition of the raw input that can be calculated in different threads using
