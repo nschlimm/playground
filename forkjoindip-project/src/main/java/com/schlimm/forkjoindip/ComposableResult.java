@@ -20,22 +20,22 @@ public abstract class ComposableResult<A> {
 	/**
 	 * Standard constructor.
 	 * 
-	 * @param firstPeace
+	 * @param firstPiece
 	 *            the first peace of a composed result
 	 */
-	public ComposableResult(A firstPeace) {
+	public ComposableResult(A firstPiece) {
 		super();
-		rawResult = firstPeace;
+		rawResult = firstPiece;
 	}
 
 	/**
-	 * Adds another peace to the composed result
+	 * Adds another piece to the composed result
 	 * 
-	 * @param anotherPeace
-	 *            the peace to add
+	 * @param anotherPiece
+	 *            the piece to add
 	 * @return the composed result
 	 */
-	public abstract ComposableResult<A> compose(ComposableResult<A> anotherPeace);
+	public abstract ComposableResult<A> compose(ComposableResult<A> anotherPiece);
 
 	public A getRawResult() {
 		return rawResult;
